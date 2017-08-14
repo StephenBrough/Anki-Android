@@ -285,7 +285,7 @@ public class ModelBrowser extends AnkiActivity {
                 String cardName = mModelDisplayList.get(position).getName();
                 mCurrentID = mModelIds.get(position);
                 mModelListPosition = position;
-                mContextMenu = ModelBrowserContextMenu.newInstance(cardName, mContextMenuListener);
+                mContextMenu = ModelBrowserContextMenu.Companion.newInstance(cardName, mContextMenuListener);
                 showDialogFragment(mContextMenu);
                 return true;
             }

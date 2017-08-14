@@ -162,8 +162,7 @@ public class BasicTextFieldController extends FieldControllerBase implements IFi
                     showToast(gtxt(R.string.multimedia_editor_text_field_editing_many_words));
                 }
 
-                // Pick from two translation sources
-                PickStringDialogFragment fragment = new PickStringDialogFragment();
+
 
                 final ArrayList<String> translationSources = new ArrayList<>();
                 translationSources.add("Glosbe.com");
@@ -172,23 +171,22 @@ public class BasicTextFieldController extends FieldControllerBase implements IFi
                     translationSources.add("ColorDict");
                 }
 
-                fragment.setChoices(translationSources);
-                fragment.setOnclickListener(new DialogInterface.OnClickListener() {
+                // Pick from two translation sources
+                PickStringDialogFragment.Companion.show(mActivity.getSupportFragmentManager(),
+                        gtxt(R.string.multimedia_editor_trans_pick_translation_source),
+                        translationSources,
+                        new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String translationSource = translationSources.get(which);
-                        if (translationSource.equals("Glosbe.com")) {
-                            startTranslationWithGlosbe();
-                        } else if (translationSource.equals("ColorDict")) {
-                            startTranslationWithColorDict();
-                        }
-                    }
-                });
-
-                fragment.setTitle(gtxt(R.string.multimedia_editor_trans_pick_translation_source));
-
-                fragment.show(mActivity.getSupportFragmentManager(), "pick.translation.source");
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String translationSource = translationSources.get(which);
+                                if (translationSource.equals("Glosbe.com")) {
+                                    startTranslationWithGlosbe();
+                                } else if (translationSource.equals("ColorDict")) {
+                                    startTranslationWithColorDict();
+                                }
+                            }
+                        });
             }
         });
 
@@ -257,16 +255,11 @@ public class BasicTextFieldController extends FieldControllerBase implements IFi
 
                 @Override
                 public void onClick(View v) {
-                    PickStringDialogFragment fragment = new PickStringDialogFragment();
-
-                    fragment.setChoices(mPossibleClones);
-                    fragment.setOnclickListener(controller);
-                    fragment.setTitle(gtxt(R.string.multimedia_editor_text_field_editing_clone_source));
-
-                    fragment.show(mActivity.getSupportFragmentManager(), "pick.clone");
-
+                    PickStringDialogFragment.Companion.show(mActivity.getSupportFragmentManager(),
+                            gtxt(R.string.multimedia_editor_text_field_editing_clone_source),
+                            mPossibleClones,
+                            controller);
                     // flow continues in the onClick function
-
                 }
             });
 

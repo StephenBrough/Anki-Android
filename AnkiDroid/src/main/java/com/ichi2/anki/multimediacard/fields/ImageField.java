@@ -70,7 +70,7 @@ public class ImageField extends FieldBase implements IField {
     @Override
     public boolean setImagePath(String pathToImage) {
         mImagePath = pathToImage;
-        setThisModified();
+        setThisModified(true);
         return true;
     }
 

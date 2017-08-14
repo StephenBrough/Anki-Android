@@ -364,7 +364,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         public void run() {
             Timber.i("AbstractFlashcardViewer:: onEmulatedLongClick");
             // Show hint about lookup function if dictionary available and Webview version supports text selection
-            if (!mDisableClipboard && Lookup.isAvailable() && CompatHelper.isHoneycomb()) {
+            if (!mDisableClipboard && Lookup.INSTANCE.isAvailable() && CompatHelper.isHoneycomb()) {
                 String lookupHint = getResources().getString(R.string.lookup_hint);
                 UIUtils.showThemedToast(AbstractFlashcardViewer.this, lookupHint, false);
             }
@@ -909,7 +909,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         }
 
         // Initialize dictionary lookup feature
-        Lookup.initialize(this);
+        Lookup.INSTANCE.initialize(this);
 
         updateScreenCounts();
         supportInvalidateOptionsMenu();
@@ -1210,7 +1210,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
     private boolean lookUp() {
         mLookUpIcon.setVisibility(View.GONE);
         mIsSelecting = false;
-        if (Lookup.lookUp(clipboardGetText().toString())) {
+        if (Lookup.INSTANCE.lookUp(getApplicationContext(), clipboardGetText().toString())) {
             clipboardSetText("");
         }
         return true;
@@ -1219,12 +1219,12 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
 
     private void showLookupButtonIfNeeded() {
         if (!mDisableClipboard && mClipboard != null) {
-            if (clipboardGetText().length() != 0 && Lookup.isAvailable() && mLookUpIcon.getVisibility() != View.VISIBLE) {
+            if (clipboardGetText().length() != 0 && Lookup.INSTANCE.isAvailable() && mLookUpIcon.getVisibility() != View.VISIBLE) {
                 mLookUpIcon.setVisibility(View.VISIBLE);
-                enableViewAnimation(mLookUpIcon, ViewAnimation.fade(ViewAnimation.FADE_IN, mFadeDuration, 0));
+                enableViewAnimation(mLookUpIcon, ViewAnimation.INSTANCE.fade(ViewAnimation.INSTANCE.getFADE_IN(), mFadeDuration, 0));
             } else if (mLookUpIcon.getVisibility() == View.VISIBLE) {
                 mLookUpIcon.setVisibility(View.GONE);
-                enableViewAnimation(mLookUpIcon, ViewAnimation.fade(ViewAnimation.FADE_OUT, mFadeDuration, 0));
+                enableViewAnimation(mLookUpIcon, ViewAnimation.INSTANCE.fade(ViewAnimation.INSTANCE.getFADE_OUT(), mFadeDuration, 0));
             }
         }
     }
@@ -1233,7 +1233,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
     private void hideLookupButton() {
         if (!mDisableClipboard && mLookUpIcon.getVisibility() != View.GONE) {
             mLookUpIcon.setVisibility(View.GONE);
-            enableViewAnimation(mLookUpIcon, ViewAnimation.fade(ViewAnimation.FADE_OUT, mFadeDuration, 0));
+            enableViewAnimation(mLookUpIcon, ViewAnimation.INSTANCE.fade(ViewAnimation.INSTANCE.getFADE_OUT(), mFadeDuration, 0));
             clipboardSetText("");
         }
     }
@@ -1272,7 +1272,6 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
                     return 0;
             }
         } catch (RuntimeException e) {
-            AnkiDroidApp.sendExceptionReport(e, "AbstractReviewer-getRecommendedEase");
             closeReviewer(DeckPicker.RESULT_DB_ERROR, true);
             return 0;
         }
@@ -1597,7 +1596,6 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         try {
             buttonCount = mSched.answerButtons(mCurrentCard);
         } catch (RuntimeException e) {
-            AnkiDroidApp.sendExceptionReport(e, "AbstractReviewer-showEaseButtons");
             closeReviewer(DeckPicker.RESULT_DB_ERROR, true);
             return;
         }

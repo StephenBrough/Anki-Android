@@ -93,7 +93,7 @@ public class TextField extends FieldBase implements IField {
     @Override
     public boolean setText(String text) {
         mText = text;
-        setThisModified();
+        setThisModified(true);
         return true;
     }
 

@@ -96,6 +96,7 @@ import com.ichi2.ui.DividerItemDecoration;
 import com.ichi2.utils.VersionUtils;
 import com.ichi2.widget.WidgetStatus;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -234,7 +235,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             long deckId = (long) v.getTag();
             Timber.i("DeckPicker:: Long tapped on deck with id %d", deckId);
             mContextMenuDid = deckId;
-            showDialogFragment(DeckPickerContextMenu.newInstance(deckId));
+            showDialogFragment(DeckPickerContextMenu.Companion.newInstance(deckId));
             return true;
         }
     };
@@ -329,7 +330,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             }
             String exportPath = result.getString();
             if (exportPath != null) {
-                showAsyncDialogFragment(DeckPickerExportCompleteDialog.newInstance(exportPath));
+                showAsyncDialogFragment(DeckPickerExportCompleteDialog.Companion.newInstance(exportPath));
             } else {
                 UIUtils.showThemedToast(DeckPicker.this, getResources().getString(R.string.export_unsuccessful), true);
             }
@@ -636,7 +637,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             case R.id.action_export:
                 Timber.i("DeckPicker:: Export collection button pressed");
                 String msg = getResources().getString(R.string.confirm_apkg_export);
-                showDialogFragment(ExportDialog.newInstance(msg));
+                showDialogFragment(ExportDialog.Companion.newInstance(msg));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -862,10 +863,10 @@ public class DeckPicker extends NavigationDrawerActivity implements
     private void showStartupScreensAndDialogs(SharedPreferences preferences, int skip) {
         if (!BackupManager.enoughDiscSpace(CollectionHelper.getCurrentAnkiDroidDirectory(this))) {
             // Not enough space to do backup
-            showDialogFragment(DeckPickerNoSpaceLeftDialog.newInstance());
+            showDialogFragment(DeckPickerNoSpaceLeftDialog.Companion.newInstance());
         } else if (preferences.getBoolean("noSpaceLeft", false)) {
             // No space left
-            showDialogFragment(DeckPickerBackupNoSpaceLeftDialog.newInstance());
+            showDialogFragment(DeckPickerBackupNoSpaceLeftDialog.Companion.newInstance());
             preferences.edit().remove("noSpaceLeft").commit();
         } else if (preferences.getString("lastVersion", "").equals("")) {
             // Fresh install
@@ -1039,20 +1040,19 @@ public class DeckPicker extends NavigationDrawerActivity implements
 
     // Show dialogs to deal with database loading issues etc
     public void showDatabaseErrorDialog(int id) {
-        AsyncDialogFragment newFragment = DatabaseErrorDialog.newInstance(id);
+        AsyncDialogFragment newFragment = DatabaseErrorDialog.Companion.newInstance(id);
         showAsyncDialogFragment(newFragment);
     }
 
 
     @Override
     public void showMediaCheckDialog(int id) {
-        showAsyncDialogFragment(MediaCheckDialog.newInstance(id));
+        showAsyncDialogFragment(MediaCheckDialog.Companion.newInstance(id));
     }
 
-
     @Override
-    public void showMediaCheckDialog(int id, List<List<String>> checkList) {
-        showAsyncDialogFragment(MediaCheckDialog.newInstance(id, checkList));
+    public void showMediaCheckDialog(int dialogType, @NotNull List<? extends List<String>> checkList) {
+        showAsyncDialogFragment(MediaCheckDialog.Companion.newInstance(dialogType, checkList));
     }
 
 
@@ -1072,7 +1072,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
      */
     @Override
     public void showSyncErrorDialog(int id, String message) {
-        AsyncDialogFragment newFragment = SyncErrorDialog.newInstance(id, message);
+        AsyncDialogFragment newFragment = SyncErrorDialog.Companion.newInstance(id, message);
         showAsyncDialogFragment(newFragment);
     }
 
@@ -1112,18 +1112,13 @@ public class DeckPicker extends NavigationDrawerActivity implements
 
     @Override
     public void showImportDialog(int id, String message) {
-        DialogFragment newFragment = ImportDialog.newInstance(id, message);
+        DialogFragment newFragment = ImportDialog.Companion.newInstance(id, message);
         showDialogFragment(newFragment);
     }
 
     public void onSdCardNotMounted() {
         UIUtils.showThemedToast(this, getResources().getString(R.string.sd_card_not_mounted), false);
         finishWithoutAnimation();
-    }
-
-    // Callback method to submit error report
-    public void sendErrorReport() {
-        AnkiDroidApp.sendExceptionReport(new RuntimeException(), "DeckPicker.sendErrorReport");
     }
 
 
@@ -1433,7 +1428,6 @@ public class DeckPicker extends NavigationDrawerActivity implements
                 }
             } catch (IllegalArgumentException e) {
                 Timber.e(e, "Could not dismiss mProgressDialog. The Activity must have been destroyed while the AsyncTask was running");
-                AnkiDroidApp.sendExceptionReport(e, "DeckPicker.onPostExecute", "Could not dismiss mProgressDialog");
             }
             syncMessage = data.message;
             if (!data.success) {
@@ -1785,7 +1779,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             UIUtils.showSnackbar(this, R.string.studyoptions_limit_reached, false, R.string.study_more, new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CustomStudyDialog d = CustomStudyDialog.newInstance(
+                    CustomStudyDialog d = CustomStudyDialog.Companion.newInstance(
                             CustomStudyDialog.CONTEXT_MENU_LIMITS,
                             getCol().getDecks().selected(), true);
                     showDialogFragment(d);
@@ -1825,7 +1819,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             UIUtils.showSnackbar(this, R.string.studyoptions_empty_schedule, false, R.string.custom_study, new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CustomStudyDialog d = CustomStudyDialog.newInstance(
+                    CustomStudyDialog d = CustomStudyDialog.Companion.newInstance(
                             CustomStudyDialog.CONTEXT_MENU_EMPTY_SCHEDULE,
                             getCol().getDecks().selected(), true);
                     showDialogFragment(d);
@@ -1952,7 +1946,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        showDialogFragment(ExportDialog.newInstance(msg, did));
+        showDialogFragment(ExportDialog.Companion.newInstance(msg, did));
     }
 
 
@@ -2044,7 +2038,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         } else {
             msg = res.getQuantityString(R.plurals.delete_deck_message, cnt, deckName, cnt);
         }
-        showDialogFragment(DeckPickerConfirmDeleteDeckDialog.newInstance(msg));
+        showDialogFragment(DeckPickerConfirmDeleteDeckDialog.Companion.newInstance(msg));
     }
 
 
@@ -2252,4 +2246,6 @@ public class DeckPicker extends NavigationDrawerActivity implements
             }
         });
     }
+
+
 }

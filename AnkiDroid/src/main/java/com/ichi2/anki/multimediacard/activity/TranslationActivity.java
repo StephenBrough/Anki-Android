@@ -120,7 +120,7 @@ public class TranslationActivity extends FragmentActivity implements DialogInter
         tvFrom.setText(getText(R.string.multimedia_editor_trans_from));
         linearLayout.addView(tvFrom);
 
-        mLanguageLister = new LanguagesListerGlosbe(this);
+        mLanguageLister = new LanguagesListerGlosbe();
 
         mSpinnerFrom = new Spinner(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
@@ -179,7 +179,7 @@ public class TranslationActivity extends FragmentActivity implements DialogInter
 
         @Override
         protected String doInBackground(Void... params) {
-            return HttpFetcher.fetchThroughHttp(mWebServiceAddress);
+            return HttpFetcher.INSTANCE.fetchThroughHttp(mWebServiceAddress);
         }
 
 
@@ -288,14 +288,10 @@ public class TranslationActivity extends FragmentActivity implements DialogInter
             return;
         }
 
-        PickStringDialogFragment fragment = new PickStringDialogFragment();
-
-        fragment.setChoices(mPossibleTranslations);
-        fragment.setOnclickListener(this);
-        fragment.setTitle(getText(R.string.multimedia_editor_trans_pick_translation).toString());
-
-        fragment.show(this.getSupportFragmentManager(), "pick.translation");
-
+        PickStringDialogFragment.Companion.show(getSupportFragmentManager(),
+                getString(R.string.multimedia_editor_trans_pick_translation),
+                mPossibleTranslations,
+                this);
     }
 
 
@@ -314,7 +310,7 @@ public class TranslationActivity extends FragmentActivity implements DialogInter
             return res;
         }
 
-        String desiredLang = LanguagesListerGlosbe.requestToResponseLangCode(languageCodeTo);
+        String desiredLang = LanguagesListerGlosbe.Companion.requestToResponseLangCode(languageCodeTo);
 
         for (Tuc tuc : tucs) {
             if (tuc == null) {
@@ -402,7 +398,7 @@ public class TranslationActivity extends FragmentActivity implements DialogInter
 
 
     private void stopWorking() {
-        TaskOperations.stopTaskGracefully(mTranslationLoadPost);
+        TaskOperations.INSTANCE.stopTaskGracefully(mTranslationLoadPost);
         dismissCarefullyProgressDialog();
     }
 

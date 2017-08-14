@@ -229,7 +229,7 @@ public class AnkiActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
     private void disableActivityAnimation() {
-        ActivityTransitionAnimation.slide(this, ActivityTransitionAnimation.NONE);
+        ActivityTransitionAnimation.INSTANCE.slide(this, ActivityTransitionAnimation.NONE);
     }
 
 
@@ -246,7 +246,7 @@ public class AnkiActivity extends AppCompatActivity implements LoaderManager.Loa
         if (animationDisabled()) {
             disableActivityAnimation();
         } else {
-            ActivityTransitionAnimation.slide(this, animation);
+            ActivityTransitionAnimation.INSTANCE.slide(this, animation);
         }
     }
 
@@ -397,12 +397,12 @@ public class AnkiActivity extends AppCompatActivity implements LoaderManager.Loa
      * @param reload flag which forces app to be restarted when true
      */
     protected void showSimpleMessageDialog(String message, boolean reload) {
-        AsyncDialogFragment newFragment = SimpleMessageDialog.newInstance(message, reload);
+        AsyncDialogFragment newFragment = SimpleMessageDialog.Companion.newInstance(message, reload);
         showAsyncDialogFragment(newFragment);
     }
 
     protected void showSimpleMessageDialog(String title, String message, boolean reload) {
-        AsyncDialogFragment newFragment = SimpleMessageDialog.newInstance(title, message, reload);
+        AsyncDialogFragment newFragment = SimpleMessageDialog.Companion.newInstance(title, message, reload);
         showAsyncDialogFragment(newFragment);
     }
 

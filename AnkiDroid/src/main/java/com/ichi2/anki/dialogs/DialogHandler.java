@@ -71,12 +71,12 @@ public class DialogHandler extends Handler {
             ((DeckPicker) mActivity.get()).showSyncErrorDialog(id, message);
         } else if (msg.what == MSG_SHOW_EXPORT_COMPLETE_DIALOG) {
             // Export complete
-            AsyncDialogFragment f = DeckPickerExportCompleteDialog.newInstance(msgData.getString("exportPath"));
+            AsyncDialogFragment f = DeckPickerExportCompleteDialog.Companion.newInstance(msgData.getString("exportPath"));
             mActivity.get().showAsyncDialogFragment(f);
         } else if (msg.what == MSG_SHOW_MEDIA_CHECK_COMPLETE_DIALOG) {            
             // Media check results
             int id = msgData.getInt("dialogType");
-            if (id!=MediaCheckDialog.DIALOG_CONFIRM_MEDIA_CHECK) {
+            if (id!= MediaCheckDialog.DIALOG_CONFIRM_MEDIA_CHECK) {
                 List<List<String>> checkList = new ArrayList<>();
                 checkList.add(msgData.getStringArrayList("nohave"));
                 checkList.add(msgData.getStringArrayList("unused"));

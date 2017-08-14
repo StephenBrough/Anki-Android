@@ -141,7 +141,7 @@ public class ModelFieldEditor extends AnkiActivity {
         mFieldLabelView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mContextMenu = ModelEditorContextMenu.newInstance(mFieldLabels.get(position), mContextMenuListener);
+                mContextMenu = ModelEditorContextMenu.Companion.newInstance(mFieldLabels.get(position), mContextMenuListener);
                 showDialogFragment(mContextMenu);
                 mCurrentPos = position;
             }

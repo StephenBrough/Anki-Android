@@ -138,7 +138,6 @@ public class Hooks {
     public static Object runFilter(String hook, Object arg, Object... args) {
         if (hooks == null) {
             Timber.e("Hooks object has not been initialized");
-            AnkiDroidApp.sendExceptionReport(new IllegalStateException("Hooks object uninitialized"), "Hooks.runFilter");
             return arg;
         }
         List<Hook> _hook = hooks.get(hook);

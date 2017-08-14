@@ -82,7 +82,7 @@ public class AudioField extends FieldBase implements IField {
     @Override
     public boolean setAudioPath(String pathToAudio) {
         mAudioPath = pathToAudio;
-        setThisModified();
+        setThisModified(true);
         return true;
     }
 

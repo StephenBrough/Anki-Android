@@ -506,7 +506,7 @@ public class CardBrowser extends NavigationDrawerActivity implements
                 String cardName = card.get("sfld");
                 boolean isMarked = (flags == 2 || flags == 3);
                 boolean isSuspended = (flags == 1 || flags == 3);
-                showDialogFragment(CardBrowserContextMenu
+                showDialogFragment(CardBrowserContextMenu.Companion
                         .newInstance(cardName, isMarked, isSuspended, mContextMenuListener));
                 return true;
             }
@@ -637,7 +637,7 @@ public class CardBrowser extends NavigationDrawerActivity implements
 
             case R.id.action_save_search:
                 String searchTerms = mSearchView.getQuery().toString();
-                showDialogFragment(CardBrowserMySearchesDialog.newInstance(null, mMySearchesDialogListener,
+                showDialogFragment(CardBrowserMySearchesDialog.Companion.newInstance(null, mMySearchesDialogListener,
                         searchTerms, CardBrowserMySearchesDialog.CARD_BROWSER_MY_SEARCHES_TYPE_SAVE));
                 return true;
 
@@ -651,11 +651,11 @@ public class CardBrowser extends NavigationDrawerActivity implements
                         savedFilters.put(searchName, savedFiltersObj.optString(searchName));
                     }
                 }
-                showDialogFragment(CardBrowserMySearchesDialog.newInstance(savedFilters, mMySearchesDialogListener,
+                showDialogFragment(CardBrowserMySearchesDialog.Companion.newInstance(savedFilters, mMySearchesDialogListener,
                         "", CardBrowserMySearchesDialog.CARD_BROWSER_MY_SEARCHES_TYPE_LIST));
                 return true;
             case R.id.action_sort_by_size:
-                showDialogFragment(CardBrowserOrderDialog
+                showDialogFragment(CardBrowserOrderDialog.Companion
                         .newInstance(mOrder, mOrderAsc, mOrderDialogListener));
                 return true;
 
@@ -729,8 +729,8 @@ public class CardBrowser extends NavigationDrawerActivity implements
     }
 
     private void showTagsDialog() {
-        TagsDialog dialog = com.ichi2.anki.dialogs.TagsDialog.newInstance(
-            TagsDialog.TYPE_FILTER_BY_TAG, new ArrayList<String>(), new ArrayList<>(getCol().getTags().all()));
+        TagsDialog dialog = TagsDialog.Companion.newInstance(
+                TagsDialog.TYPE_FILTER_BY_TAG, new ArrayList<String>(), new ArrayList<>(getCol().getTags().all()));
         dialog.setTagsDialogListener(new TagsDialogListener() {
             @Override
             public void onPositive(List<String> selectedTags, int option) {

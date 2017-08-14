@@ -104,7 +104,7 @@ public class LoadPronounciationActivity extends Activity implements OnCancelList
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layoutInLoadPronActivity);
 
-        mLanguageLister = new LanguageListerBeolingus(this);
+        mLanguageLister = new LanguageListerBeolingus();
 
         mSpinnerFrom = new Spinner(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
@@ -209,7 +209,7 @@ public class LoadPronounciationActivity extends Activity implements OnCancelList
             // }
 
             // Should be just this
-            return HttpFetcher.fetchThroughHttp(getAddress(), "ISO-8859-1");
+            return HttpFetcher.INSTANCE.fetchThroughHttp(getAddress(), "ISO-8859-1");
         }
 
 
@@ -249,7 +249,7 @@ public class LoadPronounciationActivity extends Activity implements OnCancelList
 
         @Override
         protected String doInBackground(Void... params) {
-            return HttpFetcher.downloadFileToSdCard(mAddress, mActivity, "pronunc");
+            return HttpFetcher.INSTANCE.downloadFileToSdCard(mAddress, mActivity, "pronunc");
         }
 
 
@@ -285,7 +285,7 @@ public class LoadPronounciationActivity extends Activity implements OnCancelList
                 return;
             }
 
-            mPronunciationAddress = BeolingusParser.getPronounciationAddressFromTranslation(mTranslation, mSource);
+            mPronunciationAddress = BeolingusParser.INSTANCE.getPronounciationAddressFromTranslation(mTranslation, mSource);
 
             if (mPronunciationAddress.contentEquals("no")) {
 
@@ -320,7 +320,7 @@ public class LoadPronounciationActivity extends Activity implements OnCancelList
 
             mPronunciationPage = result;
 
-            mMp3Address = BeolingusParser.getMp3AddressFromPronounciation(mPronunciationPage);
+            mMp3Address = BeolingusParser.INSTANCE.getMp3AddressFromPronounciation(mPronunciationPage);
 
             if (mMp3Address.contentEquals("no")) {
                 failNoPronunciation();
@@ -471,11 +471,11 @@ public class LoadPronounciationActivity extends Activity implements OnCancelList
     private void stopAllTasks() {
         AsyncTask<?, ?, ?> t;
         t = mPostTranslation;
-        TaskOperations.stopTaskGracefully(t);
+        TaskOperations.INSTANCE.stopTaskGracefully(t);
         t = mPostPronunciation;
-        TaskOperations.stopTaskGracefully(t);
+        TaskOperations.INSTANCE.stopTaskGracefully(t);
         t = mDownloadMp3Task;
-        TaskOperations.stopTaskGracefully(t);
+        TaskOperations.INSTANCE.stopTaskGracefully(t);
     }
 
 

@@ -310,22 +310,22 @@ public class Stats {
         StatsMetaInfo metaInfo = new StatsMetaInfo();
         metaInfo = (StatsMetaInfo) Hooks.getInstance(context).runFilter("advancedStatistics", metaInfo, type, context, _limit());
         if (metaInfo.isStatsCalculated()) {
-            mDynamicAxis = metaInfo.ismDynamicAxis();
-            mHasColoredCumulative = metaInfo.ismHasColoredCumulative();
-            mType = metaInfo.getmType();
-            mTitle = metaInfo.getmTitle();
-            mBackwards = metaInfo.ismBackwards();
-            mValueLabels = metaInfo.getmValueLabels();
-            mColors = metaInfo.getmColors();
-            mAxisTitles = metaInfo.getmAxisTitles();
-            mMaxCards = metaInfo.getmMaxCards();
-            mMaxElements = metaInfo.getmMaxElements();
-            mFirstElement = metaInfo.getmFirstElement();
-            mLastElement = metaInfo.getmLastElement();
-            mZeroIndex = metaInfo.getmZeroIndex();
-            mCumulative = metaInfo.getmCumulative();
-            mMcount = metaInfo.getmMcount();
-            mSeriesList = metaInfo.getmSeriesList();
+            mDynamicAxis = metaInfo.getDynamicAxis();
+            mHasColoredCumulative = metaInfo.getHasColoredCumulative();
+            mType = metaInfo.getType();
+            mTitle = metaInfo.getTitle();
+            mBackwards = metaInfo.getBackwards();
+            mValueLabels = metaInfo.getValueLabels();
+            mColors = metaInfo.getColors();
+            mAxisTitles = metaInfo.getAxisTitles();
+            mMaxCards = metaInfo.getMaxCards();
+            mMaxElements = metaInfo.getMaxElements();
+            mFirstElement = metaInfo.getFirstElement();
+            mLastElement = metaInfo.getLastElement();
+            mZeroIndex = metaInfo.getZeroIndex();
+            mCumulative = metaInfo.getCumulative();
+            mMcount = metaInfo.getCount();
+            mSeriesList = metaInfo.getSeriesList();
             return metaInfo.isDataAvailable();
         } else {
             return calculateDue(type);

@@ -23,7 +23,6 @@ public class CollectionLoader extends AsyncTaskLoader<Collection> {
             return CollectionHelper.getInstance().getCol(getContext());
         } catch (RuntimeException e) {
             Timber.e(e, "loadInBackground - RuntimeException on opening collection");
-            AnkiDroidApp.sendExceptionReport(e, "CollectionLoader.loadInBackground");
             return null;
         }
     }

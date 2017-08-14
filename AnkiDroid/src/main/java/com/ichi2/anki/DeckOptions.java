@@ -373,7 +373,7 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                     mCol.getDecks().save(mOptions);
                 } catch (RuntimeException e) {
                     Timber.e("DeckOptions - RuntimeException on saving conf: " + e);
-                    AnkiDroidApp.sendExceptionReport(e, "DeckOptionsSaveConf");
+//                    AnkiDroidApp.sendExceptionReport(e, "DeckOptionsSaveConf");
                     setResult(DeckPicker.RESULT_DB_ERROR);
                     finish();
                 }
@@ -679,7 +679,7 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
             setResult(RESULT_CANCELED);
         }
         finish();
-        ActivityTransitionAnimation.slide(this, ActivityTransitionAnimation.FADE);
+        ActivityTransitionAnimation.INSTANCE.slide(this, ActivityTransitionAnimation.FADE);
     }
 
 

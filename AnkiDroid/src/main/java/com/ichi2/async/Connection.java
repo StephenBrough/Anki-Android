@@ -207,7 +207,7 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
         } catch (Exception e2) {
             // Ask user to report all bugs which aren't timeout errors
             if (!timeoutOccured(e2)) {
-                AnkiDroidApp.sendExceptionReport(e2, "doInBackgroundLogin");
+//                AnkiDroidApp.sendExceptionReport(e2, "doInBackgroundLogin");
             }
             data.success = false;
             data.result = new Object[] {"connectionError" };
@@ -354,7 +354,7 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
                         }
                     }
                 } catch (OutOfMemoryError e) {
-                    AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync-fullSync");
+//                    AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync-fullSync");
                     data.success = false;
                     data.result = new Object[] { "OutOfMemoryError" };
                     return data;
@@ -364,7 +364,7 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
                     } else if (e.getMessage().equals("UserAbortedSync")) {
                         data.result = new Object[] {"UserAbortedSync" };
                     } else {
-                        AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync-fullSync");
+//                        AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync-fullSync");
                         data.result = new Object[] { "IOException" };
                     }
                     data.success = false;
@@ -405,7 +405,7 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
                     } else if (e.getMessage().equals("UserAbortedSync")) {
                         data.result = new Object[] {"UserAbortedSync" };
                     } else {
-                        AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync-mediaSync");
+//                        AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync-mediaSync");
                     }
                     mediaError = e.getLocalizedMessage();
                 }
@@ -423,7 +423,7 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
             Timber.e("Media sync rejected by server");
             data.success = false;
             data.result = new Object[] {"mediaSyncServerError"};
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync");
+//            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync");
             return data;
         } catch (UnknownHttpResponseException e) {
             Timber.e("doInBackgroundSync -- unknown response code error");
@@ -444,7 +444,7 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
             } else if (e.getMessage().equals("UserAbortedSync")) {
                 data.result = new Object[] {"UserAbortedSync" };
             } else {
-                AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync");
+//                AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSync");
                 data.result = new Object[] {e.getLocalizedMessage()};
             }
             return data;

@@ -269,23 +269,23 @@ public class AdvancedStatistics extends Hook  {
         if(mMaxCards == 0)
             mMaxCards = 10;
 
-        metaInfo.setmDynamicAxis(true);
-        metaInfo.setmHasColoredCumulative(true);
-        metaInfo.setmType(type);
-        metaInfo.setmTitle(R.string.stats_forecast);
-        metaInfo.setmBackwards(true);
-        metaInfo.setmValueLabels(mValueLabels);
-        metaInfo.setmColors(mColors);
-        metaInfo.setmAxisTitles(mAxisTitles);
-        metaInfo.setmMaxCards(mMaxCards);
-        metaInfo.setmMaxElements(mMaxElements);
-        metaInfo.setmFirstElement(mFirstElement);
-        metaInfo.setmLastElement(mLastElement);
-        metaInfo.setmZeroIndex(mZeroIndex);
-        metaInfo.setmCumulative(mCumulative);
-        metaInfo.setmMcount(mMcount);
+        metaInfo.setDynamicAxis(true);
+        metaInfo.setHasColoredCumulative(true);
+        metaInfo.setType(type);
+        metaInfo.setTitle(R.string.stats_forecast);
+        metaInfo.setBackwards(true);
+        metaInfo.setValueLabels(mValueLabels);
+        metaInfo.setColors(mColors);
+        metaInfo.setAxisTitles(mAxisTitles);
+        metaInfo.setMaxCards(mMaxCards);
+        metaInfo.setMaxElements(mMaxElements);
+        metaInfo.setFirstElement(mFirstElement);
+        metaInfo.setLastElement(mLastElement);
+        metaInfo.setZeroIndex(mZeroIndex);
+        metaInfo.setCumulative(mCumulative);
+        metaInfo.setCount(mMcount);
 
-        metaInfo.setmSeriesList(mSeriesList);
+        metaInfo.setSeriesList(mSeriesList);
 
         metaInfo.setDataAvailable(dues.size() > 0);
 

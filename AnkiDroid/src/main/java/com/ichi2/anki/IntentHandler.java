@@ -73,7 +73,6 @@ public class IntentHandler extends Activity {
                         Timber.w("Could not retrieve filename from ContentProvider, but was valid zip file so we try to continue");
                     } else {
                         Timber.e("Could not retrieve filename from ContentProvider or read content as ZipFile");
-                        AnkiDroidApp.sendExceptionReport(new RuntimeException("Could not import apkg from ContentProvider"), "IntentHandler.java", "apkg import failed");
                     }
                 }
 
@@ -88,7 +87,7 @@ public class IntentHandler extends Activity {
                     if (successful) {
                         sendShowImportFileDialogMsg(tempOutDir);
                     } else {
-                        AnkiDroidApp.sendExceptionReport(new RuntimeException("Error importing apkg file"), "IntentHandler.java", "apkg import failed");
+//                        AnkiDroidApp.sendExceptionReport(new RuntimeException("Error importing apkg file"), "IntentHandler.java", "apkg import failed");
                     }
                 }
             } else if (intent.getData().getScheme().equals("file")) {
@@ -141,7 +140,7 @@ public class IntentHandler extends Activity {
             // otherwise go to previous task
             reloadIntent.setAction(Intent.ACTION_MAIN);
             reloadIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-            reloadIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+            reloadIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivityIfNeeded(reloadIntent, 0);
             finishWithFade();
         }
@@ -187,7 +186,7 @@ public class IntentHandler extends Activity {
     /** Finish Activity using FADE animation **/
     private void finishWithFade() {
     	finish();
-    	ActivityTransitionAnimation.slide(this, ActivityTransitionAnimation.UP);
+    	ActivityTransitionAnimation.INSTANCE.slide(this, ActivityTransitionAnimation.UP);
     }
 
     /**

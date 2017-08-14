@@ -224,10 +224,8 @@ public class Syncer {
         } catch (JSONException | IllegalStateException e) {
             throw new RuntimeException(e);
         } catch (OutOfMemoryError e) {
-            AnkiDroidApp.sendExceptionReport(e, "Syncer-sync");
             return new Object[] { "OutOfMemoryError" };
         } catch (IOException e) {
-            AnkiDroidApp.sendExceptionReport(e, "Syncer-sync");
             return new Object[] { "IOException" };
         }
         return new Object[] { "success" };

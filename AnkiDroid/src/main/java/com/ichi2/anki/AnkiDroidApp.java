@@ -28,17 +28,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ViewConfiguration;
 
-import com.ichi2.anki.dialogs.AnkiDroidCrashReportDialog;
+import com.crashlytics.android.Crashlytics;
 import com.ichi2.anki.exception.StorageAccessException;
 import com.ichi2.compat.CompatHelper;
 import com.ichi2.utils.LanguageUtil;
 
-import org.acra.ACRA;
-import org.acra.ACRAConfigurationException;
-import org.acra.ReportField;
-import org.acra.ReportingInteractionMode;
-import org.acra.annotation.ReportsCrashes;
-import org.acra.sender.HttpSender;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,68 +40,12 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
  * Application class.
  */
-@ReportsCrashes(
-        reportDialogClass = AnkiDroidCrashReportDialog.class,
-        httpMethod = HttpSender.Method.PUT,
-        reportType = HttpSender.Type.JSON,
-        formUri = "https://ankidroid.org/acra/report",
-        mode = ReportingInteractionMode.DIALOG,
-        resDialogCommentPrompt =  R.string.empty_string,
-        resDialogTitle =  R.string.feedback_title,
-        resDialogText =  R.string.feedback_default_text,
-        resToastText = R.string.feedback_auto_toast_text,
-        resDialogPositiveButtonText = R.string.feedback_report,
-        additionalSharedPreferences = {"com.ichi2.anki"},
-        excludeMatchingSharedPreferencesKeys = {"username","hkey"},
-        customReportContent = {
-            ReportField.REPORT_ID,
-            ReportField.APP_VERSION_CODE,
-            ReportField.APP_VERSION_NAME,
-            ReportField.PACKAGE_NAME,
-            ReportField.FILE_PATH,
-            ReportField.PHONE_MODEL,
-            ReportField.ANDROID_VERSION,
-            ReportField.BUILD,
-            ReportField.BRAND,
-            ReportField.PRODUCT,
-            ReportField.TOTAL_MEM_SIZE,
-            ReportField.AVAILABLE_MEM_SIZE,
-            ReportField.BUILD_CONFIG,
-            ReportField.CUSTOM_DATA,
-            ReportField.STACK_TRACE,
-            ReportField.STACK_TRACE_HASH,
-            //ReportField.INITIAL_CONFIGURATION,
-            ReportField.CRASH_CONFIGURATION,
-            //ReportField.DISPLAY,
-            ReportField.USER_COMMENT,
-            ReportField.USER_APP_START_DATE,
-            ReportField.USER_CRASH_DATE,
-            //ReportField.DUMPSYS_MEMINFO,
-            //ReportField.DROPBOX,
-            ReportField.LOGCAT,
-            //ReportField.EVENTSLOG,
-            //ReportField.RADIOLOG,
-            //ReportField.IS_SILENT,
-            ReportField.INSTALLATION_ID,
-            //ReportField.USER_EMAIL,
-            //ReportField.DEVICE_FEATURES,
-            ReportField.ENVIRONMENT,
-            //ReportField.SETTINGS_SYSTEM,
-            //ReportField.SETTINGS_SECURE,
-            //ReportField.SETTINGS_GLOBAL,
-            ReportField.SHARED_PREFERENCES,
-            ReportField.APPLICATION_LOG,
-            ReportField.MEDIA_CODEC_LIST,
-            ReportField.THREAD_DETAILS
-            //ReportField.USER_IP
-        },
-        logcatArguments = { "-t", "100", "-v", "time", "ActivityManager:I", "SQLiteLog:W", AnkiDroidApp.TAG + ":D", "*:S" }
-)
 public class AnkiDroidApp extends Application {
 
     public static final String XML_CUSTOM_NAMESPACE = "http://arbitrary.app.namespace/com.ichi2.anki";
@@ -145,30 +83,20 @@ public class AnkiDroidApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         // Get preferences
         SharedPreferences preferences = getSharedPrefs(this);
-
-        // Initialize crash reporting module
-        ACRA.init(this);
 
         // Setup logging and crash reporting
         if (BuildConfig.DEBUG) {
             // Enable verbose error logging and do method tracing to put the Class name as log tag
             Timber.plant(new Timber.DebugTree());
-            // Disable crash reporting
-            setAcraReportingMode(FEEDBACK_REPORT_NEVER);
-            preferences.edit().putString("reportErrorMode", FEEDBACK_REPORT_NEVER).commit();
-            // Use a wider logcat filter incase crash reporting manually re-enabled
-            String [] logcatArgs = { "-t", "300", "-v", "long", "ACRA:S"};
-            ACRA.getConfig().setLogcatArguments(logcatArgs);
         } else {
             // Disable verbose error logging and use fixed log tag "AnkiDroid"
             Timber.plant(new ProductionCrashReportingTree());
-            // Enable or disable crash reporting based on user setting
-            setAcraReportingMode(preferences.getString("reportErrorMode", FEEDBACK_REPORT_ASK));
+            Fabric.with(this, new Crashlytics());
         }
         Timber.tag(TAG);
-
 
         sInstance = this;
         setLanguage(preferences.getString(Preferences.LANGUAGE, ""));
@@ -194,7 +122,7 @@ public class AnkiDroidApp extends Application {
                 String defaultDir = CollectionHelper.getDefaultAnkiDroidDirectory();
                 if (isSdCardMounted() && CollectionHelper.getCurrentAnkiDroidDirectory(this).equals(defaultDir)) {
                     // Don't send report if the user is using a custom directory as SD cards trip up here a lot
-                    sendExceptionReport(e, "AnkiDroidApp.onCreate");
+//                    sendExceptionReport(e, "AnkiDroidApp.onCreate");
                 }
             }
         }
@@ -239,49 +167,6 @@ public class AnkiDroidApp extends Application {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
-
-    public static void sendExceptionReport(Throwable e, String origin) {
-        sendExceptionReport(e, origin, null);
-    }
-
-
-    public static void sendExceptionReport(Throwable e, String origin, String additionalInfo) {
-        //CustomExceptionHandler.getInstance().uncaughtException(null, e, origin, additionalInfo);
-        SharedPreferences prefs = getSharedPrefs(getInstance());
-        // Only send report if we have not sent an identical report before
-        try {
-            JSONObject sentReports = new JSONObject(prefs.getString("sentExceptionReports", "{}"));
-            String hash = getExceptionHash(e);
-            if (sentReports.has(hash)) {
-                Timber.i("The exception report with hash %s has already been sent from this device", hash);
-                return;
-            } else {
-                sentReports.put(hash, true);
-                prefs.edit().putString("sentExceptionReports", sentReports.toString()).apply();
-            }
-        } catch (JSONException e1) {
-            Timber.i(e1, "Could not get cache of sent exception reports");
-        }
-        ACRA.getErrorReporter().putCustomData("origin", origin);
-        ACRA.getErrorReporter().putCustomData("additionalInfo", additionalInfo);
-        ACRA.getErrorReporter().handleException(e);
-    }
-
-    private static String getExceptionHash(Throwable th) {
-        final StringBuilder res = new StringBuilder();
-        Throwable cause = th;
-        while (cause != null) {
-            final StackTraceElement[] stackTraceElements = cause.getStackTrace();
-            for (final StackTraceElement e : stackTraceElements) {
-                res.append(e.getClassName());
-                res.append(e.getMethodName());
-            }
-            cause = cause.getCause();
-        }
-        return Integer.toHexString(res.toString().hashCode());
-    }
-
-
     /**
      * Sets the user language.
      *
@@ -309,34 +194,6 @@ public class AnkiDroidApp extends Application {
             }
         }
         return enabled;
-    }
-
-
-    /**
-     * Set the reporting mode for ACRA based on the value of the reportErrorMode preference
-     * @param value value of reportErrorMode preference
-     */
-    public void setAcraReportingMode(String value) {
-        SharedPreferences.Editor editor = ACRA.getACRASharedPreferences().edit();
-        // Set the ACRA disable value
-        if (value.equals(FEEDBACK_REPORT_NEVER)) {
-            editor.putBoolean("acra.disable", true);
-        } else {
-            editor.putBoolean("acra.disable", false);
-            // Switch between auto-report via toast and manual report via dialog
-            try {
-                if (value.equals(FEEDBACK_REPORT_ALWAYS)) {
-                    ACRA.getConfig().setMode(ReportingInteractionMode.TOAST);
-                    ACRA.getConfig().setResToastText(R.string.feedback_auto_toast_text);
-                } else if (value.equals(FEEDBACK_REPORT_ASK)) {
-                    ACRA.getConfig().setMode(ReportingInteractionMode.DIALOG);
-                    ACRA.getConfig().setResToastText(R.string.feedback_manual_toast_text);
-                }
-            } catch (ACRAConfigurationException e) {
-                Timber.e("Could not set ACRA report mode");
-            }
-        }
-        editor.commit();
     }
 
     /**

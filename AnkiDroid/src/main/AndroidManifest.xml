@@ -22,8 +22,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ichi2.anki"
           android:installLocation="auto"
-          android:versionCode="20900105"
-          android:versionName="2.9alpha5">
+         >
 
     <!--
         The version number is of the form:
@@ -373,6 +372,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3bc2d8fd6a6f923b194f86d0da42f846b8f57b13" />
     </application>
 
 </manifest>

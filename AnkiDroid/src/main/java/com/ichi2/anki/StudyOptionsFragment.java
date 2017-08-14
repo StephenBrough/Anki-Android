@@ -150,7 +150,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
         Intent i = new Intent(getActivity(), FilteredDeckOptions.class);
         i.putExtra("defaultConfig", defaultConfig);
         getActivity().startActivityForResult(i, DECK_OPTIONS);
-        ActivityTransitionAnimation.slide(getActivity(), ActivityTransitionAnimation.FADE);
+        ActivityTransitionAnimation.INSTANCE.slide(getActivity(), ActivityTransitionAnimation.FADE);
     }
 
 
@@ -215,7 +215,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
         if (!mFragmented && a != null) {
             a.setResult(result);
             a.finish();
-            ActivityTransitionAnimation.slide(a, ActivityTransitionAnimation.RIGHT);
+            ActivityTransitionAnimation.INSTANCE.slide(a, ActivityTransitionAnimation.RIGHT);
         } else if (a == null) {
             // getActivity() can return null if reference to fragment lingers after parent activity has been closed,
             // which is particularly relevant when using AsyncTasks.
@@ -240,7 +240,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
 
 
     private void animateLeft() {
-        ActivityTransitionAnimation.slide(getActivity(), ActivityTransitionAnimation.LEFT);
+        ActivityTransitionAnimation.INSTANCE.slide(getActivity(), ActivityTransitionAnimation.LEFT);
     }
 
 
@@ -270,7 +270,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
      * Show the context menu for the custom study options
      */
     private void showCustomStudyContextMenu() {
-        CustomStudyDialog d = CustomStudyDialog.newInstance(CustomStudyDialog.CONTEXT_MENU_STANDARD,
+        CustomStudyDialog d = CustomStudyDialog.Companion.newInstance(CustomStudyDialog.CONTEXT_MENU_STANDARD,
                 getCol().getDecks().selected());
         ((AnkiActivity)getActivity()).showDialogFragment(d);
     }
@@ -298,7 +298,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
                 } else {
                     Intent i = new Intent(getActivity(), DeckOptions.class);
                     getActivity().startActivityForResult(i, DECK_OPTIONS);
-                    ActivityTransitionAnimation.slide(getActivity(), ActivityTransitionAnimation.FADE);
+                    ActivityTransitionAnimation.INSTANCE.slide(getActivity(), ActivityTransitionAnimation.FADE);
                 }
                 return true;
             case R.id.action_custom_study:

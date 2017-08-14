@@ -384,7 +384,6 @@ public class DeckTask extends BaseAsyncTask<DeckTask.TaskData, DeckTask.TaskData
             }
         } catch (RuntimeException e) {
             Timber.e(e, "doInBackgroundAddNote - RuntimeException on adding fact");
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundAddNote");
             return new TaskData(false);
         }
         return new TaskData(true);
@@ -427,7 +426,6 @@ public class DeckTask extends BaseAsyncTask<DeckTask.TaskData, DeckTask.TaskData
             }
         } catch (RuntimeException e) {
             Timber.e(e, "doInBackgroundUpdateNote - RuntimeException on updating fact");
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundUpdateNote");
             return new TaskData(false);
         }
         return new TaskData(true);
@@ -461,7 +459,6 @@ public class DeckTask extends BaseAsyncTask<DeckTask.TaskData, DeckTask.TaskData
             }
         } catch (RuntimeException e) {
             Timber.e(e, "doInBackgroundAnswerCard - RuntimeException on answering card");
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundAnswerCard");
             return new TaskData(false);
         }
         return new TaskData(true);
@@ -569,7 +566,6 @@ public class DeckTask extends BaseAsyncTask<DeckTask.TaskData, DeckTask.TaskData
             }
         } catch (RuntimeException e) {
             Timber.e(e, "doInBackgroundSuspendCard - RuntimeException on suspending card");
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundSuspendCard");
             return new TaskData(false);
         }
         return new TaskData(true);
@@ -605,7 +601,6 @@ public class DeckTask extends BaseAsyncTask<DeckTask.TaskData, DeckTask.TaskData
             }
         } catch (RuntimeException e) {
             Timber.e(e, "doInBackgroundUndo - RuntimeException on undoing");
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundUndo");
             return new TaskData(false);
         }
         return new TaskData(true);
@@ -774,7 +769,6 @@ public class DeckTask extends BaseAsyncTask<DeckTask.TaskData, DeckTask.TaskData
             zip = new ZipFile(new File(path), ZipFile.OPEN_READ);
         } catch (IOException e) {
             Timber.e(e, "doInBackgroundImportReplace - Error while unzipping");
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundImportReplace0");
             return new TaskData(false);
         }
         try {
@@ -864,15 +858,12 @@ public class DeckTask extends BaseAsyncTask<DeckTask.TaskData, DeckTask.TaskData
             return new TaskData(true);
         } catch (RuntimeException e) {
             Timber.e(e, "doInBackgroundImportReplace - RuntimeException");
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundImportReplace1");
             return new TaskData(false);
         } catch (FileNotFoundException e) {
             Timber.e(e, "doInBackgroundImportReplace - FileNotFoundException");
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundImportReplace2");
             return new TaskData(false);
         } catch (IOException e) {
             Timber.e(e, "doInBackgroundImportReplace - IOException");
-            AnkiDroidApp.sendExceptionReport(e, "doInBackgroundImportReplace3");
             return new TaskData(false);
         }
     }

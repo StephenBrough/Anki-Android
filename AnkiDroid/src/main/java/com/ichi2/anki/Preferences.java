@@ -530,8 +530,6 @@ public class Preferences extends AppCompatPreferenceActivity implements Preferen
                     break;
                 }
                 case "reportErrorMode": {
-                    String value = prefs.getString("reportErrorMode", "");
-                    AnkiDroidApp.getInstance().setAcraReportingMode(value);
                     AnkiDroidApp.getSharedPrefs(this).edit().remove("sentExceptionReports").apply();    // clear cache
                     break;
                 }
@@ -769,7 +767,7 @@ public class Preferences extends AppCompatPreferenceActivity implements Preferen
 
     private void closePreferences() {
         finish();
-        ActivityTransitionAnimation.slide(this, ActivityTransitionAnimation.FADE);
+        ActivityTransitionAnimation.INSTANCE.slide(this, ActivityTransitionAnimation.FADE);
         if (getCol() != null && getCol().getDb()!= null) {
             getCol().save();
         }
