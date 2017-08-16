@@ -313,14 +313,14 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
                 return true;
             case R.id.action_rebuild:
                 Timber.i("StudyOptionsFragment:: rebuild cram deck button pressed");
-                mProgressDialog = StyledProgressDialog.show(getActivity(), "",
+                mProgressDialog = StyledProgressDialog.Companion.show(getActivity(), "",
                         getResources().getString(R.string.rebuild_cram_deck), true);
                 DeckTask.launchDeckTask(DeckTask.TASK_TYPE_REBUILD_CRAM, getDeckTaskListener(true),
                         new DeckTask.TaskData(mFragmented));
                 return true;
             case R.id.action_empty:
                 Timber.i("StudyOptionsFragment:: empty cram deck button pressed");
-                mProgressDialog = StyledProgressDialog.show(getActivity(), "",
+                mProgressDialog = StyledProgressDialog.Companion.show(getActivity(), "",
                         getResources().getString(R.string.empty_cram_deck), false);
                 DeckTask.launchDeckTask(DeckTask.TASK_TYPE_EMPTY_CRAM, getDeckTaskListener(true),
                         new DeckTask.TaskData(mFragmented));
@@ -422,7 +422,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-                    mProgressDialog = StyledProgressDialog.show(getActivity(), "",
+                    mProgressDialog = StyledProgressDialog.Companion.show(getActivity(), "",
                             getResources().getString(R.string.rebuild_cram_deck), true);
                     DeckTask.launchDeckTask(DeckTask.TASK_TYPE_REBUILD_CRAM, getDeckTaskListener(true),
                             new DeckTask.TaskData(mFragmented));
@@ -436,7 +436,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
                 int[] counts = getCol().getSched().counts();
                 if ((counts[0]+counts[1]+counts[2])>0 && mStudyOptionsView != null) {
                     View rootLayout = mStudyOptionsView.findViewById(R.id.studyoptions_main);
-                    UIUtils.showSnackbar(getActivity(), R.string.studyoptions_no_cards_due, false, 0, null, rootLayout);
+                    UIUtils.INSTANCE.showSnackbar(getActivity(), R.string.studyoptions_no_cards_due, false, 0, null, rootLayout);
                 }
             }
         } else if (requestCode == STATISTICS && mCurrentContentView == CONTENT_CONGRATS) {

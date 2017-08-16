@@ -291,7 +291,7 @@ public class CardBrowser extends NavigationDrawerActivity implements
         @Override
         public void OnSaveSearch(String searchName, String searchTerms) {
             if (TextUtils.isEmpty(searchName)) {
-                UIUtils.showThemedToast(CardBrowser.this,
+                UIUtils.INSTANCE.showThemedToast(CardBrowser.this,
                         getString(R.string.card_browser_list_my_searches_new_search_error_empty_name), true);
                 return;
             }
@@ -306,7 +306,7 @@ public class CardBrowser extends NavigationDrawerActivity implements
                     savedFiltersObj.put(searchName, searchTerms);
                     should_save = true;
                 } else {
-                    UIUtils.showThemedToast(CardBrowser.this,
+                    UIUtils.INSTANCE.showThemedToast(CardBrowser.this,
                             getString(R.string.card_browser_list_my_searches_new_search_error_dup), true);
                 }
                 if (should_save) {
@@ -397,7 +397,7 @@ public class CardBrowser extends NavigationDrawerActivity implements
             if (mOrder == 1 && preferences.getBoolean("cardBrowserNoSorting", false)) {
                 mOrder = 0;
             }
-            mOrderAsc = Upgrade.upgradeJSONIfNecessary(getCol(), getCol().getConf(), "sortBackwards", false);
+            mOrderAsc = Upgrade.INSTANCE.upgradeJSONIfNecessary(getCol(), getCol().getConf(), "sortBackwards", false);
             // default to descending for non-text fields
             if (fSortTypes[mOrder].equals("noteFld")) {
                 mOrderAsc = !mOrderAsc;
@@ -530,8 +530,8 @@ public class CardBrowser extends NavigationDrawerActivity implements
         DeckTask.cancelTask(DeckTask.TASK_TYPE_RENDER_BROWSER_QA);
         super.onStop();
         if (!isFinishing()) {
-            WidgetStatus.update(this);
-            UIUtils.saveCollectionInBackground(this);
+            WidgetStatus.INSTANCE.update(this);
+            UIUtils.INSTANCE.saveCollectionInBackground(this);
         }
     }
 
@@ -1072,7 +1072,7 @@ public class CardBrowser extends NavigationDrawerActivity implements
                 Timber.i("CardBrowser:: Completed doInBackgroundSearchCards Successfuly");
                 updateList();
                 if (!mSearchView.isIconified()) {
-                    UIUtils.showSimpleSnackbar(CardBrowser.this, getSubtitleText(), false);
+                    UIUtils.INSTANCE.showSimpleSnackbar(CardBrowser.this, getSubtitleText(), false);
                 }
             }
             hideProgressBar();
@@ -1194,7 +1194,7 @@ public class CardBrowser extends NavigationDrawerActivity implements
             mColorFlagKey = colorFlagKey;
             mFontSizeScalePcent = fontSizeScalePcent;
             if (!customFont.equals("")) {
-                mCustomTypeface = AnkiFont.getTypeface(context, customFont);
+                mCustomTypeface = AnkiFont.Companion.getTypeface(context, customFont);
             }
             mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
@@ -1224,7 +1224,7 @@ public class CardBrowser extends NavigationDrawerActivity implements
             View[] columns = (View[]) v.getTag();
             final Map<String, String> dataSet = getCards().get(position);
             final int colorIdx = getColor(dataSet.get(mColorFlagKey));
-            int[] colors = Themes.getColorFromAttr(CardBrowser.this, new int[]{android.R.attr.colorBackground,
+            int[] colors = Themes.INSTANCE.getColorFromAttr(CardBrowser.this, new int[]{android.R.attr.colorBackground,
                     R.attr.markedColor, R.attr.suspendedColor, R.attr.markedColor});
             for (int i = 0; i < mToIds.length; i++) {
                 TextView col = (TextView) columns[i];

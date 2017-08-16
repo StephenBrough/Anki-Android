@@ -231,7 +231,7 @@ public class NavigationDrawerActivity extends AnkiActivity implements Navigation
                     // Workaround to kick user back to StudyOptions after opening settings from Reviewer
                     // because onDestroy() of old Activity interferes with TTS in new Activity
                     finishWithoutAnimation();
-                } else if (mOldTheme != Themes.getCurrentTheme(getApplicationContext())) {
+                } else if (mOldTheme != Themes.INSTANCE.getCurrentTheme(getApplicationContext())) {
                     // The current theme was changed, so need to reload the stack with the new theme
                     CompatHelper.getCompat().restartActivityInvalidateBackstack(NavigationDrawerActivity.this);
                 } else {
@@ -293,7 +293,7 @@ public class NavigationDrawerActivity extends AnkiActivity implements Navigation
                     case R.id.nav_settings:
                         mOldColPath = CollectionHelper.getCurrentAnkiDroidDirectory(NavigationDrawerActivity.this);
                         // Remember the theme we started with so we can restart the Activity if it changes
-                        mOldTheme = Themes.getCurrentTheme(getApplicationContext());
+                        mOldTheme = Themes.INSTANCE.getCurrentTheme(getApplicationContext());
                         startActivityForResultWithAnimation(new Intent(NavigationDrawerActivity.this, Preferences.class), REQUEST_PREFERENCES_UPDATE, ActivityTransitionAnimation.FADE);
                         break;
                     case R.id.nav_help:

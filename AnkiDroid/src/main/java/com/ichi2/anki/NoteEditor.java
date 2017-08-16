@@ -191,7 +191,7 @@ public class NoteEditor extends AnkiActivity {
         public void onPreExecute() {
             Resources res = getResources();
             mProgressDialog = StyledProgressDialog
-                    .show(NoteEditor.this, "", res.getString(R.string.saving_facts), false);
+                    .Companion.show(NoteEditor.this, "", res.getString(R.string.saving_facts), false);
         }
 
 
@@ -217,10 +217,10 @@ public class NoteEditor extends AnkiActivity {
                 } catch (JSONException e) {
                     throw new RuntimeException();
                 }
-                UIUtils.showThemedToast(NoteEditor.this,
+                UIUtils.INSTANCE.showThemedToast(NoteEditor.this,
                         getResources().getQuantityString(R.plurals.factadder_cards_added, count, count), true);
             } else {
-                UIUtils.showThemedToast(NoteEditor.this, getResources().getString(R.string.factadder_saving_error), true);
+                UIUtils.INSTANCE.showThemedToast(NoteEditor.this, getResources().getString(R.string.factadder_saving_error), true);
             }
             if (!mAddNote || mCaller == CALLER_CARDEDITOR || mAedictIntent) {
                 mChanged = true;
@@ -543,8 +543,8 @@ public class NoteEditor extends AnkiActivity {
     protected void onStop() {
         super.onStop();
         if (!isFinishing()) {
-            WidgetStatus.update(this);
-            UIUtils.saveCollectionInBackground(this);
+            WidgetStatus.INSTANCE.update(this);
+            UIUtils.INSTANCE.saveCollectionInBackground(this);
         }
     }
 
@@ -599,12 +599,12 @@ public class NoteEditor extends AnkiActivity {
                             mSourceText[1] = entry_lines[0];
                             mAedictIntent = true;
                         } else {
-                            UIUtils.showThemedToast(NoteEditor.this,
+                            UIUtils.INSTANCE.showThemedToast(NoteEditor.this,
                                     getResources().getString(R.string.intent_aedict_empty), false);
                             return true;
                         }
                     } else {
-                        UIUtils.showThemedToast(NoteEditor.this, getResources().getString(R.string.intent_aedict_empty),
+                        UIUtils.INSTANCE.showThemedToast(NoteEditor.this, getResources().getString(R.string.intent_aedict_empty),
                                 false);
                         return true;
                     }
@@ -612,7 +612,7 @@ public class NoteEditor extends AnkiActivity {
                 }
             }
         }
-        UIUtils.showThemedToast(NoteEditor.this, getResources().getString(R.string.intent_aedict_category), false);
+        UIUtils.INSTANCE.showThemedToast(NoteEditor.this, getResources().getString(R.string.intent_aedict_category), false);
         return true;
     }
 
@@ -864,7 +864,7 @@ public class NoteEditor extends AnkiActivity {
                         getCol().getSched().forgetCards(new long[]{mCurrentEditedCard.getId()});
                         getCol().reset();
                         mReloadRequired = true;
-                        UIUtils.showThemedToast(NoteEditor.this,
+                        UIUtils.INSTANCE.showThemedToast(NoteEditor.this,
                                 getResources().getString(R.string.reset_card_dialog_acknowledge), true);
                     }
                 };
@@ -979,7 +979,7 @@ public class NoteEditor extends AnkiActivity {
         getCol().getSched().reschedCards(new long[]{mCurrentEditedCard.getId()}, days, days);
         getCol().reset();
         mReloadRequired = true;
-        UIUtils.showThemedToast(NoteEditor.this,
+        UIUtils.INSTANCE.showThemedToast(NoteEditor.this,
                 getResources().getString(R.string.reschedule_card_dialog_acknowledge), true);
     }
 
@@ -1099,7 +1099,7 @@ public class NoteEditor extends AnkiActivity {
         SharedPreferences preferences = AnkiDroidApp.getSharedPrefs(getBaseContext());
         String customFont = preferences.getString("browserEditorFont", "");
         if (!customFont.equals("")) {
-            mCustomTypeface = AnkiFont.getTypeface(this, customFont);
+            mCustomTypeface = AnkiFont.Companion.getTypeface(this, customFont);
         }
 
         for (int i = 0; i < fields.length; i++) {
@@ -1109,12 +1109,12 @@ public class NoteEditor extends AnkiActivity {
             initFieldEditText(newTextbox, i, fields[i], mCustomTypeface, !editModelMode);
 
             TextView label = newTextbox.getLabel();
-            label.setPadding((int) UIUtils.getDensityAdjustedValue(this, 3.4f), 0, 0, 0);
+            label.setPadding((int) UIUtils.INSTANCE.getDensityAdjustedValue(this, 3.4f), 0, 0, 0);
             mEditFields.add(newTextbox);
 
             ImageButton mediaButton = (ImageButton) editline_view.findViewById(R.id.id_media_button);
             // Load icons from attributes
-            int[] icons = Themes.getResFromAttr(this, new int[]{R.attr.attachFileImage, R.attr.upDownImage});
+            int[] icons = Themes.INSTANCE.getResFromAttr(this, new int[]{R.attr.attachFileImage, R.attr.upDownImage});
             // Make the icon change between media icon and switch field icon depending on whether editing note type
             if (editModelMode && allowFieldRemapping()) {
                 // Allow remapping if originally more than two fields

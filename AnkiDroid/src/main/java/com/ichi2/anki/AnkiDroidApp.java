@@ -174,7 +174,7 @@ public class AnkiDroidApp extends Application {
      */
     public static void setLanguage(String localeCode) {
         Configuration config = getInstance().getResources().getConfiguration();
-        Locale newLocale = LanguageUtil.getLocale(localeCode);
+        Locale newLocale = LanguageUtil.INSTANCE.getLocale(localeCode);
         config.locale = newLocale;
         getInstance().getResources().updateConfiguration(config, getInstance().getResources().getDisplayMetrics());
     }

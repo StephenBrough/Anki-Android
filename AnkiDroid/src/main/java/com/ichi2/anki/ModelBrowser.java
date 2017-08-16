@@ -224,8 +224,8 @@ public class ModelBrowser extends AnkiActivity {
     public void onStop() {
         super.onStop();
         if (!isFinishing()) {
-            WidgetStatus.update(this);
-            UIUtils.saveCollectionInBackground(this);
+            WidgetStatus.INSTANCE.update(this);
+            UIUtils.INSTANCE.saveCollectionInBackground(this);
         }
     }
 

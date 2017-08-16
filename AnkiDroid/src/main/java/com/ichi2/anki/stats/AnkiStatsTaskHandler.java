@@ -175,7 +175,7 @@ public class AnkiStatsTaskHandler {
                     e.printStackTrace();
                 }
                 mProgressBar.setVisibility(View.GONE);
-                int backgroundColor = Themes.getColorFromAttr(mWebView.getContext(), android.R.attr.colorBackground);
+                int backgroundColor = Themes.INSTANCE.getColorFromAttr(mWebView.getContext(), android.R.attr.colorBackground);
                 mWebView.setBackgroundColor(backgroundColor);
                 mWebView.setVisibility(View.VISIBLE);
                 mWebView.invalidate();

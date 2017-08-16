@@ -80,9 +80,9 @@ public class PieChart implements Drawable, Legendable {
         float realBorder= Math.max(maxSideBorders, maxUpperBottomBorders) + 3;
 
         RectangleWrap field = g.getClipBounds();
-        float diameter = Math.min(field.width, field.height) - 2 * realBorder;
-        float xCenter = field.width / 2.0F;
-        float yCenter = field.height / 2.0F;
+        float diameter = Math.min(field.getWidth(), field.getHeight()) - 2 * realBorder;
+        float xCenter = field.getWidth() / 2.0F;
+        float yCenter = field.getHeight() / 2.0F;
 
         ColorWrap oldColor = g.getColor();
 
@@ -109,7 +109,7 @@ public class PieChart implements Drawable, Legendable {
         g.fillArc(left, top, diameter, diameter, currentAngle,
                 (360F + FIRST_SECTOR_OFFSET - currentAngle));
 
-        g.setColor(ColorWrap.black);
+        g.setColor(ColorWrap.Companion.getBlack());
         g.drawArc(left, top, diameter, diameter, 0, 360);
     }
 
@@ -132,7 +132,7 @@ public class PieChart implements Drawable, Legendable {
             float height = fm.getHeight();
             g.setColor(labelBackground);
             g.fillRect(x-1,y-height+3,width+2,height);
-            g.setColor(ColorWrap.white);
+            g.setColor(ColorWrap.Companion.getWhite());
             g.drawString(text, x, y);
         }
     }
@@ -152,7 +152,7 @@ public class PieChart implements Drawable, Legendable {
 
     @Override
     public ColorWrap getColor() {
-        return mColors.length > 0 ? mColors[0] : ColorWrap.WHITE;
+        return mColors.length > 0 ? mColors[0] : ColorWrap.Companion.getWHITE();
     }
 
     @Override

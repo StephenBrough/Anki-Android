@@ -28,7 +28,7 @@ public class LegendDrawable implements Drawable, Legendable {
 
 
 
-    private ColorWrap color = ColorWrap.BLACK;
+    private ColorWrap color = ColorWrap.Companion.getBLACK();
 
     @Override
     public void paint(GraphicsWrap g) {

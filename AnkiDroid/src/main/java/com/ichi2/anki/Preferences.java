@@ -107,7 +107,7 @@ public class Preferences extends AppCompatPreferenceActivity implements Preferen
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Themes.setThemeLegacy(this);
+        Themes.INSTANCE.setThemeLegacy(this);
 
         super.onCreate(savedInstanceState);
 
@@ -589,7 +589,7 @@ public class Preferences extends AppCompatPreferenceActivity implements Preferen
         }
         // Handle special cases
         if (pref.getKey().equals("about_dialog_preference")) {
-            pref.setSummary(getResources().getString(R.string.about_version) + " " + VersionUtils.getPkgVersionName());
+            pref.setSummary(getResources().getString(R.string.about_version) + " " + VersionUtils.INSTANCE.getPkgVersionName());
         } else if (pref.getKey().equals("custom_sync_server_link")) {
             if (!AnkiDroidApp.getSharedPrefs(this).getBoolean("useCustomSyncServer", false)) {
                 pref.setSummary(R.string.disabled);
@@ -658,8 +658,8 @@ public class Preferences extends AppCompatPreferenceActivity implements Preferen
         ListPreference languageSelection = (ListPreference) screen.findPreference(LANGUAGE);
         if (languageSelection != null) {
             Map<String, String> items = new TreeMap<>();
-            for (String localeCode : LanguageUtil.APP_LANGUAGES) {
-                Locale loc = LanguageUtil.getLocale(localeCode);
+            for (String localeCode : LanguageUtil.INSTANCE.getAPP_LANGUAGES()) {
+                Locale loc = LanguageUtil.INSTANCE.getLocale(localeCode);
                 items.put(loc.getDisplayName(), loc.toString());
             }
             CharSequence[] languageDialogLabels = new CharSequence[items.size() + 1];

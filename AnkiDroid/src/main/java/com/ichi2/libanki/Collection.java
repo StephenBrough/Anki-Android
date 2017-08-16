@@ -140,7 +140,7 @@ public class Collection {
         mDb = db;
         mPath = path;
         _openLog();
-        log(path, VersionUtils.getPkgVersionName());
+        log(path, VersionUtils.INSTANCE.getPkgVersionName());
         mServer = server;
         mLastSave = Utils.now();
         clearUndo();
@@ -150,7 +150,7 @@ public class Collection {
         mTags = new Tags(this);
         load();
         if (mCrt == 0) {
-            mCrt = UIUtils.getDayStart() / 1000;
+            mCrt = UIUtils.INSTANCE.getDayStart() / 1000;
         }
         mStartReps = 0;
         mStartTime = 0;

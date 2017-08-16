@@ -145,7 +145,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mRecyclerViewLayoutManager;
     private DeckAdapter mDeckListAdapter;
-    private FloatingActionsMenu mActionsMenu;   // Note this will be null below SDK 14
+    private FloatingActionsMenu mActionsMenu;
 
     private SwipeRefreshLayout mPullToSyncWrapper;
 
@@ -255,7 +255,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         @Override
         public void onPreExecute() {
             if (mProgressDialog == null || !mProgressDialog.isShowing()) {
-                mProgressDialog = StyledProgressDialog.show(DeckPicker.this,
+                mProgressDialog = StyledProgressDialog.Companion.show(DeckPicker.this,
                         getResources().getString(R.string.import_title), null, false);
             }
         }
@@ -296,7 +296,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         @Override
         public void onPreExecute() {
             if (mProgressDialog == null || !mProgressDialog.isShowing()) {
-                mProgressDialog = StyledProgressDialog.show(DeckPicker.this,
+                mProgressDialog = StyledProgressDialog.Companion.show(DeckPicker.this,
                         getResources().getString(R.string.import_title),
                         getResources().getString(R.string.import_replacing), false);
             }
@@ -318,7 +318,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
 
         @Override
         public void onPreExecute() {
-            mProgressDialog = StyledProgressDialog.show(DeckPicker.this, "",
+            mProgressDialog = StyledProgressDialog.Companion.show(DeckPicker.this, "",
                     getResources().getString(R.string.export_in_progress), false);
         }
 
@@ -332,7 +332,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             if (exportPath != null) {
                 showAsyncDialogFragment(DeckPickerExportCompleteDialog.Companion.newInstance(exportPath));
             } else {
-                UIUtils.showThemedToast(DeckPicker.this, getResources().getString(R.string.export_unsuccessful), true);
+                UIUtils.INSTANCE.showThemedToast(DeckPicker.this, getResources().getString(R.string.export_unsuccessful), true);
             }
         }
 
@@ -674,9 +674,9 @@ public class DeckPicker extends NavigationDrawerActivity implements
             // Show a message when reviewing has finished
             int[] studyOptionsCounts = getCol().getSched().counts();
             if (studyOptionsCounts[0] + studyOptionsCounts[1] + studyOptionsCounts[2] == 0) {
-                UIUtils.showSimpleSnackbar(this, R.string.studyoptions_congrats_finished, false);
+                UIUtils.INSTANCE.showSimpleSnackbar(this, R.string.studyoptions_congrats_finished, false);
             } else {
-                UIUtils.showSimpleSnackbar(this, R.string.studyoptions_no_cards_due, false);
+                UIUtils.INSTANCE.showSimpleSnackbar(this, R.string.studyoptions_no_cards_due, false);
             }
         } else if (requestCode == REQUEST_BROWSE_CARDS) {
             // Store the selected deck after opening browser
@@ -755,8 +755,8 @@ public class DeckPicker extends NavigationDrawerActivity implements
         Timber.d("onStop()");
         super.onStop();
         if (colIsOpen()) {
-            WidgetStatus.update(this);
-            UIUtils.saveCollectionInBackground(this);
+            WidgetStatus.INSTANCE.update(this);
+            UIUtils.INSTANCE.saveCollectionInBackground(this);
         }
     }
 
@@ -870,14 +870,14 @@ public class DeckPicker extends NavigationDrawerActivity implements
             preferences.edit().remove("noSpaceLeft").commit();
         } else if (preferences.getString("lastVersion", "").equals("")) {
             // Fresh install
-            preferences.edit().putString("lastVersion", VersionUtils.getPkgVersionName()).commit();
+            preferences.edit().putString("lastVersion", VersionUtils.INSTANCE.getPkgVersionName()).commit();
             onFinishedStartup();
-        } else if (skip < 2 && !preferences.getString("lastVersion", "").equals(VersionUtils.getPkgVersionName())) {
+        } else if (skip < 2 && !preferences.getString("lastVersion", "").equals(VersionUtils.INSTANCE.getPkgVersionName())) {
             // AnkiDroid is being updated and a collection already exists. We check if we are upgrading
             // to a version that contains additions to the database integrity check routine that we would
             // like to run on all collections. A missing version number is assumed to be a fresh
             // installation of AnkiDroid and we don't run the check.
-            int current = VersionUtils.getPkgVersionCode();
+            int current = VersionUtils.INSTANCE.getPkgVersionCode();
             int previous;
             if (!preferences.contains("lastUpgradeVersion")) {
                 // Fresh install
@@ -951,7 +951,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             } else {
                 // If no changes are required we go to the new features activity
                 // There the "lastVersion" is set, so that this code is not reached again
-                if (VersionUtils.isReleaseVersion()) {
+                if (VersionUtils.INSTANCE.isReleaseVersion()) {
                     Intent infoIntent = new Intent(this, Info.class);
                     infoIntent.putExtra(Info.TYPE_EXTRA, Info.TYPE_NEW_VERSION);
 
@@ -963,9 +963,9 @@ public class DeckPicker extends NavigationDrawerActivity implements
                     }
                 } else {
                     // Don't show new features dialog for development builds
-                    preferences.edit().putString("lastVersion", VersionUtils.getPkgVersionName()).apply();
-                    String ver = getResources().getString(R.string.updated_version, VersionUtils.getPkgVersionName());
-                    UIUtils.showSnackbar(this, ver, true, -1, null, findViewById(R.id.root_layout), null);
+                    preferences.edit().putString("lastVersion", VersionUtils.INSTANCE.getPkgVersionName()).apply();
+                    String ver = getResources().getString(R.string.updated_version, VersionUtils.INSTANCE.getPkgVersionName());
+                    UIUtils.INSTANCE.showSnackbar(this, ver, true, -1, null, findViewById(R.id.root_layout), null);
                     showStartupScreensAndDialogs(preferences, 2);
                 }
             }
@@ -1095,7 +1095,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             showSimpleNotification(res.getString(R.string.app_name), res.getString(messageResource));
         } else {
             if (syncMessage == null || syncMessage.length() == 0) {
-                UIUtils.showSimpleSnackbar(this, messageResource, false);
+                UIUtils.INSTANCE.showSimpleSnackbar(this, messageResource, false);
             } else {
                 Resources res = AnkiDroidApp.getAppResources();
                 showSimpleMessageDialog(res.getString(messageResource), syncMessage, false);
@@ -1117,7 +1117,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
     }
 
     public void onSdCardNotMounted() {
-        UIUtils.showThemedToast(this, getResources().getString(R.string.sd_card_not_mounted), false);
+        UIUtils.INSTANCE.showThemedToast(this, getResources().getString(R.string.sd_card_not_mounted), false);
         finishWithoutAnimation();
     }
 
@@ -1128,7 +1128,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
 
             @Override
             public void onPreExecute() {
-                mProgressDialog = StyledProgressDialog.show(DeckPicker.this, "",
+                mProgressDialog = StyledProgressDialog.Companion.show(DeckPicker.this, "",
                         getResources().getString(R.string.backup_repair_deck_progress), false);
             }
 
@@ -1139,7 +1139,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
                     mProgressDialog.dismiss();
                 }
                 if (result == null || !result.getBoolean()) {
-                    UIUtils.showThemedToast(DeckPicker.this, getResources().getString(R.string.deck_repair_error), true);
+                    UIUtils.INSTANCE.showThemedToast(DeckPicker.this, getResources().getString(R.string.deck_repair_error), true);
                     onCollectionLoadError();
                 }
             }
@@ -1162,7 +1162,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         DeckTask.launchDeckTask(DeckTask.TASK_TYPE_CHECK_DATABASE, new DeckTask.TaskListener() {
             @Override
             public void onPreExecute() {
-                mProgressDialog = StyledProgressDialog.show(DeckPicker.this, "",
+                mProgressDialog = StyledProgressDialog.Companion.show(DeckPicker.this, "",
                         getResources().getString(R.string.check_db_message), false);
             }
 
@@ -1206,7 +1206,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         DeckTask.launchDeckTask(DeckTask.TASK_TYPE_CHECK_MEDIA, new DeckTask.TaskListener() {
             @Override
             public void onPreExecute() {
-                mProgressDialog = StyledProgressDialog.show(DeckPicker.this, "",
+                mProgressDialog = StyledProgressDialog.Companion.show(DeckPicker.this, "",
                         getResources().getString(R.string.check_media_message), false);
             }
 
@@ -1333,8 +1333,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             preferences.edit().putLong("lastSyncTime", syncStartTime).apply();
 
             if (mProgressDialog == null || !mProgressDialog.isShowing()) {
-                mProgressDialog = StyledProgressDialog
-                        .show(DeckPicker.this, getResources().getString(R.string.sync_title),
+                mProgressDialog = StyledProgressDialog.Companion.show(DeckPicker.this, getResources().getString(R.string.sync_title),
                                 getResources().getString(R.string.sync_title) + "\n"
                                         + getResources().getString(R.string.sync_up_down_size, countUp, countDown),
                                 false);
@@ -1557,7 +1556,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
                     showSyncLogMessage(R.string.sync_database_acknowledge, syncMessage);
                 }
                 updateDeckList();
-                WidgetStatus.update(DeckPicker.this);
+                WidgetStatus.INSTANCE.update(DeckPicker.this);
                 if (mFragmented) {
                     try {
                         loadStudyOptionsFragment(false);
@@ -1647,7 +1646,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         File attachment = new File(path);
         if (!attachment.exists()) {
             Timber.e("Specified apkg file %s does not exist", path);
-            UIUtils.showThemedToast(this, getResources().getString(R.string.apk_share_error), false);
+            UIUtils.INSTANCE.showThemedToast(this, getResources().getString(R.string.apk_share_error), false);
             return;
         }
         // Get a URI for the file to be shared via the FileProvider API
@@ -1656,7 +1655,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             uri = CompatHelper.getCompat().getExportUri(DeckPicker.this, attachment);
         } catch (IllegalArgumentException e) {
             Timber.e("Could not generate a valid URI for the apkg file");
-            UIUtils.showThemedToast(this, getResources().getString(R.string.apk_share_error), false);
+            UIUtils.INSTANCE.showThemedToast(this, getResources().getString(R.string.apk_share_error), false);
             return;
         }
         Intent shareIntent = ShareCompat.IntentBuilder.from(DeckPicker.this)
@@ -1669,7 +1668,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             startActivityWithoutAnimation(shareIntent);
         } else {
             Timber.e("Could not find appropriate application to share apkg with");
-            UIUtils.showThemedToast(this, getResources().getString(R.string.apk_share_error), false);
+            UIUtils.INSTANCE.showThemedToast(this, getResources().getString(R.string.apk_share_error), false);
         }
     }
 
@@ -1776,7 +1775,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             openStudyOptions(false);
         } else if (getCol().getSched().newDue() || getCol().getSched().revDue()) {
             // If there are no cards to review because of the daily study limit then give "Study more" option
-            UIUtils.showSnackbar(this, R.string.studyoptions_limit_reached, false, R.string.study_more, new OnClickListener() {
+            UIUtils.INSTANCE.showSnackbar(this, R.string.studyoptions_limit_reached, false, R.string.study_more, new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CustomStudyDialog d = CustomStudyDialog.Companion.newInstance(
@@ -1803,7 +1802,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             // If the deck is empty and has no children then show a message saying it's empty
             final Uri helpUrl = Uri.parse(getResources().getString(R.string.link_manual_getting_started));
             mayOpenUrl(helpUrl);
-            UIUtils.showSnackbar(this, R.string.empty_deck, false, R.string.help, new OnClickListener() {
+            UIUtils.INSTANCE.showSnackbar(this, R.string.empty_deck, false, R.string.help, new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     openUrl(helpUrl);
@@ -1816,7 +1815,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             }
         } else {
             // Otherwise say there are no cards scheduled to study, and give option to do custom study
-            UIUtils.showSnackbar(this, R.string.studyoptions_empty_schedule, false, R.string.custom_study, new OnClickListener() {
+            UIUtils.INSTANCE.showSnackbar(this, R.string.studyoptions_empty_schedule, false, R.string.custom_study, new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CustomStudyDialog d = CustomStudyDialog.Companion.newInstance(
@@ -1977,7 +1976,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
                                 col.getDecks().rename(col.getDecks().get(did), newName);
                             } catch (DeckRenameException e) {
                                 // We get a localized string from libanki to explain the error
-                                UIUtils.showThemedToast(DeckPicker.this, e.getLocalizedMessage(res), false);
+                                UIUtils.INSTANCE.showThemedToast(DeckPicker.this, e.getLocalizedMessage(res), false);
                             }
                         }
                         dismissAllDialogFragments();
@@ -2008,7 +2007,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             return;
         }
         if (did == 1) {
-            UIUtils.showSimpleSnackbar(this, R.string.delete_deck_default_deck, true);
+            UIUtils.INSTANCE.showSimpleSnackbar(this, R.string.delete_deck_default_deck, true);
             dismissAllDialogFragments();
             return;
         }
@@ -2053,7 +2052,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
 
             @Override
             public void onPreExecute() {
-                mProgressDialog = StyledProgressDialog.show(DeckPicker.this, "",
+                mProgressDialog = StyledProgressDialog.Companion.show(DeckPicker.this, "",
                         getResources().getString(R.string.delete_deck), false);
                 if (did == getCol().getDecks().current().optLong("id")) {
                     removingCurrent = true;
@@ -2205,7 +2204,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         DeckTask.launchDeckTask(DeckTask.TASK_TYPE_FIND_EMPTY_CARDS, new DeckTask.Listener() {
             @Override
             public void onPreExecute(DeckTask task) {
-                mProgressDialog = StyledProgressDialog.show(DeckPicker.this, "",
+                mProgressDialog = StyledProgressDialog.Companion.show(DeckPicker.this, "",
                         getResources().getString(R.string.emtpy_cards_finding), false);
             }
 
@@ -2222,7 +2221,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
                         @Override
                         public void run() {
                             getCol().remCards(Utils.arrayList2array(cids));
-                            UIUtils.showSimpleSnackbar(DeckPicker.this, String.format(
+                            UIUtils.INSTANCE.showSimpleSnackbar(DeckPicker.this, String.format(
                                     getResources().getString(R.string.empty_cards_deleted), cids.size()), false);
                         }
                     };

@@ -51,13 +51,13 @@ public class PieChartTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void constructorShouldThrowIfSizesMismatch() throws Exception {
-        new PieChart(plot, new double[]{1, 1}, new ColorWrap[]{ColorWrap.RED});
+        new PieChart(plot, new double[]{1, 1}, new ColorWrap[]{ColorWrap.Companion.getRED()});
     }
 
     @Test
     public void paintShouldNotDrawAnythingIfValuesAreZero() throws Exception {
         pieChart = new PieChart(plot, new double[]{0, 0}, new ColorWrap[]{
-                ColorWrap.RED, ColorWrap.GREEN});
+                ColorWrap.Companion.getRED(), ColorWrap.Companion.getGREEN()});
         pieChart.paint(graphics);
         verify(graphics, never()).fillArc(anyFloat(), anyFloat(), anyFloat(), anyFloat(),
                 anyFloat(), anyFloat());
@@ -66,11 +66,11 @@ public class PieChartTest {
     @Test
     public void paintShouldDrawFullRedCircleIfOneValue() throws Exception {
         pieChart = new PieChart(plot, new double[]{1.}, new ColorWrap[]{
-                ColorWrap.RED});
+                ColorWrap.Companion.getRED()});
         RectangleWrap r = createRectangleMock(100, 100);
         when(graphics.getClipBounds()).thenReturn(r);
         pieChart.paint(graphics);
-        verify(graphics).setColor(ColorWrap.RED);
+        verify(graphics).setColor(ColorWrap.Companion.getRED());
         verify(graphics).fillArc(anyFloat(), anyFloat(), anyFloat(), anyFloat(),
                 floatThat(closeTo(-90F)),
                 floatThat(closeTo(360F)));
@@ -79,18 +79,18 @@ public class PieChartTest {
     @Test
     public void paintShouldDrawTwoSectorsWithGivenColors() throws Exception {
         pieChart = new PieChart(plot, new double[]{1, 1}, new ColorWrap[]{
-                ColorWrap.RED, ColorWrap.GREEN});
+                ColorWrap.Companion.getRED(), ColorWrap.Companion.getGREEN()});
         RectangleWrap r = createRectangleMock(100, 100);
         when(graphics.getClipBounds()).thenReturn(r);
 
         pieChart.paint(graphics);
 
-        verify(graphics).setColor(ColorWrap.RED);
+        verify(graphics).setColor(ColorWrap.Companion.getRED());
         verify(graphics).fillArc(anyFloat(), anyFloat(), anyFloat(), anyFloat(),
                 floatThat(closeTo(-90F)),
                 floatThat(closeTo(180F)));
 
-        verify(graphics).setColor(ColorWrap.GREEN);
+        verify(graphics).setColor(ColorWrap.Companion.getGREEN());
         verify(graphics).fillArc(anyFloat(), anyFloat(), anyFloat(), anyFloat(),
                 floatThat(closeTo(90F)),
                 floatThat(closeTo(180F)));
@@ -98,8 +98,8 @@ public class PieChartTest {
 
     public static RectangleWrap createRectangleMock(int width, int height) {
         RectangleWrap r = mock(RectangleWrap.class);
-        r.width = width;
-        r.height = height;
+        r.setWidth(width);
+        r.setHeight(height);
         when(r.width()).thenReturn(width);
         when(r.height()).thenReturn(height);
         return r;

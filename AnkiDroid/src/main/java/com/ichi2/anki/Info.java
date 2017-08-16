@@ -70,7 +70,7 @@ public class Info extends AnkiActivity {
             setSupportActionBar(toolbar);
         }
 
-        setTitle(String.format("%s v%s", VersionUtils.getAppName(), VersionUtils.getPkgVersionName()));
+        setTitle(String.format("%s v%s", VersionUtils.INSTANCE.getAppName(), VersionUtils.INSTANCE.getPkgVersionName()));
         webView = (WebView) findViewById(R.id.info);
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
@@ -100,7 +100,7 @@ public class Info extends AnkiActivity {
                 switch (mType) {
                     case TYPE_NEW_VERSION:
                         AnkiDroidApp.getSharedPrefs(Info.this.getBaseContext()).edit()
-                                .putString("lastVersion", VersionUtils.getPkgVersionName()).commit();
+                                .putString("lastVersion", VersionUtils.INSTANCE.getPkgVersionName()).commit();
                         break;
                 }
                 finishWithAnimation();
@@ -188,7 +188,7 @@ public class Info extends AnkiActivity {
     public String copyDebugInfo() {
         StringBuilder sb = new StringBuilder();
         // AnkiDroid Version
-        sb.append("AnkiDroid Version = ").append(VersionUtils.getPkgVersionName()).append("\n\n");
+        sb.append("AnkiDroid Version = ").append(VersionUtils.INSTANCE.getPkgVersionName()).append("\n\n");
         // Android SDK
         sb.append("Android Version = " + Build.VERSION.RELEASE).append("\n\n");
         String debugInfo = sb.toString();

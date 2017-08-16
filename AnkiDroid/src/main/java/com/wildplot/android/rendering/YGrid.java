@@ -34,7 +34,7 @@ public class YGrid implements Drawable {
 	/**
 	 * the color of the grid lines
 	 */
-	private ColorWrap color = ColorWrap.LIGHT_GRAY;
+	private ColorWrap color = ColorWrap.Companion.getLIGHT_GRAY();
 	
 	/**
 	 * the Sheet the grid lines will be drawn onto

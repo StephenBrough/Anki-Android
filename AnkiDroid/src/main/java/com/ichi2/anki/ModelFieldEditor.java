@@ -99,8 +99,8 @@ public class ModelFieldEditor extends AnkiActivity {
     protected void onStop() {
         super.onStop();
         if (!isFinishing()) {
-            WidgetStatus.update(this);
-            UIUtils.saveCollectionInBackground(this);
+            WidgetStatus.INSTANCE.update(this);
+            UIUtils.INSTANCE.saveCollectionInBackground(this);
         }
     }
 
@@ -523,7 +523,7 @@ public class ModelFieldEditor extends AnkiActivity {
         @Override
         public void onPreExecute() {
             if (mProgressDialog == null) {
-                mProgressDialog = StyledProgressDialog.show(ModelFieldEditor.this, getIntent().getStringExtra("title"),
+                mProgressDialog = StyledProgressDialog.Companion.show(ModelFieldEditor.this, getIntent().getStringExtra("title"),
                         getResources().getString(R.string.model_field_editor_changing), false);
             }
         }

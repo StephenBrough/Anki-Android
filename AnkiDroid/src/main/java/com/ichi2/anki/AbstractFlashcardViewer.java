@@ -366,7 +366,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
             // Show hint about lookup function if dictionary available and Webview version supports text selection
             if (!mDisableClipboard && Lookup.INSTANCE.isAvailable() && CompatHelper.isHoneycomb()) {
                 String lookupHint = getResources().getString(R.string.lookup_hint);
-                UIUtils.showThemedToast(AbstractFlashcardViewer.this, lookupHint, false);
+                UIUtils.INSTANCE.showThemedToast(AbstractFlashcardViewer.this, lookupHint, false);
             }
             Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vibratorManager.vibrate(50);
@@ -624,7 +624,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
                 int nMins = elapsed[0].intValue() / 60;
                 String mins = res.getQuantityString(R.plurals.timebox_reached_minutes, nMins, nMins);
                 String timeboxMessage = res.getQuantityString(R.plurals.timebox_reached, nCards, nCards, mins);
-                UIUtils.showThemedToast(AbstractFlashcardViewer.this, timeboxMessage, true);
+                UIUtils.INSTANCE.showThemedToast(AbstractFlashcardViewer.this, timeboxMessage, true);
                 getCol().startTimebox();
             }
         }
@@ -1603,12 +1603,12 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         // Set correct label and background resource for each button
         // Note that it's necessary to set the resource dynamically as the ease2 / ease3 buttons
         // (which libanki expects ease to be 2 and 3) can either be hard, good, or easy - depending on num buttons shown
-        final int[] background = Themes.getResFromAttr(this, new int [] {
+        final int[] background = Themes.INSTANCE.getResFromAttr(this, new int [] {
                 R.attr.againButtonRef,
                 R.attr.hardButtonRef,
                 R.attr.goodButtonRef,
                 R.attr.easyButtonRef});
-        final int[] textColor = Themes.getColorFromAttr(this, new int [] {
+        final int[] textColor = Themes.INSTANCE.getColorFromAttr(this, new int [] {
                 R.attr.againButtonTextColor,
                 R.attr.hardButtonTextColor,
                 R.attr.goodButtonTextColor,
@@ -2158,7 +2158,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
             // If card styling doesn't contain any mention of the night_mode class then do color inversion as fallback
             // TODO: find more robust solution that won't match unrelated classes like "night_mode_old"
             if (!mCurrentCard.css().contains(".night_mode")) {
-                content = HtmlColors.invertColors(content);
+                content = HtmlColors.INSTANCE.invertColors(content);
             }
         }
 
@@ -2644,7 +2644,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         AbstractFlashcardViewer.this.setResult(result);
 
         if (saveDeck) {
-            UIUtils.saveCollectionInBackground(this);
+            UIUtils.INSTANCE.saveCollectionInBackground(this);
         }
         finishWithAnimation(ActivityTransitionAnimation.RIGHT);
     }

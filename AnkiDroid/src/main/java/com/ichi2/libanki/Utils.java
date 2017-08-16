@@ -226,7 +226,7 @@ public class Utils {
     public static String fmtPercentage(Double value, int point) {
         // only retrieve the percentage format the first time
         if (mCurrentPercentageFormat == null) {
-            mCurrentPercentageFormat = NumberFormat.getPercentInstance(LanguageUtil.getLocale());
+            mCurrentPercentageFormat = NumberFormat.getPercentInstance(LanguageUtil.INSTANCE.getLocale());
         }
         return mCurrentPercentageFormat.format(value);
     }
@@ -878,7 +878,7 @@ public class Utils {
                 // Go through the list of allowed extensios.
                 if (filePathExtension.equalsIgnoreCase(fontExtension)) {
                     // This looks like a font file.
-                    AnkiFont font = AnkiFont.createAnkiFont(context, filePath, false);
+                    AnkiFont font = AnkiFont.Companion.createAnkiFont(context, filePath, false);
                     if (font != null) {
                         fonts.add(font);
                     }
@@ -889,7 +889,7 @@ public class Utils {
         if (ankiDroidFonts != null) {
             for (String ankiDroidFont : ankiDroidFonts) {
                 // Assume all files in the assets directory are actually fonts.
-                AnkiFont font = AnkiFont.createAnkiFont(context, ankiDroidFont, true);
+                AnkiFont font = AnkiFont.Companion.createAnkiFont(context, ankiDroidFont, true);
                 if (font != null) {
                     fonts.add(font);
                 }

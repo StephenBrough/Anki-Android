@@ -46,8 +46,8 @@ public class PlotSheet implements Drawable {
     protected float fontSize = 10f;
     protected boolean fontSizeSet = false;
 
-    protected ColorWrap backgroundColor = ColorWrap.white;
-    protected ColorWrap textColor = ColorWrap.black;
+    protected ColorWrap backgroundColor = ColorWrap.Companion.getWhite();
+    protected ColorWrap textColor = ColorWrap.Companion.getBlack();
 
     /**
      * title of plotSheet
@@ -174,20 +174,20 @@ public class PlotSheet implements Drawable {
         return (this.isLogX)?xToGraphicLog(x,field):xToGraphicLinear(x,field);
     }
     private float xToGraphicLinear(double x, RectangleWrap field) {
-        double xQuotient = (field.width - leftFrameThickness -rightFrameThickness) /
+        double xQuotient = (field.getWidth() - leftFrameThickness -rightFrameThickness) /
                 (Math.abs(this.screenParts.get(currentScreen).getxRange()[1] -
                         this.screenParts.get(currentScreen).getxRange()[0]));
         double xDistanceFromLeft = x - this.screenParts.get(currentScreen).getxRange()[0];
         
-        return field.x + leftFrameThickness + (float)(xDistanceFromLeft * xQuotient);
+        return field.getX() + leftFrameThickness + (float)(xDistanceFromLeft * xQuotient);
     }
     private float xToGraphicLog(double x, RectangleWrap field) {
         double range = Math.log10(this.screenParts.get(currentScreen).getxRange()[1]) -
                 Math.log10(this.screenParts.get(currentScreen).getxRange()[0]);
 
-        return (float) (field.x + this.leftFrameThickness + (Math.log10(x) -
+        return (float) (field.getX() + this.leftFrameThickness + (Math.log10(x) -
                 Math.log10(this.screenParts.get(currentScreen).getxRange()[0]))/(range) *
-                (field.width - leftFrameThickness - rightFrameThickness));
+                (field.getWidth() - leftFrameThickness - rightFrameThickness));
     }
     
     /**
@@ -204,13 +204,13 @@ public class PlotSheet implements Drawable {
     
     
     private float yToGraphicLinear(double y, RectangleWrap field) {
-        double yQuotient = (field.height - upperFrameThickness - bottomFrameThickness) /
+        double yQuotient = (field.getHeight() - upperFrameThickness - bottomFrameThickness) /
                 (Math.abs(this.screenParts.get(currentScreen).getyRange()[1] -
                         this.screenParts.get(currentScreen).getyRange()[0]));
 
         double yDistanceFromTop = this.screenParts.get(currentScreen).getyRange()[1] - y;
         
-        return (float)(field.y + upperFrameThickness + yDistanceFromTop * yQuotient);
+        return (float)(field.getY() + upperFrameThickness + yDistanceFromTop * yQuotient);
     }
     private float yToGraphicLog(double y, RectangleWrap field) {
         
@@ -218,8 +218,8 @@ public class PlotSheet implements Drawable {
         return (float) (((Math.log10(y)-Math.log10(this.screenParts.get(currentScreen).getyRange()[0]))/
                 (Math.log10(this.screenParts.get(currentScreen).getyRange()[1]) -
                         Math.log10(this.screenParts.get(currentScreen).getyRange()[0])))
-                *(field.height - upperFrameThickness - bottomFrameThickness) -
-                (field.height-upperFrameThickness - bottomFrameThickness))*(-1) + upperFrameThickness;
+                *(field.getHeight() - upperFrameThickness - bottomFrameThickness) -
+                (field.getHeight() -upperFrameThickness - bottomFrameThickness))*(-1) + upperFrameThickness;
     }
     
     /**
@@ -252,8 +252,8 @@ public class PlotSheet implements Drawable {
     private double xToCoordinateLinear(float x, RectangleWrap field) {
         double xQuotient = (Math.abs(this.screenParts.get(currentScreen).getxRange()[1] -
                 this.screenParts.get(currentScreen).getxRange()[0])) /
-                (field.width- leftFrameThickness - rightFrameThickness);
-        double xDistanceFromLeft = field.x - leftFrameThickness + x;
+                (field.getWidth() - leftFrameThickness - rightFrameThickness);
+        double xDistanceFromLeft = field.getX() - leftFrameThickness + x;
         
         return this.screenParts.get(currentScreen).getxRange()[0] + xDistanceFromLeft*xQuotient;
     }
@@ -262,8 +262,8 @@ public class PlotSheet implements Drawable {
         double range = Math.log10(this.screenParts.get(currentScreen).getxRange()[1]) -
                 Math.log10(this.screenParts.get(currentScreen).getxRange()[0]);
         
-        return Math.pow(10, ((x- (field.x + leftFrameThickness))*1.0*(range) )/
-                (field.width - leftFrameThickness -rightFrameThickness) +
+        return Math.pow(10, ((x- (field.getX() + leftFrameThickness))*1.0*(range) )/
+                (field.getWidth() - leftFrameThickness -rightFrameThickness) +
                 Math.log10(this.screenParts.get(currentScreen).getxRange()[0]) ) ;
     }
     
@@ -286,8 +286,8 @@ public class PlotSheet implements Drawable {
     public double yToCoordinateLinear(float y, RectangleWrap field) {
         double yQuotient = (Math.abs(this.screenParts.get(currentScreen).getyRange()[1] -
                 this.screenParts.get(currentScreen).getyRange()[0])) /
-                (field.height -upperFrameThickness -bottomFrameThickness);
-        double yDistanceFromBottom = field.y + field.height - 1 - y -bottomFrameThickness;
+                (field.getHeight() -upperFrameThickness -bottomFrameThickness);
+        double yDistanceFromBottom = field.getY() + field.getHeight() - 1 - y -bottomFrameThickness;
         
         return this.screenParts.get(currentScreen).getyRange()[0] + yDistanceFromBottom*yQuotient;
     }
@@ -295,8 +295,8 @@ public class PlotSheet implements Drawable {
     public double yToCoordinateLog(float y, RectangleWrap field) {
 
         return Math.pow(10,
-                ((y - upperFrameThickness + (field.height-upperFrameThickness-bottomFrameThickness))*(-1))/
-                        ((field.height-upperFrameThickness-bottomFrameThickness))*
+                ((y - upperFrameThickness + (field.getHeight() -upperFrameThickness-bottomFrameThickness))*(-1))/
+                        ((field.getHeight() -upperFrameThickness-bottomFrameThickness))*
                         ((Math.log10(this.screenParts.get(currentScreen).getyRange()[1]) -
                                 Math.log10(this.screenParts.get(currentScreen).getyRange()[0]))) +
                         Math.log10(this.screenParts.get(currentScreen).getyRange()[0]));
@@ -342,8 +342,8 @@ public class PlotSheet implements Drawable {
 
         g.setTypeface(typeface);
         g.setColor(backgroundColor);
-        g.fillRect(0, 0, field.width, field.height);
-        g.setColor(ColorWrap.BLACK);
+        g.fillRect(0, 0, field.getWidth(), field.getHeight());
+        g.setColor(ColorWrap.Companion.getBLACK());
 
 
         if(fontSizeSet) {
@@ -372,38 +372,38 @@ public class PlotSheet implements Drawable {
         if(leftFrameThickness>0 || rightFrameThickness > 0 || upperFrameThickness > 0 || bottomFrameThickness > 0){
             g.setColor(backgroundColor);
             //upper frame
-            g.fillRect(0, 0, field.width, upperFrameThickness);
+            g.fillRect(0, 0, field.getWidth(), upperFrameThickness);
 
             //left frame
-            g.fillRect(0, upperFrameThickness, leftFrameThickness, field.height);
+            g.fillRect(0, upperFrameThickness, leftFrameThickness, field.getHeight());
             
             //right frame
-            g.fillRect(field.width+1-rightFrameThickness, upperFrameThickness,rightFrameThickness +
-                    leftFrameThickness, field.height-bottomFrameThickness);
+            g.fillRect(field.getWidth() +1-rightFrameThickness, upperFrameThickness,rightFrameThickness +
+                    leftFrameThickness, field.getHeight() -bottomFrameThickness);
             
             //bottom frame
             //gFrame.setColor(Color.RED); //DEBUG
-            g.fillRect(leftFrameThickness, field.height-bottomFrameThickness,
-                    field.width-rightFrameThickness,bottomFrameThickness+1);
+            g.fillRect(leftFrameThickness, field.getHeight() -bottomFrameThickness,
+                    field.getWidth() -rightFrameThickness,bottomFrameThickness+1);
             
             //make small black border frame
             if(isBordered){
-                g.setColor(ColorWrap.black);
+                g.setColor(ColorWrap.Companion.getBlack());
                 //upper border
                 g.fillRect(leftFrameThickness-borderThickness+1, upperFrameThickness-borderThickness+1,
-                        field.width-leftFrameThickness - rightFrameThickness +2*borderThickness-2, borderThickness);
+                        field.getWidth() -leftFrameThickness - rightFrameThickness +2*borderThickness-2, borderThickness);
                 
                 //lower border
-                g.fillRect(leftFrameThickness-borderThickness+1, field.height-bottomFrameThickness,
-                        field.width-leftFrameThickness -rightFrameThickness+2*borderThickness-2, borderThickness);
+                g.fillRect(leftFrameThickness-borderThickness+1, field.getHeight() -bottomFrameThickness,
+                        field.getWidth() -leftFrameThickness -rightFrameThickness+2*borderThickness-2, borderThickness);
                 
                 //left border
                 g.fillRect(leftFrameThickness-borderThickness+1, upperFrameThickness-borderThickness+1,
-                        borderThickness, field.height-upperFrameThickness - bottomFrameThickness+2*borderThickness-2);
+                        borderThickness, field.getHeight() -upperFrameThickness - bottomFrameThickness+2*borderThickness-2);
                 
                 //right border
-                g.fillRect(field.width-rightFrameThickness, upperFrameThickness-borderThickness+1,
-                        borderThickness, field.height-upperFrameThickness - bottomFrameThickness +2*borderThickness-2);
+                g.fillRect(field.getWidth() -rightFrameThickness, upperFrameThickness-borderThickness+1,
+                        borderThickness, field.getHeight() -upperFrameThickness - bottomFrameThickness +2*borderThickness-2);
                 
             }
 
@@ -419,7 +419,7 @@ public class PlotSheet implements Drawable {
                 float height = fm.getHeight();
 
                 float width = fm.stringWidth(this.title);
-                g.drawString(this.title, field.width / 2 - width / 2, upperFrameThickness - 10 - height);
+                g.drawString(this.title, field.getWidth() / 2 - width / 2, upperFrameThickness - 10 - height);
                 g.setFontSize(oldFontSize);
             }
 
@@ -451,7 +451,7 @@ public class PlotSheet implements Drawable {
                 ColorWrap color = mLegendMap.get(legendName);
                 g.setColor(color);
 
-                if(legendCnt++ != 0 && xPointer + rectangleSize*2.0f + stringWidth >= field.width){
+                if(legendCnt++ != 0 && xPointer + rectangleSize*2.0f + stringWidth >= field.getWidth()){
                     xPointer = spacerValue;
                     ySpacer += rectangleSize + spacerValue;
                 }
@@ -643,7 +643,7 @@ public class PlotSheet implements Drawable {
      */
     public double ticsCalcX(float pixelDistance, RectangleWrap field){
         double deltaRange = this.screenParts.get(currentScreen).getxRange()[1] - this.screenParts.get(currentScreen).getxRange()[0];
-        float ticlimit = field.width/pixelDistance;
+        float ticlimit = field.getWidth() /pixelDistance;
         double tics = Math.pow(10, (int)Math.log10(deltaRange/ticlimit));
         while(2.0*(deltaRange/(tics)) <= ticlimit) {
             tics /= 2.0;
@@ -661,7 +661,7 @@ public class PlotSheet implements Drawable {
      */
     public double ticsCalcY(float pixelDistance, RectangleWrap field){
         double deltaRange = this.screenParts.get(currentScreen).getyRange()[1] - this.screenParts.get(currentScreen).getyRange()[0];
-        float ticlimit = field.height/pixelDistance;
+        float ticlimit = field.getHeight() /pixelDistance;
         double tics = Math.pow(10, (int)Math.log10(deltaRange/ticlimit));
         while(2.0*(deltaRange/(tics)) <= ticlimit) {
             tics /= 2.0;

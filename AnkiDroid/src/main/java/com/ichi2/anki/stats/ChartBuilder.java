@@ -134,9 +134,9 @@ public class ChartBuilder {
         PlotSheet plotSheet = new PlotSheet(mFirstElement - 0.5, mLastElement + 0.5, 0, mMaxCards * Y_AXIS_STRETCH_FACTOR);
         plotSheet.setFrameThickness(frameThickness * 0.66f, frameThickness * 0.66f, frameThickness, frameThickness * 0.9f);
         plotSheet.setFontSize(textSize);
-        int backgroundColor = Themes.getColorFromAttr(mChartView.getContext(), android.R.attr.colorBackground);
+        int backgroundColor = Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), android.R.attr.colorBackground);
         plotSheet.setBackgroundColor(new ColorWrap(backgroundColor));
-        int textColor = Themes.getColorFromAttr(mChartView.getContext(), android.R.attr.textColor);
+        int textColor = Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), android.R.attr.textColor);
         plotSheet.setTextColor(new ColorWrap(textColor));
         plotSheet.setIsBackwards(mBackwards);
 
@@ -170,19 +170,19 @@ public class ChartBuilder {
 
 
     private PlotSheet createPieChart(PlotSheet plotSheet) {
-        ColorWrap[] colors = {new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[0])),
-                              new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[1])),
-                              new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[2])),
-                              new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[3]))};
+        ColorWrap[] colors = {new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[0])),
+                              new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[1])),
+                              new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[2])),
+                              new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[3]))};
 
         PieChart pieChart = new PieChart(plotSheet, mSeriesList[0], colors);
         pieChart.setName(mChartView.getResources().getString(mValueLabels[0]) + ": " + (int) mSeriesList[0][0]);
         LegendDrawable legendDrawable1 = new LegendDrawable();
         LegendDrawable legendDrawable2 = new LegendDrawable();
         LegendDrawable legendDrawable3 = new LegendDrawable();
-        legendDrawable1.setColor(new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[1])));
-        legendDrawable2.setColor(new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[2])));
-        legendDrawable3.setColor(new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[3])));
+        legendDrawable1.setColor(new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[1])));
+        legendDrawable2.setColor(new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[2])));
+        legendDrawable3.setColor(new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[3])));
 
         legendDrawable1.setName(mChartView.getResources().getString(mValueLabels[1]) + ": " + (int) mSeriesList[0][1]);
         legendDrawable2.setName(mChartView.getResources().getString(mValueLabels[2]) + ": " + (int) mSeriesList[0][2]);
@@ -223,17 +223,17 @@ public class ChartBuilder {
                 case HOURLY_BREAKDOWN:
                 case WEEKLY_BREAKDOWN:
                 case INTERVALS:
-                    color = new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[i - 1]), BAR_OPACITY);
+                    color = new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[i - 1]), BAR_OPACITY);
                     break;
                 case REVIEW_COUNT:
                 case REVIEW_TIME:
                 case FORECAST:
                     if (i == 1) {
-                        color = new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[i - 1]), BAR_OPACITY);
+                        color = new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[i - 1]), BAR_OPACITY);
                         break;
                     }
                 default:
-                    color = new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[i - 1]));
+                    color = new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[i - 1]));
             }
 
             BarGraph barGraph = new BarGraph(usedPlotSheet, barThickness, bars, color);
@@ -253,10 +253,10 @@ public class ChartBuilder {
         for (int i = 1; i < mCumulative.length; i++) {
             double[][] cumulative = {mCumulative[0], mCumulative[i]};
 
-            ColorWrap usedColor = new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), R.attr.stats_cumulative));
+            ColorWrap usedColor = new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), R.attr.stats_cumulative));
             String name = mChartView.getResources().getString(R.string.stats_cumulative);
             if (mHasColoredCumulative) {      //also non colored Cumulatives have names!
-                usedColor = new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[i - 1]));
+                usedColor = new ColorWrap(Themes.INSTANCE.getColorFromAttr(mChartView.getContext(), mColors[i - 1]));
             } else {
                 if (mChartType == Stats.ChartType.INTERVALS) {
                     name = mChartView.getResources().getString(R.string.stats_cumulative_percentage);
@@ -265,7 +265,7 @@ public class ChartBuilder {
 
             Lines lines = new Lines(hiddenPlotSheet, cumulative, usedColor);
             lines.setSize(3f);
-            lines.setShadow(5f, 2f, 2f, ColorWrap.BLACK);
+            lines.setShadow(5f, 2f, 2f, ColorWrap.Companion.getBLACK());
             if (!mHasColoredCumulative) {
                 lines.setName(name);
             }
@@ -332,9 +332,9 @@ public class ChartBuilder {
 
 
     private void setupGrid(PlotSheet plotSheet, double yTicks, double xTicks) {
-        int red = ColorWrap.LIGHT_GRAY.getRed();
-        int green = ColorWrap.LIGHT_GRAY.getGreen();
-        int blue = ColorWrap.LIGHT_GRAY.getBlue();
+        int red = ColorWrap.Companion.getLIGHT_GRAY().getRed();
+        int green = ColorWrap.Companion.getLIGHT_GRAY().getGreen();
+        int blue = ColorWrap.Companion.getLIGHT_GRAY().getBlue();
 
         ColorWrap newGridColor = new ColorWrap(red, green, blue, 222);
 
@@ -367,7 +367,7 @@ public class ChartBuilder {
 
     public double ticksCalcX(int pixelDistance, RectangleWrap field, double start, double end) {
         double deltaRange = end - start;
-        int ticlimit = field.width / pixelDistance;
+        int ticlimit = field.getWidth() / pixelDistance;
         double tics = Math.pow(10, (int) Math.log10(deltaRange / ticlimit));
         while (2.0 * (deltaRange / (tics)) <= ticlimit) {
             tics /= 2.0;
@@ -381,14 +381,14 @@ public class ChartBuilder {
     public double ticksCalcY(int pixelDistance, RectangleWrap field, double start, double end) {
 
         double size = ticsCalc(pixelDistance, field, end - start);
-        Timber.d("ChartBuilder ticksCalcY: pixelDistance: %d, ticks: %,.2f, start: %,.2f, end: %,.2f, height: %d", pixelDistance, size, start, end, field.height);
+        Timber.d("ChartBuilder ticksCalcY: pixelDistance: %d, ticks: %,.2f, start: %,.2f, end: %,.2f, height: %d", pixelDistance, size, start, end, field.getHeight());
         return size;
     }
 
     public double ticsCalc(int pixelDistance, RectangleWrap field, double deltaRange) {
 
         //Make approximation of number of ticks based on desired number of pixels per tick
-        double numTicks = field.height / pixelDistance;
+        double numTicks = field.getHeight() / pixelDistance;
 
         //Compute size of one tick in graph-units
         double delta = deltaRange / numTicks;
@@ -420,7 +420,7 @@ public class ChartBuilder {
         //Compute size * magn so that we return one number
         size *= magn;
 
-        Timber.d("ChartBuilder ticksCalc : pixelDistance: %d, ticks: %,.2f, deltaRange: %,.2f, height: %d", pixelDistance, size, deltaRange, field.height);
+        Timber.d("ChartBuilder ticksCalc : pixelDistance: %d, ticks: %,.2f, deltaRange: %,.2f, height: %d", pixelDistance, size, deltaRange, field.getHeight());
 
         return size;
     }

@@ -96,7 +96,7 @@ public class FilteredDeckOptions extends AppCompatPreferenceActivity implements 
                 mValues.put("order", ar.getString(2));
                 JSONArray delays = mDeck.optJSONArray("delays");
                 if (delays != null) {
-                    mValues.put("steps", StepsPreference.convertFromJSON(delays));
+                    mValues.put("steps", StepsPreference.Companion.convertFromJSON(delays));
                     mValues.put("stepsOn", Boolean.toString(true));
                 } else {
                     mValues.put("steps", "1 10");
@@ -145,7 +145,7 @@ public class FilteredDeckOptions extends AppCompatPreferenceActivity implements 
                         } else if (entry.getKey().equals("stepsOn")) {
                             boolean on = (Boolean) entry.getValue();
                             if (on) {
-                                JSONArray steps =  StepsPreference.convertToJSON(mValues.get("steps"));
+                                JSONArray steps =  StepsPreference.Companion.convertToJSON(mValues.get("steps"));
                                 if (steps.length() > 0) {
                                     mDeck.put("delays", steps);
                                 }
@@ -153,7 +153,7 @@ public class FilteredDeckOptions extends AppCompatPreferenceActivity implements 
                                 mDeck.put("delays", JSONObject.NULL);
                             }
                         } else if (entry.getKey().equals("steps")) {
-                            mDeck.put("delays", StepsPreference.convertToJSON((String) entry.getValue()));
+                            mDeck.put("delays", StepsPreference.Companion.convertToJSON((String) entry.getValue()));
                         } else if (entry.getKey().equals("preset")) {
                             int i = Integer.parseInt((String) entry.getValue());
                             if (i > 0) {
@@ -348,7 +348,7 @@ public class FilteredDeckOptions extends AppCompatPreferenceActivity implements 
 
     @Override
     protected void onCreate(Bundle icicle) {
-        Themes.setThemeLegacy(this);
+        Themes.INSTANCE.setThemeLegacy(this);
         super.onCreate(icicle);
 
         mCol = CollectionHelper.getInstance().getCol(this);

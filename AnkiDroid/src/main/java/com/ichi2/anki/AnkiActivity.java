@@ -56,7 +56,7 @@ public class AnkiActivity extends AppCompatActivity implements LoaderManager.Loa
         // The hardware buttons should control the music volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         // Set the theme
-        Themes.setTheme(this);
+        Themes.INSTANCE.setTheme(this);
         super.onCreate(savedInstanceState);
         mCustomTabActivityHelper = new CustomTabActivityHelper();
     }

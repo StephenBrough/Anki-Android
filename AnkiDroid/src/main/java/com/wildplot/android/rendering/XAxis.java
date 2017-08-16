@@ -230,7 +230,7 @@ public class XAxis implements Drawable {
 		} else {
             float[] middlePosition = {plotSheet.xToGraphic(0, field), plotSheet.yToGraphic( yOffset, field) };
             if(mHasName)
-			    g.drawString(this.name, field.width/2-width/2, Math.round(middlePosition[1]+fontHeigth* 2.5f));
+			    g.drawString(this.name, field.getWidth() /2-width/2, Math.round(middlePosition[1]+fontHeigth* 2.5f));
 		}
 	}
 
@@ -243,7 +243,7 @@ public class XAxis implements Drawable {
 
         while(currentX <= this.end) {
             if((!this.isOnFrame && plotSheet.xToGraphic(currentX, field) <= plotSheet.xToGraphic(this.end, field) -45
-                    && plotSheet.xToGraphic(currentX, field) <= field.x + field.width - 45) ||
+                    && plotSheet.xToGraphic(currentX, field) <= field.getX() + field.getWidth() - 45) ||
                     (this.isOnFrame && currentX <= this.plotSheet.getxRange()[1] &&
                             currentX >= this.plotSheet.getxRange()[0])){
 
@@ -267,7 +267,7 @@ public class XAxis implements Drawable {
         for(int i = 0; i < mTickPositions.length; i ++){
             double currentX = mTickPositions[i];
             if((!this.isOnFrame && plotSheet.xToGraphic(currentX, field) <= plotSheet.xToGraphic(this.end, field) -45
-                    && plotSheet.xToGraphic(currentX, field) <= field.x + field.width - 45) ||
+                    && plotSheet.xToGraphic(currentX, field) <= field.getX() + field.getWidth() - 45) ||
                     (this.isOnFrame && currentX <= this.plotSheet.getxRange()[1] &&
                             currentX >= this.plotSheet.getxRange()[0])){
 
@@ -420,7 +420,7 @@ public class XAxis implements Drawable {
 		
 		while(currentX <= this.end) {
 			if((!this.isOnFrame && plotSheet.xToGraphic(currentX, field) <= plotSheet.xToGraphic(this.end, field) -45 
-					&& plotSheet.xToGraphic(currentX, field) <= field.x + field.width - 45) || 
+					&& plotSheet.xToGraphic(currentX, field) <= field.getX() + field.getWidth() - 45) ||
 					(this.isOnFrame && currentX <= this.plotSheet.getxRange()[1] &&
 					currentX >= this.plotSheet.getxRange()[0])){
 				

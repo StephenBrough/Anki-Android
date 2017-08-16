@@ -78,7 +78,7 @@ public class OverviewStatsBuilder {
     }
 
     public String createInfoHtmlString() {
-        int textColorInt = Themes.getColorFromAttr(mWebView.getContext(), android.R.attr.textColor);
+        int textColorInt = Themes.INSTANCE.getColorFromAttr(mWebView.getContext(), android.R.attr.textColor);
         String textColor = String.format("#%06X", (0xFFFFFF & textColorInt)); // Color to hex string
 
         String css = "<style>\n" +

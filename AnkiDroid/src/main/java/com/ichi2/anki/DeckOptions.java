@@ -111,7 +111,7 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                 mValues.put("replayQuestion", Boolean.toString(mOptions.optBoolean("replayq", true)));
                 // new
                 JSONObject newOptions = mOptions.getJSONObject("new");
-                mValues.put("newSteps", StepsPreference.convertFromJSON(newOptions.getJSONArray("delays")));
+                mValues.put("newSteps", StepsPreference.Companion.convertFromJSON(newOptions.getJSONArray("delays")));
                 mValues.put("newGradIvl", newOptions.getJSONArray("ints").getString(0));
                 mValues.put("newEasy", newOptions.getJSONArray("ints").getString(1));
                 mValues.put("newFactor", Integer.toString(newOptions.getInt("initialFactor") / 10));
@@ -127,7 +127,7 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                 mValues.put("revBury", Boolean.toString(revOptions.optBoolean("bury", true)));
                 // lapse
                 JSONObject lapOptions = mOptions.getJSONObject("lapse");
-                mValues.put("lapSteps", StepsPreference.convertFromJSON(lapOptions.getJSONArray("delays")));
+                mValues.put("lapSteps", StepsPreference.Companion.convertFromJSON(lapOptions.getJSONArray("delays")));
                 mValues.put("lapNewIvl", Integer.toString((int) (lapOptions.getDouble("mult") * 100)));
                 mValues.put("lapMinIvl", lapOptions.getString("minInt"));
                 mValues.put("lapLeechThres", lapOptions.getString("leechFails"));
@@ -143,7 +143,7 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                     mValues.put("reminderTime", String.format("%1$02d:%2$02d", reminderTime.get(0), reminderTime.get(1)));
                 } else {
                     mValues.put("reminderEnabled", "false");
-                    mValues.put("reminderTime", TimePreference.DEFAULT_VALUE);
+                    mValues.put("reminderTime", TimePreference.Companion.getDEFAULT_VALUE());
                 }
             } catch (JSONException e) {
                 finish();
@@ -229,10 +229,10 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                             mDeck.put("desc", value);
                             mCol.getDecks().save(mDeck);
                         } else if (key.equals("newSteps")) {
-                            mOptions.getJSONObject("new").put("delays", StepsPreference.convertToJSON((String) value));
+                            mOptions.getJSONObject("new").put("delays", StepsPreference.Companion.convertToJSON((String) value));
                         } else if (key.equals("lapSteps")) {
                             mOptions.getJSONObject("lapse")
-                                    .put("delays", StepsPreference.convertToJSON((String) value));
+                                    .put("delays", StepsPreference.Companion.convertToJSON((String) value));
                         } else if (key.equals("deckConf")) {
                             long newConfId = Long.parseLong((String) value);
                             mOptions = mCol.getDecks().getConf(newConfId);
@@ -259,7 +259,7 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                         } else if (key.equals("confRemove")) {
                             if (mOptions.getLong("id") == 1) {
                                 // Don't remove the options group if it's the default group
-                                UIUtils.showThemedToast(DeckOptions.this,
+                                UIUtils.INSTANCE.showThemedToast(DeckOptions.this,
                                         getResources().getString(R.string.default_conf_delete_error), false);
                             } else {
                                 // Remove options group, handling the case where the user needs to confirm full sync
@@ -300,8 +300,8 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                                 reminder.put("time", mOptions.getJSONObject("reminder").getJSONArray("time"));
                             } else {
                                 reminder.put("time", new JSONArray()
-                                        .put(TimePreference.parseHours(TimePreference.DEFAULT_VALUE))
-                                        .put(TimePreference.parseMinutes(TimePreference.DEFAULT_VALUE)));
+                                        .put(TimePreference.Companion.parseHours(TimePreference.Companion.getDEFAULT_VALUE()))
+                                        .put(TimePreference.Companion.parseMinutes(TimePreference.Companion.getDEFAULT_VALUE())));
                             }
 
                             mOptions.put("reminder", reminder);
@@ -334,8 +334,8 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                             final JSONObject reminder = new JSONObject();
 
                             reminder.put("enabled", true);
-                            reminder.put("time", new JSONArray().put(TimePreference.parseHours((String) value))
-                                    .put(TimePreference.parseMinutes((String) value)));
+                            reminder.put("time", new JSONArray().put(TimePreference.Companion.parseHours((String) value))
+                                    .put(TimePreference.Companion.parseMinutes((String) value)));
 
                             mOptions.put("reminder", reminder);
 
@@ -450,7 +450,7 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                 @Override
                 public void onPreExecute() {
                     Resources res = getResources();
-                    mProgressDialog = StyledProgressDialog.show(DeckOptions.this, "",
+                    mProgressDialog = StyledProgressDialog.Companion.show(DeckOptions.this, "",
                             res.getString(R.string.reordering_cards), false);
                 }
 
@@ -583,7 +583,7 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
 
     @Override
     protected void onCreate(Bundle icicle) {
-        Themes.setThemeLegacy(this);
+        Themes.INSTANCE.setThemeLegacy(this);
         super.onCreate(icicle);
 
         mCol = CollectionHelper.getInstance().getCol(this);

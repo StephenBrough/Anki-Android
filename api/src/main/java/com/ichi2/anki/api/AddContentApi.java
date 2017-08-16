@@ -231,7 +231,7 @@ public final class AddContentApi {
             if (!cursor.moveToNext()) {
                 return null;
             }
-            return NoteInfo.buildFromCursor(cursor);
+            return NoteInfo.Companion.buildFromCursor(cursor);
         } finally {
             cursor.close();
         }
@@ -297,8 +297,8 @@ public final class AddContentApi {
      * @return the mid of the model which was created, or null if it could not be created
      */
     public Long addNewBasicModel(String name) {
-        return addNewCustomModel(name, BasicModel.FIELDS, BasicModel.CARD_NAMES, BasicModel.QFMT,
-                BasicModel.AFMT, null, null, null);
+        return addNewCustomModel(name, BasicModel.INSTANCE.getFIELDS(), BasicModel.INSTANCE.getCARD_NAMES(), BasicModel.INSTANCE.getQFMT(),
+                BasicModel.INSTANCE.getAFMT(), null, null, null);
     }
 
 
@@ -309,8 +309,8 @@ public final class AddContentApi {
      * @return the mid of the model which was created, or null if it could not be created
      */
     public Long addNewBasic2Model(String name) {
-        return addNewCustomModel(name, Basic2Model.FIELDS, Basic2Model.CARD_NAMES, Basic2Model.QFMT,
-                Basic2Model.AFMT, null, null, null);
+        return addNewCustomModel(name, Basic2Model.INSTANCE.getFIELDS(), Basic2Model.INSTANCE.getCARD_NAMES(), Basic2Model.INSTANCE.getQFMT(),
+                Basic2Model.INSTANCE.getAFMT(), null, null, null);
     }
 
     /**
@@ -661,7 +661,7 @@ public final class AddContentApi {
                 }
                 try {
                     while (cursor.moveToNext()) {
-                        addNoteToDuplicatesArray(NoteInfo.buildFromCursor(cursor), duplicates, outputPos);
+                        addNoteToDuplicatesArray(NoteInfo.Companion.buildFromCursor(cursor), duplicates, outputPos);
                     }
                 } finally {
                     cursor.close();
@@ -722,7 +722,7 @@ public final class AddContentApi {
             SparseArray<List<NoteInfo>> duplicates = new SparseArray<>();
             try {
                 while (notesTableCursor.moveToNext()) {
-                    NoteInfo note = NoteInfo.buildFromCursor(notesTableCursor);
+                    NoteInfo note = NoteInfo.Companion.buildFromCursor(notesTableCursor);
                     if (note == null) {
                         continue;
                     }

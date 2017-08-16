@@ -197,11 +197,11 @@ public class BasicImageFieldController extends FieldControllerBase implements IF
         // use same filename but with png extension for output file
         String outPath = inPath.substring(0, inPath.lastIndexOf(".")) + ".png";
         // Load into a bitmap with max size of 1920 pixels and rotate if necessary
-        Bitmap b = BitmapUtil.decodeFile(f, IMAGE_SAVE_MAX_WIDTH);
+        Bitmap b = BitmapUtil.INSTANCE.decodeFile(f, IMAGE_SAVE_MAX_WIDTH);
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(outPath);
-            b = ExifUtil.rotateFromCamera(f, b);
+            b = ExifUtil.INSTANCE.rotateFromCamera(f, b);
             b.compress(Bitmap.CompressFormat.PNG, 90, out);
             f.delete();
             return outPath;
@@ -231,11 +231,11 @@ public class BasicImageFieldController extends FieldControllerBase implements IF
             // fix for both
             File f = new File(imagePath);
 
-            Bitmap b = BitmapUtil.decodeFile(f, maxsize);
+            Bitmap b = BitmapUtil.INSTANCE.decodeFile(f, maxsize);
 
             int currentapiVersion = android.os.Build.VERSION.SDK_INT;
             if (currentapiVersion >= android.os.Build.VERSION_CODES.ECLAIR) {
-                b = ExifUtil.rotateFromCamera(f, b);
+                b = ExifUtil.INSTANCE.rotateFromCamera(f, b);
             }
 
             mImagePreview.setImageBitmap(b);
@@ -246,7 +246,7 @@ public class BasicImageFieldController extends FieldControllerBase implements IF
     @Override
     public void onDestroy() {
         ImageView imageView = mImagePreview;
-        BitmapUtil.freeImageView(imageView);
+        BitmapUtil.INSTANCE.freeImageView(imageView);
     }
 
 }

@@ -25,32 +25,32 @@ import com.wildplot.android.rendering.interfaces.Legendable;
 
 /**
  * BarGraph uses a point matrix or a function to render bar graphs on PlotSheet object
- * 
+ *
  *
  */
 public class BarGraph implements Drawable, Legendable {
 
     private String mName = "";
     private boolean mNameIsSet = false;
-	
+
 	private PlotSheet plotSheet;
-	
+
 	private double[][] points;
-	
+
 	private Function2D function;
-	
+
 	private double size = 1;
-	
+
 	private boolean hasFunction = false;
-	
+
 	private double steps = 1;
-	
+
 	private ColorWrap color;
-	
+
 	private ColorWrap fillColor;
-	
+
 	private boolean filling = false;
-	
+
 	/**
 	 * Constructor for BarGraph object
 	 * @param plotSheet the sheet the bar will be drawn onto
@@ -64,7 +64,7 @@ public class BarGraph implements Drawable, Legendable {
 		this.points = points;
 		this.color = color;
 	}
-	
+
 	/**
 	 * Constructor for BarGraph object
 	 * @param plotSheet the sheet the bar will be drawn onto
@@ -79,7 +79,7 @@ public class BarGraph implements Drawable, Legendable {
 		this.hasFunction = true;
 		this.color = color;
 	}
-	
+
 	/**
 	 * Constructor for BarGraph object
 	 * @param plotSheet the sheet the bar will be drawn onto
@@ -96,7 +96,7 @@ public class BarGraph implements Drawable, Legendable {
 		this.hasFunction = true;
 		this.color = color;
 	}
-	
+
 	/**
 	 * Set filling for a bar graph true or false
 	 */
@@ -106,9 +106,9 @@ public class BarGraph implements Drawable, Legendable {
 			this.fillColor = this.color;
 		}
 	}
-	
+
 	/**
-	 * Set filling color for bar graph 
+	 * Set filling color for bar graph
 	 * @param fillColor of the bar graph
 	 */
 	public void setFillColor(ColorWrap fillColor) {
@@ -123,17 +123,17 @@ public class BarGraph implements Drawable, Legendable {
 		ColorWrap oldColor = g.getColor();
 		RectangleWrap field = g.getClipBounds();
 		g.setColor(color);
-		
+
 		if(this.hasFunction) {
-			
+
 			double tmp =  (int)((0-plotSheet.getxRange()[0])/this.steps);
-			tmp = (0.0 - tmp*this.steps); 
-			
+			tmp = (0.0 - tmp*this.steps);
+
 			while(tmp <= plotSheet.getxRange()[1]) {
 				drawBar(tmp, function.f(tmp), g, field);
 				tmp += this.steps;
 			}
-			
+
 		} else {
 			for(int i = 0; i<this.points[0].length; i++) {
 				if(points.length == 3) {
@@ -142,17 +142,17 @@ public class BarGraph implements Drawable, Legendable {
 					drawBar(points[0][i], points[1][i], g, field);
 				}
 			}
-			
+
 		}
-		
-		
-		
+
+
+
 		g.setColor(oldColor);
 
 	}
-	
+
 	/**
-	 * draw a single bar at given coordinates with given graphics object and bounds 
+	 * draw a single bar at given coordinates with given graphics object and bounds
 	 * @param x x-coordinate of bar
 	 * @param y height of bar
 	 * @param g graphics object for drawing
@@ -161,7 +161,7 @@ public class BarGraph implements Drawable, Legendable {
 	private void drawBar(double x, double y, GraphicsWrap g, RectangleWrap field) {
 		drawBar(x,y,g,field,this.size);
 	}
-	
+
 	/**
 	 * draw a single bar at given coordinates with given graphics object and bounds and specific size
 	 * @param x x-coordinate of bar
@@ -176,19 +176,19 @@ public class BarGraph implements Drawable, Legendable {
         float[] pointUpLeft 		= plotSheet.toGraphicPoint(x-size/2, y, field);
         float[] pointUpRight 		= plotSheet.toGraphicPoint(x+size/2, y, field);
         float[] pointBottomLeft 	= plotSheet.toGraphicPoint(x-size/2, 0, field);
-		
+
 		if(filling){
 			ColorWrap oldColor = g.getColor();
 			if(this.fillColor != null)
 				g.setColor(fillColor);
-			
+
 			if(y<0) {
 				g.fillRect(pointUpLeft[0], plotSheet.yToGraphic(0, field), pointUpRight[0]-pointUpLeft[0], pointUpLeft[1]- pointBottomLeft[1]);
 			} else {
 				g.fillRect(pointUpLeft[0], pointUpLeft[1], pointUpRight[0]-pointUpLeft[0], pointBottomLeft[1]-pointUpLeft[1]);
 			}
 			//g.fillRect(pointUpLeft[0], pointUpLeft[1], pointUpRight[0]-pointUpLeft[0], pointBottomLeft[1]-pointUpLeft[1]);
-			
+
 			g.setColor(oldColor);
 		} else {
 
@@ -201,11 +201,11 @@ public class BarGraph implements Drawable, Legendable {
 //		g.drawLine(pointUpLeft[0], pointUpLeft[1], pointUpRight[0], pointUpRight[1]);
 //		g.drawLine(pointUpLeft[0], pointUpLeft[1], pointBottomLeft[0], pointBottomLeft[1]);
 //		g.drawLine(pointBottomRight[0], pointBottomRight[1], pointBottomLeft[0], pointBottomLeft[1]);
-		
-		
-		
+
+
+
 	}
-	
+
 	/**
 	 * returns true if this BarGraph can draw on the outer frame of plot (normally not)
 	 */
@@ -216,7 +216,7 @@ public class BarGraph implements Drawable, Legendable {
 	@Override
 	public void abortAndReset() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
     @Override

@@ -208,8 +208,8 @@ public class YAxis implements Drawable {
 		while(currentY <= this.end) {
 			if((!this.isOnFrame &&plotSheet.yToGraphic(currentY, field) >= plotSheet.yToGraphic(this.end, field) +cleanSpace 
 					&& plotSheet.yToGraphic(currentY, field) <= plotSheet.yToGraphic(this.start, field) - cleanSpace
-					&& plotSheet.yToGraphic(currentY, field) <= field.y + field.height - cleanSpace
-					&& plotSheet.yToGraphic(currentY, field) >= field.y  + cleanSpace) || 
+					&& plotSheet.yToGraphic(currentY, field) <= field.getY() + field.getHeight() - cleanSpace
+					&& plotSheet.yToGraphic(currentY, field) >= field.getY() + cleanSpace) ||
 					(this.isOnFrame && currentY <= this.plotSheet.getyRange()[1] &&
 							currentY >= this.plotSheet.getyRange()[0])){
 			
@@ -256,14 +256,14 @@ public class YAxis implements Drawable {
             g.save();
             if(isOnRightSide) {
                 float[] middlePosition = {plotSheet.xToGraphic(xOffset, field), plotSheet.yToGraphic(0, field)};
-                g.rotate(90, middlePosition[0]+spacerValue*1.4f, field.height / 2 - width / 2);
+                g.rotate(90, middlePosition[0]+spacerValue*1.4f, field.getHeight() / 2 - width / 2);
                 if(mHasName)
-                    g.drawString(this.name, middlePosition[0]+spacerValue*1.4f, field.height / 2 - width / 2);
+                    g.drawString(this.name, middlePosition[0]+spacerValue*1.4f, field.getHeight() / 2 - width / 2);
             }else {
                 float[] middlePosition = {plotSheet.xToGraphic(xOffset, field), plotSheet.yToGraphic(0, field)};
-                g.rotate(-90, middlePosition[0]-spacerValue*1.4f, field.height / 2 + width / 2);
+                g.rotate(-90, middlePosition[0]-spacerValue*1.4f, field.getHeight() / 2 + width / 2);
                 if(mHasName)
-                    g.drawString(this.name, middlePosition[0]-spacerValue*1.4f, field.height / 2 + width / 2);
+                    g.drawString(this.name, middlePosition[0]-spacerValue*1.4f, field.getHeight() / 2 + width / 2);
             }
             g.restore();
 //			g.setFont(oldFont);
@@ -471,8 +471,8 @@ public class YAxis implements Drawable {
 			
 			if((!this.isOnFrame &&plotSheet.yToGraphic(currentY, field) >= plotSheet.yToGraphic(this.end, field) +cleanSpace 
 					&& plotSheet.yToGraphic(currentY, field) <= plotSheet.yToGraphic(this.start, field) - cleanSpace
-					&& plotSheet.yToGraphic(currentY, field) <= field.y + field.height - cleanSpace
-					&& plotSheet.yToGraphic(currentY, field) >= field.y  + cleanSpace) || 
+					&& plotSheet.yToGraphic(currentY, field) <= field.getY() + field.getHeight() - cleanSpace
+					&& plotSheet.yToGraphic(currentY, field) >= field.getY() + cleanSpace) ||
 					(this.isOnFrame && currentY <= this.plotSheet.getyRange()[1] &&
 							currentY >= this.plotSheet.getyRange()[0])){
 			

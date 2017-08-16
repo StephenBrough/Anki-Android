@@ -30,7 +30,7 @@ public class Lines implements Drawable, Legendable {
     private float mShadowRadius = 0.0f;
     private float mShadowDx= 0.0f;
     private float mShadowDy = 0.0f;
-    private ColorWrap mShadowColor = ColorWrap.BLACK;
+    private ColorWrap mShadowColor = ColorWrap.Companion.getBLACK();
 
     private String mName = "";
     private boolean mNameIsSet = false;
