@@ -24,12 +24,12 @@ cd "$(dirname "$0")/.."
 
 # Pull
 git pull https://github.com/$DEVELOPER/Anki-Android.git $BRANCH
-if [ "$?" -ne "0" ]; then zenity --error --text 'pull failed'; exit 1; fi 
+if [ "$?" -ne "0" ]; then zenity --errorSnackbar --text 'pull failed'; exit 1; fi
 
 # Compile
 ant clean debug
-if [ "$?" -ne "0" ]; then zenity --error --text 'compile failed'; exit 1; fi 
+if [ "$?" -ne "0" ]; then zenity --errorSnackbar --text 'compile failed'; exit 1; fi
 
 # If compile worked, push
 git push
-if [ "$?" -ne "0" ]; then zenity --error --text 'push failed'; exit 1; fi 
+if [ "$?" -ne "0" ]; then zenity --errorSnackbar --text 'push failed'; exit 1; fi

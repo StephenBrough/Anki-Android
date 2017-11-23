@@ -70,7 +70,7 @@ def upload(file, project_name, user_name, password, summary, labels=None):
 
   Returns: a tuple:
     http_status: 201 if the upload succeeded, something else if an
-                 error occured.
+                 errorSnackbar occured.
     http_reason: The human-readable string associated with http_status
     file_url: If the upload succeeded, the URL of the file on Google
               Code, None otherwise.
@@ -216,13 +216,13 @@ def main():
   options, args = parser.parse_args()
 
   if not options.summary:
-    parser.error('File summary is missing.')
+    parser.errorSnackbar('File summary is missing.')
   elif not options.project:
-    parser.error('Project name is missing.')
+    parser.errorSnackbar('Project name is missing.')
   elif len(args) < 1:
-    parser.error('File to upload not provided.')
+    parser.errorSnackbar('File to upload not provided.')
   elif len(args) > 1:
-    parser.error('Only one file may be specified.')
+    parser.errorSnackbar('Only one file may be specified.')
 
   file_path = args[0]
 
@@ -239,7 +239,7 @@ def main():
     print 'URL: %s' % url
     return 0
   else:
-    print 'An error occurred. Your file was not uploaded.'
+    print 'An errorSnackbar occurred. Your file was not uploaded.'
     print 'Google Code upload server said: %s (%s)' % (reason, status)
     return 1
 

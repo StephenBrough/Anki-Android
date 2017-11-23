@@ -196,7 +196,7 @@ The recommendations are based on individual experience and on the next coding st
 <a href="#ref6">[6]</a>.
 <br/><br/>
 -->
-If you find any error on this document or any inconsistency between the recommendations presented here and the automatic checkstyle and formatter, please send an email to <a href="mailto:ankidroid@gmail.com">ankidroid@gmail.com</a>.
+If you find any errorSnackbar on this document or any inconsistency between the recommendations presented here and the automatic checkstyle and formatter, please send an email to <a href="mailto:ankidroid@gmail.com">ankidroid@gmail.com</a>.
 
 <h3>
 <a name="Layout of the Recommendations"></a>1.1 Layout of the Recommendations
@@ -2891,28 +2891,28 @@ try {
 <tr>
 <td class="example">&lt;RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/example_id"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     &gt;
 
 &lt;RelativeLayout android:id="@+id/example_id"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     &gt;
     
 &lt;RelativeLayout
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     &gt;
     
 <i class="not">// NOT:
-&lt;RelativeLayout android:layout_width="fill_parent"
+&lt;RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     &gt;
     
 &lt;RelativeLayout android:id="@+id/example_id"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     &gt;</i>
 </td>
@@ -2936,7 +2936,7 @@ try {
 
 <tr>
 <td class="example">&lt;EditText android:id="@+id/answer_field"      	    <i class="not">// NOT: &lt;EditText android:id="@+id/answer_field"</i>
-    android:layout_width="fill_parent"				<i class="not">android:layout_width="fill_parent" android:layout_height="wrap_content"</i>
+    android:layout_width="match_parent"				<i class="not">android:layout_width="match_parent" android:layout_height="wrap_content"</i>
     android:layout_height="wrap_content"	                <i class="not">android:maxLines="2" android:visibility="gone"/&gt;</i>
     android:maxLines="2"
     android:visibility="gone"
@@ -2963,7 +2963,7 @@ try {
 <tr>
 <td class="example">&lt;TextView android:id="@+id/example_id"
     android:layout_height="wrap_content"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:textColor="#ffffff"
     android:textSize="24sp"
     /&gt;
@@ -2972,13 +2972,13 @@ try {
 &lt;TextView android:id="@+id/example_id"
     android:layout_height="wrap_content"
     android:textColor="#ffffff"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:textSize="24sp"
     /&gt;
     
 &lt;TextView android:id="@+id/example_id"
     android:layout_height="wrap_content"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:textSize="24sp"
     android:textColor="#ffffff"
     /&gt;
@@ -3003,7 +3003,7 @@ try {
 
 <tr>
 <td class="example">&lt;LinearLayout                                   <i class="not">// NOT: &lt;LinearLayout</i>
-    android:layout_width="fill_parent"                      <i class="not">android:layout_width="fill_parent"</i>
+    android:layout_width="match_parent"                      <i class="not">android:layout_width="match_parent"</i>
     android:layout_height="wrap_content"                    <i class="not">android:layout_height="wrap_content"</i>
     android:orientation="horizontal"                        <i class="not">&gt;</i>
     &gt;	

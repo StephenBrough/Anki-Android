@@ -193,7 +193,7 @@ for language in languages:
         anyError = not(update(valuesDirectory, f, zip.read(language + "/" + f + fileExt), fileExt, True, language)) or anyError
 
     if anyError:
-        print "At least one file of the last handled language contains an error."
+        print "At least one file of the last handled language contains an errorSnackbar."
         anyError = False
 
 print "\nRemoving Crowdin file\n"

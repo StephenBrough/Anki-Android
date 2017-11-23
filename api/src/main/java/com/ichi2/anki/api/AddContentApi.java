@@ -60,7 +60,7 @@ public final class AddContentApi {
     public static final String READ_WRITE_PERMISSION = FlashCardsContract.READ_WRITE_PERMISSION;
     public static final long DEFAULT_DECK_ID = 1L;
     private static final String TEST_TAG = "PREVIEW_NOTE";
-    private static final String PROVIDER_SPEC_META_DATA_KEY = "com.ichi2.anki.provider.spec";
+    private static final String PROVIDER_SPEC_META_DATA_KEY = "com.ichi2.anki.other.provider.spec";
     private static final int DEFAULT_PROVIDER_SPEC_VALUE = 1; // for when meta-data key does not exist
     private static final String[] PROJECTION = {Note._ID, Note.FLDS, Note.TAGS};
 

@@ -30,7 +30,7 @@ function silently() {
 }
 
 
-# Outputs an error message and exits the script.
+# Outputs an errorSnackbar message and exits the script.
 #
 # arguments:
 #   message: one or more strings, the message to be printed
@@ -39,25 +39,25 @@ function silently() {
 #   the message
 function fatal() {
   echo "FATAL: $*" 1>&2
-  exit 113  # Use a special error code so that we can identify fatal failures.
+  exit 113  # Use a special errorSnackbar code so that we can identify fatal failures.
 }
 
 
-# Output an error message for a missing argument and terminates with a fatal
-# error.
+# Output an errorSnackbar message for a missing argument and terminates with a fatal
+# errorSnackbar.
 #
 # arguments:
 #   name: the name of the missing argument
 #
 # stderr:
-#   an error message for the missing argument (to stderr)
+#   an errorSnackbar message for the missing argument (to stderr)
 function missing_arg() {
   fatal "Missing argument: $1"
 }
 
 
-# Output an error message if given any arguments and (in that case) also
-# terminates with a fatal error.
+# Output an errorSnackbar message if given any arguments and (in that case) also
+# terminates with a fatal errorSnackbar.
 #
 # arguments:
 #   arguments: the remaining arguments to the function
