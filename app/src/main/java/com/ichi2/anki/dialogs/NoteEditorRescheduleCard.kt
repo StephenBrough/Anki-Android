@@ -13,7 +13,7 @@ class NoteEditorRescheduleCard : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): MaterialDialog {
         super.onCreate(savedInstanceState)
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(R.string.reschedule_card_dialog_title)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)

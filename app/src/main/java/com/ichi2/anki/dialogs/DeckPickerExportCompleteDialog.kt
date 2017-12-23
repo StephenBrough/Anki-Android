@@ -32,7 +32,7 @@ class DeckPickerExportCompleteDialog : AsyncDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): MaterialDialog {
         super.onCreate(savedInstanceState)
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(R.string.export_successful_title)
                 .content(notificationMessage)
                 .iconAttr(R.attr.dialogSendIcon)

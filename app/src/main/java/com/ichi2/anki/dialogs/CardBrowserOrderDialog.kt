@@ -33,7 +33,7 @@ class CardBrowserOrderDialog : DialogFragment() {
 
                     }
                 }
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(resources.getString(R.string.card_browser_change_display_order_title))
                 .content(resources.getString(R.string.card_browser_change_display_order_reverse))
                 .items(*items)

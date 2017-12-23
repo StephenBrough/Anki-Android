@@ -230,65 +230,21 @@ public class AnkiDroidApp extends Application {
     }
 
     /** A tree which logs necessary data for crash reporting. */
-    public static class ProductionCrashReportingTree extends Timber.HollowTree {
+    public static class ProductionCrashReportingTree extends Timber.Tree {
         private static final ThreadLocal<String> NEXT_TAG = new ThreadLocal<>();
         private static final Pattern ANONYMOUS_CLASS = Pattern.compile("\\$\\d+$");
 
-        @Override public void e(String message, Object... args) {
-            Log.e(TAG, createTag() + "/ " + formatString(message, args)); // Just add to the log.
-        }
-
-        @Override public void e(Throwable t, String message, Object... args) {
-            Log.e(TAG, createTag() + "/ " + formatString(message, args), t); // Just add to the log.
-        }
-
-        @Override public void w(String message, Object... args) {
-            Log.w(TAG, createTag() + "/ " + formatString(message, args)); // Just add to the log.
-        }
-
-        @Override public void w(Throwable t, String message, Object... args) {
-            Log.w(TAG, createTag() + "/ " + formatString(message, args), t); // Just add to the log.
-        }
-
-        @Override public void i(String message, Object... args) {
-            // Skip createTag() to improve  performance. message should be descriptive enough without it
-            Log.i(TAG, formatString(message, args)); // Just add to the log.
-        }
-
-        @Override public void i(Throwable t, String message, Object... args) {
-            // Skip createTag() to improve  performance. message should be descriptive enough without it
-            Log.i(TAG, formatString(message, args), t); // Just add to the log.
-        }
-
-        // Ignore logs below INFO level --> Non-overridden methods go to HollowTree
-
-        static String formatString(String message, Object... args) {
-            // If no varargs are supplied, treat it as a request to log the string without formatting.
-            try {
-                return args.length == 0 ? message : String.format(message, args);
-            } catch (Exception e) {
-                return message;
-            }
-        }
-
-        private static String createTag() {
-            String tag = NEXT_TAG.get();
-            if (tag != null) {
-                NEXT_TAG.remove();
-                return tag;
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            if (priority == Log.VERBOSE || priority == Log.DEBUG) {
+                return;
             }
 
-            StackTraceElement[] stackTrace = new Throwable().getStackTrace();
-            if (stackTrace.length < 6) {
-                throw new IllegalStateException(
-                        "Synthetic stacktrace didn't have enough elements: are you using proguard?");
+            Crashlytics.log(priority, tag, message);
+
+            if (t != null) {
+                Crashlytics.log(priority, tag, t.getMessage());
             }
-            tag = stackTrace[5].getClassName();
-            Matcher m = ANONYMOUS_CLASS.matcher(tag);
-            if (m.find()) {
-                tag = m.replaceAll("");
-            }
-            return tag.substring(tag.lastIndexOf('.') + 1);
         }
     }
 }

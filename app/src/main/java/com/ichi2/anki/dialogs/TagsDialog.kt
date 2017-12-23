@@ -68,10 +68,10 @@ class TagsDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         mCurrentTags = TreeSet(String.CASE_INSENSITIVE_ORDER)
-        mCurrentTags!!.addAll(arguments.getStringArrayList(CHECKED_TAGS_KEY))
+        mCurrentTags!!.addAll(arguments!!.getStringArrayList(CHECKED_TAGS_KEY))
 
         mCurrentTags!!
                 .filterNot { allTags.contains(it) }
@@ -123,7 +123,7 @@ class TagsDialog : DialogFragment() {
 
         adjustToolbar(tagsDialogView)
 
-        val builder = MaterialDialog.Builder(activity)
+        val builder = MaterialDialog.Builder(activity!!)
                 .positiveText(mPositiveText!!)
                 .negativeText(res.getString(R.string.dialog_cancel))
                 .customView(tagsDialogView, false)
@@ -158,7 +158,7 @@ class TagsDialog : DialogFragment() {
                 addTag(query)
                 mToolbarSearchView!!.setQuery("", true)
             } else {
-                val addTagBuilder = MaterialDialog.Builder(activity)
+                val addTagBuilder = MaterialDialog.Builder(activity!!)
                         .title(R.string.add_tag)
                         .negativeText(R.string.cancel)
                         .positiveText(R.string.ok)
@@ -238,7 +238,7 @@ class TagsDialog : DialogFragment() {
             }
             mTagsArrayAdapter!!.notifyDataSetChanged()
             // Show a snackbar to let the user know the tag was added successfully
-            UIUtils.showSnackbar(activity, feedbackText, false, -1, null,
+            UIUtils.showSnackbar(activity!!, feedbackText, false, -1, null,
                     mDialog!!.view.findViewById(R.id.tags_dialog_snackbar), null)
         }
     }

@@ -36,7 +36,7 @@ class ExportDialog : DialogFragment() {
         }
         val items = arrayOf(resources.getString(R.string.export_include_schedule), resources.getString(R.string.export_include_media))
 
-        val builder = MaterialDialog.Builder(activity)
+        val builder = MaterialDialog.Builder(activity!!)
                 .title(R.string.export)
                 .content(dialogMessage)
                 .positiveText(R.string.ok)

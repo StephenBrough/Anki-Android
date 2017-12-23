@@ -126,7 +126,7 @@ class DeckPickerContextMenu : DialogFragment() {
         super.onCreate(savedInstanceState)
         val title = CollectionHelper.getInstance().getCol(context)!!.decks.name(deckId)
         val itemIds = listIds
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(title)
                 .cancelable(true)
                 .autoDismiss(false)

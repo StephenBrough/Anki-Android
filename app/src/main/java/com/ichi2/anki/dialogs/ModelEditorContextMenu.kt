@@ -24,7 +24,7 @@ class ModelEditorContextMenu : DialogFragment() {
         entries[FIELD_RENAME] = resources.getString(R.string.model_field_editor_rename)
         entries[FIELD_DELETE] = resources.getString(R.string.model_field_editor_delete)
 
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(label)
                 .items(*entries)
                 .itemsCallback(contextMenuListener)

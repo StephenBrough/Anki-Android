@@ -66,7 +66,7 @@ class DatabaseErrorDialog : AsyncDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): MaterialDialog {
         super.onCreate(savedInstanceState)
-        val builder = MaterialDialog.Builder(activity)
+        val builder = MaterialDialog.Builder(activity!!)
         builder.cancelable(true)
                 .title(title)
 
@@ -253,7 +253,7 @@ class DatabaseErrorDialog : AsyncDialogFragment() {
                                     dismissAllDialogFragments()
                                 } else {
                                     // otherwise show an errorSnackbar dialog
-                                    MaterialDialog.Builder(activity)
+                                    MaterialDialog.Builder(activity!!)
                                             .title(R.string.backup_error)
                                             .content(R.string.backup_invalid_file_error)
                                             .positiveText(R.string.dialog_ok)
@@ -267,7 +267,7 @@ class DatabaseErrorDialog : AsyncDialogFragment() {
 
             DIALOG_NEW_COLLECTION ->
                 // Allow user to create a new empty collection
-                return builder.content(message!!)
+                return builder.content(message)
                         .positiveText(resources.getString(R.string.dialog_positive_create))
                         .negativeText(resources.getString(R.string.dialog_cancel))
                         .callback(object : MaterialDialog.ButtonCallback() {

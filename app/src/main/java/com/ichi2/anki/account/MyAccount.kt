@@ -142,7 +142,7 @@ class MyAccount : AnkiActivity() {
          */
 
         if (!username.isBlank() && !password.isBlank()) {
-            Connection.login(loginListener, Connection.Payload(arrayOf<Any>(username, password)))
+//            Connection.login(loginListener, Connection.Payload(arrayOf<Any>(username, password)))
         } else {
             UIUtils.showSimpleSnackbar(this, R.string.invalid_username_password, true)
         }

@@ -15,6 +15,7 @@
  */
 package com.ichi2.anki.dialogs
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -128,7 +129,7 @@ class CustomStudyDialog : DialogFragment() {
      */
     private fun buildContextMenu(id: Int): MaterialDialog {
         val listIds = getListIds(id)
-        return MaterialDialog.Builder(this.activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(R.string.custom_study)
                 .cancelable(true)
                 .itemsIds(listIds!!)
@@ -140,7 +141,7 @@ class CustomStudyDialog : DialogFragment() {
                             // User asked to permanently change the deck options
                             val i = Intent(activity, DeckOptions::class.java)
                             i.putExtra("did", did)
-                            getActivity().startActivity(i)
+                            activity.startActivity(i)
                         }
                         MORE_OPTIONS -> {
                             // User asked to see all custom study options
@@ -204,7 +205,7 @@ class CustomStudyDialog : DialogFragment() {
         */
         // Input dialogs
         // Show input dialog for an individual custom study dialog
-        val v = activity.layoutInflater.inflate(R.layout.styled_custom_study_details_dialog, null)
+        val v = activity!!.layoutInflater.inflate(R.layout.styled_custom_study_details_dialog, null)
         val textView1 = v.findViewById<View>(R.id.custom_study_details_text1) as TextView
         val textView2 = v.findViewById<View>(R.id.custom_study_details_text2) as TextView
         val mEditText = v.findViewById<View>(R.id.custom_study_details_edittext2) as EditText
@@ -217,7 +218,7 @@ class CustomStudyDialog : DialogFragment() {
         mEditText.requestFocus()
         // Whether or not to jump straight to the reviewer
         // Set builder parameters
-        val builder = MaterialDialog.Builder(activity)
+        val builder = MaterialDialog.Builder(activity!!)
                 .customView(v, true)
                 .positiveText(resources.getString(R.string.dialog_ok))
                 .negativeText(resources.getString(R.string.dialog_cancel))
@@ -238,8 +239,8 @@ class CustomStudyDialog : DialogFragment() {
                                 AnkiDroidApp.getSharedPrefs(activity).edit().putInt("extendNew", n).commit()
                                 val deck = col!!.decks.get(did)
                                 deck.put("extendNew", n)
-                                col!!.decks.save(deck)
-                                col!!.sched.extendLimits(n, 0)
+                                col.decks.save(deck)
+                                col.sched.extendLimits(n, 0)
                                 onLimitsExtended(jumpToReviewer)
                             } catch (e: JSONException) {
                                 throw RuntimeException(e)
@@ -249,8 +250,8 @@ class CustomStudyDialog : DialogFragment() {
                                 AnkiDroidApp.getSharedPrefs(activity).edit().putInt("extendRev", n).commit()
                                 val deck = col!!.decks.get(did)
                                 deck.put("extendRev", n)
-                                col!!.decks.save(deck)
-                                col!!.sched.extendLimits(0, n)
+                                col.decks.save(deck)
+                                col.sched.extendLimits(0, n)
                                 onLimitsExtended(jumpToReviewer)
                             } catch (e: JSONException) {
                                 throw RuntimeException(e)
@@ -314,10 +315,10 @@ class CustomStudyDialog : DialogFragment() {
                 return intArrayOf(CUSTOM_STUDY_NEW, CUSTOM_STUDY_REV, CUSTOM_STUDY_FORGOT, CUSTOM_STUDY_AHEAD, CUSTOM_STUDY_RANDOM, CUSTOM_STUDY_PREVIEW, CUSTOM_STUDY_TAGS)
             CONTEXT_MENU_LIMITS ->
                 // Special custom study options to show when the daily study limit has been reached
-                return if (col!!.sched.newDue() && col!!.sched.revDue()) {
+                return if (col!!.sched.newDue() && col.sched.revDue()) {
                     intArrayOf(CUSTOM_STUDY_NEW, CUSTOM_STUDY_REV, DECK_OPTIONS, MORE_OPTIONS)
                 } else {
-                    if (col!!.sched.newDue()) {
+                    if (col.sched.newDue()) {
                         intArrayOf(CUSTOM_STUDY_NEW, DECK_OPTIONS, MORE_OPTIONS)
                     } else {
                         intArrayOf(CUSTOM_STUDY_REV, DECK_OPTIONS, MORE_OPTIONS)
@@ -343,24 +344,24 @@ class CustomStudyDialog : DialogFragment() {
         try {
             val deckName = col!!.decks.get(did).getString("name")
             val customStudyDeck = resources.getString(R.string.custom_study_deck_name)
-            val cur = col!!.decks.byName(customStudyDeck)
+            val cur = col.decks.byName(customStudyDeck)
             if (cur != null) {
                 if (cur.getInt("dyn") != 1) {
-                    MaterialDialog.Builder(getActivity())
+                    MaterialDialog.Builder(activity)
                             .content(R.string.custom_study_deck_exists)
                             .negativeText(R.string.dialog_cancel)
                             .build().show()
                     return
                 } else {
                     // safe to empty
-                    col!!.sched.emptyDyn(cur.getLong("id"))
+                    col.sched.emptyDyn(cur.getLong("id"))
                     // reuse; don't delete as it may have children
                     dyn = cur
-                    col!!.decks.select(cur.getLong("id"))
+                    col.decks.select(cur.getLong("id"))
                 }
             } else {
-                val customStudyDid = col!!.decks.newDyn(customStudyDeck)
-                dyn = col!!.decks.get(customStudyDid)
+                val customStudyDid = col.decks.newDyn(customStudyDeck)
+                dyn = col.decks.get(customStudyDid)
             }
             // and then set various options
             if (delays.length() > 0) {

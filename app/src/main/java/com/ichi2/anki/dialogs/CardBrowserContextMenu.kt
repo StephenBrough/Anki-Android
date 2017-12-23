@@ -23,21 +23,21 @@ class CardBrowserContextMenu : DialogFragment() {
         entries[CONTEXT_MENU_DELETE] = res.getString(R.string.card_browser_delete_card)
         entries[CONTEXT_MENU_DETAILS] = res.getString(R.string.card_editor_preview_card)
         entries[CONTEXT_MENU_MARK] = res.getString(
-                if (arguments.getBoolean("isMarked"))
+                if (arguments!!.getBoolean("isMarked"))
                     R.string.card_browser_unmark_card
                 else
                     R.string.card_browser_mark_card)
         entries[CONTEXT_MENU_SUSPEND] = res.getString(
-                if (arguments.getBoolean("isSuspended"))
+                if (arguments!!.getBoolean("isSuspended"))
                     R.string.card_browser_unsuspend_card
                 else
                     R.string.card_browser_suspend_card)
         // Ellipsize the title if it's obscenely long
-        var title = arguments.getString("dialogTitle")
+        var title = arguments?.getString("dialogTitle")
         if (title != null && title.length > MAX_TITLE_LENGTH) {
             title = title.substring(0, MAX_TITLE_LENGTH) + "…"
         }
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder( activity!!)
                 .title(title!!)
                 .items(*entries)
                 .itemsCallback(mContextMenuListener!!)

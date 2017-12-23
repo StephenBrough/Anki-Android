@@ -12,7 +12,7 @@ class SingleLiveEvent<Data> : MutableLiveData<Data>() {
     private val pending = AtomicBoolean(false)
 
     @MainThread
-    override fun observe(owner: LifecycleOwner?, observer: Observer<Data>) {
+    override fun observe(owner: LifecycleOwner, observer: Observer<Data>) {
 
         if (hasActiveObservers()) {
             Log.w(TAG, "Multiple observers registered but only one will be notified of changes.")

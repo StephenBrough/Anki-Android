@@ -32,7 +32,7 @@ class ImportDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): MaterialDialog {
         super.onCreate(savedInstanceState)
-        val builder = MaterialDialog.Builder(activity)
+        val builder = MaterialDialog.Builder(activity!!)
         builder.cancelable(true)
 
         when (dialogType) {
@@ -57,7 +57,7 @@ class ImportDialog : DialogFragment() {
                 // Allow user to choose from the list of available APKG files
                 val fileList = Utils.getImportableDecks(activity)
                 if (fileList.isEmpty()) {
-                    UIUtils.showThemedToast(activity,
+                    UIUtils.showThemedToast(activity!!,
                             resources.getString(R.string.upgrade_import_no_file_found, "'.apkg'"), false)
                     return builder.showListener { dialog -> dialog.cancel() }.show()
                 } else {

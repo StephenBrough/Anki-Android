@@ -34,7 +34,7 @@ class SimpleMessageDialog : AsyncDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): MaterialDialog {
         super.onCreate(savedInstanceState)
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(notificationTitle)
                 .content(notificationMessage)
                 .positiveText(R.string.ok)

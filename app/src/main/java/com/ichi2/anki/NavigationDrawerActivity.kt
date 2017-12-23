@@ -251,12 +251,12 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
                 Timber.i("StudyOptionsFragment:: Night mode was disabled")
                 preferences.edit().putBoolean("invertedColors", false).apply()
             }
-            CompatHelper.compat?.restartActivityInvalidateBackstack(this@NavigationDrawerActivity)
+            CompatHelper.compat.restartActivityInvalidateBackstack(this@NavigationDrawerActivity)
         }
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
         drawerToggle = object : ActionBarDrawerToggle(this, mDrawerLayout, 0, 0) {
-            override fun onDrawerClosed(drawerView: View?) {
+            override fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
                 supportInvalidateOptionsMenu()
 
@@ -266,8 +266,7 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
                 }
             }
 
-
-            override fun onDrawerOpened(drawerView: View?) {
+            override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
                 supportInvalidateOptionsMenu()
             }

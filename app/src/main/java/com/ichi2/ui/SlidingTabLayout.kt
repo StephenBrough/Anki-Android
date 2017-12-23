@@ -191,7 +191,7 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
         val adapter = mViewPager!!.adapter
         val tabClickListener = TabClickListener()
 
-        for (i in 0..adapter.count - 1) {
+        for (i in 0..adapter!!.count - 1) {
             var tabView: View? = null
             var tabTitleView: TextView? = null
 
@@ -210,7 +210,9 @@ class SlidingTabLayout @JvmOverloads constructor(context: Context, attrs: Attrib
                 tabTitleView = tabView as TextView?
             }
 
-            tabTitleView!!.text = adapter.getPageTitle(i)
+            if (adapter != null) {
+                tabTitleView!!.text = adapter.getPageTitle(i)
+            }
             tabView.setOnClickListener(tabClickListener)
 
             mTabStrip.addView(tabView)

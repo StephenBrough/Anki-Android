@@ -44,7 +44,7 @@ class PickStringDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the Builder class for convenient dialog construction
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(activity!!)
         builder.setTitle(title)
 
         val adapter = ArrayAdapter(this.activity,

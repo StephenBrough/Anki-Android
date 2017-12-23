@@ -40,12 +40,12 @@ class CardBrowserMySearchesDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreate(savedInstanceState)
 
-        val builder = MaterialDialog.Builder(activity)
+        val builder = MaterialDialog.Builder(activity!!)
 
         //adjust padding to use dp as seen here: http://stackoverflow.com/a/9685690/1332026
         when (type) {
             CARD_BROWSER_MY_SEARCHES_TYPE_LIST -> {
-                mSearchesAdapter = MySearchesArrayAdapter(activity, ArrayList(savedFilters.keys))
+                mSearchesAdapter = MySearchesArrayAdapter(activity!!, ArrayList(savedFilters.keys))
                 mSearchesAdapter!!.notifyDataSetChanged() //so the values are sorted.
                 builder.title(resources.getString(R.string.card_browser_list_my_searches_title))
                         .adapter(mSearchesAdapter!!) { dialog, _, which, _ ->
@@ -64,7 +64,7 @@ class CardBrowserMySearchesDialog : DialogFragment() {
         }
         val dialog = builder.build()
         dialog.listView?.let {
-            it.divider = ColorDrawable(ContextCompat.getColor(activity, R.color.material_grey_600))
+            it.divider = ColorDrawable(ContextCompat.getColor(activity!!, R.color.material_grey_600))
             it.dividerHeight = 1
             //adjust padding to use dp as seen here: http://stackoverflow.com/a/9685690/1332026
             val scale = resources.displayMetrics.density
@@ -77,7 +77,7 @@ class CardBrowserMySearchesDialog : DialogFragment() {
 
     private fun removeSearch(searchName: String?) {
         if (mSearchesAdapter!!.getPosition(searchName) >= 0) {
-            MaterialDialog.Builder(activity)
+            MaterialDialog.Builder(activity!!)
                     .content(resources.getString(R.string.card_browser_list_my_searches_remove_content, searchName))
                     .positiveText(resources.getString(R.string.ok))
                     .negativeText(resources.getString(R.string.cancel))

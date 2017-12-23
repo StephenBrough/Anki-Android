@@ -47,7 +47,7 @@ class ConfirmationDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): MaterialDialog {
         super.onCreate(savedInstanceState)
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(if (title.isBlank()) resources.getString(R.string.app_name) else title)
                 .content(message)
                 .positiveText(R.string.ok)

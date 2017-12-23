@@ -16,7 +16,7 @@ class DeckPickerConfirmDeleteDeckDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreate(savedInstanceState)
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(R.string.delete_deck_title)
                 .content(dialogMessage)
                 .iconAttr(R.attr.dialogErrorIcon)

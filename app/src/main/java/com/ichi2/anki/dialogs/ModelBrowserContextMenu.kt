@@ -23,7 +23,7 @@ class ModelBrowserContextMenu : DialogFragment() {
         entries[MODEL_RENAME] = resources.getString(R.string.model_browser_rename)
         entries[MODEL_DELETE] = resources.getString(R.string.model_browser_delete)
 
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(activity!!)
                 .title(label)
                 .items(*entries)
                 .itemsCallback(contextMenuListener)
