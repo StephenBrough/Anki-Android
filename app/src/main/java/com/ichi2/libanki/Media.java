@@ -175,7 +175,6 @@ public class Media {
                 mDb.execute(sql);
                 mDb.execute("delete from meta");
                 mDb.execute("insert into meta select dirMod, usn from old.meta");
-                mDb.commit();
             } catch (Exception e) {
                 // if we couldn't import the old db for some reason, just start anew
                 StringWriter sw = new StringWriter();
@@ -622,7 +621,6 @@ public class Media {
         // update media db
         mDb.executeMany("insert or replace into media values (?,?,?,?)", media);
         mDb.execute("update meta set dirMod = ?", new Object[] { _mtime(dir()) });
-        mDb.commit();
     }
 
 
@@ -718,7 +716,6 @@ public class Media {
 
     public void setLastUsn(int usn) {
         mDb.execute("update meta set lastUsn = ?", new Object[] { usn });
-        mDb.commit();
     }
 
 
@@ -772,7 +769,6 @@ public class Media {
         mDb.execute("update meta set lastUsn=0,dirMod=0");
         mDb.execute("vacuum");
         mDb.execute("analyze");
-        mDb.commit();
     }
 
 

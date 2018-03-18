@@ -8,7 +8,7 @@ def homePath = System.properties['user.home']
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.ichi2.anki"
@@ -54,6 +54,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/compiler_main.kotlin_module'
+    }
 }
 
 play {
@@ -74,56 +86,60 @@ buildscript {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLib"
+    implementation Dependencies.supportAppCompat
 
     // Support
     // Note: the design support library can be quite buggy, so test everything thoroughly before updating it
-    implementation "com.android.support:design:$rootProject.ext.supportLib"
-    implementation "com.android.support:customtabs:$rootProject.ext.supportLib"
-    implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportLib"
+    implementation Dependencies.supportDesign
+    implementation Dependencies.supportCustomTabs
+    implementation Dependencies.supportRecyclerView
 
     // Sqlite
-    implementation 'io.requery:sqlite-android:3.16.0'
+    implementation Dependencies.requerySqliteAndroid
 
     // Material Third Party
-    implementation('com.afollestad.material-dialogs:core:0.8.6.2@aar') {
+    implementation(Dependencies.materialDialogs) {
         //exclude group: 'com.android.support'  // uncomment to force our local support lib version
         transitive = true
     }
-    implementation 'com.getbase:floatingactionbutton:1.10.1'
+    implementation Dependencies.fab
 
     // Logging
-    implementation 'com.jakewharton.timber:timber:4.5.1'
-    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    implementation Dependencies.timber
+    implementation(Dependencies.crashlytics) {
         transitive = true;
     }
 
     // Gson
-    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation Dependencies.gson
     implementation project(":api")
 
     // Testing
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:1.10.19' // v1 while PowerMock does not fully support v2.
-    testImplementation 'org.powermock:powermock-core:1.6.5'
-    testImplementation 'org.powermock:powermock-module-junit4:1.6.5'
-    testImplementation 'org.powermock:powermock-api-mockito:1.6.5'
-    testImplementation 'org.hamcrest:hamcrest-all:1.3'
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.mockitoCore
+    testImplementation Dependencies.powerMockCore
+    testImplementation Dependencies.powerMockJunit
+    testImplementation Dependencies.powerMockApiMockito
+    testImplementation Dependencies.hamcrest
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.18"
+    implementation Dependencies.kotlinStdlib
+    implementation Dependencies.kotlinReflect
+    implementation Dependencies.kotlinCoroutines
 
 
     // Architecture Components
-    implementation "android.arch.lifecycle:runtime:$rootProject.ext.architectureComponent"
-    implementation "android.arch.lifecycle:extensions:1.0.0"
-    implementation "android.arch.lifecycle:compiler:1.0.0"
-    kapt "android.arch.lifecycle:compiler:1.0.0"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
-    androidTestAnnotationProcessor "android.arch.lifecycle:compiler:1.0.0"
-    testAnnotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+    implementation Dependencies.archRuntime
+    implementation Dependencies.archExtensions
+    implementation Dependencies.archCompiler
+    kapt Dependencies.archCompiler
+    annotationProcessor Dependencies.archCompiler
+    implementation Dependencies.archRoom
+    implementation Dependencies.archRoomCompiler
+    kapt Dependencies.archRoomCompiler
+    annotationProcessor Dependencies.archRoomCompiler
+//    androidTestAnnotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+//    testAnnotationProcessor "android.arch.lifecycle:compiler:1.0.0"
 }
 
 apply from: "testconfig.gradle"

@@ -201,8 +201,6 @@ public class MediaSyncer {
                         mCol.getMedia().setLastUsn(serverLastUsn); // commits
                     } else {
                         mCol.log("concurrent update, skipping usn update");
-                        // commit for markClean
-                        mCol.getMedia().getDb().commit();
                         updateConflict = true;
                     }
 

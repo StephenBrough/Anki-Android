@@ -78,7 +78,7 @@ public class Anki2Importer extends Importer {
 
     public Anki2Importer(Collection col, String file) {
         super(col, file);
-        setMNeedMapper(false);
+        setNeedMapper(false);
         mDeckPrefix = null;
         mAllowUpdate = true;
         mDupeOnSchemaChange = false;
@@ -93,7 +93,7 @@ public class Anki2Importer extends Importer {
             try {
                 _import();
             } finally {
-                getMSrc().close(false);
+                getSrc().close(false);
             }
         } catch (RuntimeException e) {
             Timber.e(e, "RuntimeException while importing");
@@ -102,8 +102,8 @@ public class Anki2Importer extends Importer {
 
 
     private void _prepareFiles() {
-        setMDst(getMCol());
-        setMSrc(Storage.Collection(getMContext(), getMFile()));
+        setDst(getCol());
+        setSrc(Storage.Collection(getContext(), getFile()));
     }
 
 
@@ -111,14 +111,14 @@ public class Anki2Importer extends Importer {
         mDecks = new HashMap<>();
         try {
             // Use transactions for performance and rollbacks in case of error
-            getMDst().getDb().getDatabase().beginTransaction();
-            getMDst().getMedia().getDb().getDatabase().beginTransaction();
+            getDst().getDb().getDatabase().beginTransaction();
+            getDst().getMedia().getDb().getDatabase().beginTransaction();
 
             if (!TextUtils.isEmpty(mDeckPrefix)) {
-                long id = getMDst().getDecks().id(mDeckPrefix);
-                getMDst().getDecks().select(id);
+                long id = getDst().getDecks().id(mDeckPrefix);
+                getDst().getDecks().select(id);
             }
-            _prepareTS();
+            prepareTS();
             _prepareModels();
             _importNotes();
             _importCards();
@@ -126,15 +126,15 @@ public class Anki2Importer extends Importer {
             publishProgress(100, 100, 25);
             _postImport();
             publishProgress(100, 100, 50);
-            getMDst().getDb().getDatabase().setTransactionSuccessful();
-            getMDst().getMedia().getDb().getDatabase().setTransactionSuccessful();
+            getDst().getDb().getDatabase().setTransactionSuccessful();
+            getDst().getMedia().getDb().getDatabase().setTransactionSuccessful();
         } finally {
-            getMDst().getDb().getDatabase().endTransaction();
-            getMDst().getMedia().getDb().getDatabase().endTransaction();
+            getDst().getDb().getDatabase().endTransaction();
+            getDst().getMedia().getDb().getDatabase().endTransaction();
         }
-        getMDst().getDb().execute("vacuum");
+        getDst().getDb().execute("vacuum");
         publishProgress(100, 100, 65);
-        getMDst().getDb().execute("analyze");
+        getDst().getDb().execute("analyze");
         publishProgress(100, 100, 75);
     }
 
@@ -150,7 +150,7 @@ public class Anki2Importer extends Importer {
         Map<Long, Boolean> existing = new HashMap<>();
         Cursor cur = null;
         try {
-            cur = getMDst().getDb().getDatabase().rawQuery("select id, guid, mod, mid from notes", null);
+            cur = getDst().getDb().getDatabase().rawQuery("select id, guid, mod, mid from notes", null);
             while (cur.moveToNext()) {
                 long id = cur.getLong(0);
                 String guid = cur.getString(1);
@@ -175,11 +175,11 @@ public class Anki2Importer extends Importer {
         ArrayList<Object[]> add = new ArrayList<>();
         ArrayList<Object[]> update = new ArrayList<>();
         ArrayList<Long> dirty = new ArrayList<>();
-        int usn = getMDst().usn();
+        int usn = getDst().usn();
         int dupes = 0;
         ArrayList<String> dupesIgnored = new ArrayList<>();
         try {
-            cur = getMSrc().getDb().getDatabase().rawQuery("select * from notes", null);
+            cur = getSrc().getDb().getDatabase().rawQuery("select * from notes", null);
 
             // Counters for progress updates
             int total = cur.getCount();
@@ -227,7 +227,7 @@ public class Anki2Importer extends Importer {
                                 dirty.add((Long) note[0]);
                             } else {
                                 dupesIgnored.add(String.format("%s: %s",
-                                        getMCol().getModels().get(oldMid).getString("name"),
+                                        getCol().getModels().get(oldMid).getString("name"),
                                         ((String) note[6]).replace("\u001f", ",")));
                                 mIgnoredGuids.put((String) note[GUID], true);
                             }
@@ -263,11 +263,11 @@ public class Anki2Importer extends Importer {
         mAdded = add.size();
         mUpdated = update.size();
         // add to col
-        getMDst().getDb().executeMany("insert or replace into notes values (?,?,?,?,?,?,?,?,?,?,?)", add);
-        getMDst().getDb().executeMany("insert or replace into notes values (?,?,?,?,?,?,?,?,?,?,?)", update);
+        getDst().getDb().executeMany("insert or replace into notes values (?,?,?,?,?,?,?,?,?,?,?)", add);
+        getDst().getDb().executeMany("insert or replace into notes values (?,?,?,?,?,?,?,?,?,?,?)", update);
         long[] das = Utils.arrayList2array(dirty);
-        getMDst().updateFieldCache(das);
-        getMDst().getTags().registerNotes(das);
+        getDst().updateFieldCache(das);
+        getDst().getTags().registerNotes(das);
     }
 
 
@@ -329,29 +329,29 @@ public class Anki2Importer extends Importer {
                 return mModelMap.get(srcMid);
             }
             long mid = srcMid;
-            JSONObject srcModel = getMSrc().getModels().get(srcMid);
-            String srcScm = getMSrc().getModels().scmhash(srcModel);
+            JSONObject srcModel = getSrc().getModels().get(srcMid);
+            String srcScm = getSrc().getModels().scmhash(srcModel);
             while (true) {
                 // missing from target col?
-                if (!getMDst().getModels().have(mid)) {
+                if (!getDst().getModels().have(mid)) {
                     // copy it over
                     JSONObject model = new JSONObject(Utils.jsonToString(srcModel));
                     model.put("id", mid);
                     model.put("mod", Utils.intNow());
-                    model.put("usn", getMCol().usn());
-                    getMDst().getModels().update(model);
+                    model.put("usn", getCol().usn());
+                    getDst().getModels().update(model);
                     break;
                 }
                 // there's an existing model; do the schemas match?
-                JSONObject dstModel = getMDst().getModels().get(mid);
-                String dstScm = getMDst().getModels().scmhash(dstModel);
+                JSONObject dstModel = getDst().getModels().get(mid);
+                String dstScm = getDst().getModels().scmhash(dstModel);
                 if (srcScm.equals(dstScm)) {
                     // they do; we can reuse this mid
                     JSONObject model = new JSONObject(Utils.jsonToString(srcModel));
                     model.put("id", mid);
                     model.put("mod", Utils.intNow());
-                    model.put("usn", getMCol().usn());
-                    getMDst().getModels().update(model);
+                    model.put("usn", getCol().usn());
+                    getDst().getModels().update(model);
                     break;
                 }
                 // as they don't match, try next id
@@ -379,7 +379,7 @@ public class Anki2Importer extends Importer {
                 return mDecks.get(did);
             }
             // get the name in src
-            JSONObject g = getMSrc().getDecks().get(did);
+            JSONObject g = getSrc().getDecks().get(did);
             String name = g.getString("name");
             // if there's a prefix, replace the top level deck
             if (!TextUtils.isEmpty(mDeckPrefix)) {
@@ -398,24 +398,24 @@ public class Anki2Importer extends Importer {
                     head += "::";
                 }
                 head += parent;
-                long idInSrc = getMSrc().getDecks().id(head);
+                long idInSrc = getSrc().getDecks().id(head);
                 _did(idInSrc);
             }
             // create in local
-            long newid = getMDst().getDecks().id(name);
+            long newid = getDst().getDecks().id(name);
             // pull conf over
             if (g.has("conf") && g.getLong("conf") != 1) {
-                JSONObject conf = getMSrc().getDecks().getConf(g.getLong("conf"));
-                getMDst().getDecks().save(conf);
-                getMDst().getDecks().updateConf(conf);
-                JSONObject g2 = getMDst().getDecks().get(newid);
+                JSONObject conf = getSrc().getDecks().getConf(g.getLong("conf"));
+                getDst().getDecks().save(conf);
+                getDst().getDecks().updateConf(conf);
+                JSONObject g2 = getDst().getDecks().get(newid);
                 g2.put("conf", g.getLong("conf"));
-                getMDst().getDecks().save(g2);
+                getDst().getDecks().save(g2);
             }
             // save desc
-            JSONObject deck = getMDst().getDecks().get(newid);
+            JSONObject deck = getDst().getDecks().get(newid);
             deck.put("desc", g.getString("desc"));
-            getMDst().getDecks().save(deck);
+            getDst().getDecks().save(deck);
             // add to deck map and return
             mDecks.put(did, newid);
             return newid;
@@ -436,7 +436,7 @@ public class Anki2Importer extends Importer {
         Map<Long, Boolean> existing = new HashMap<>();
         Cursor cur = null;
         try {
-            cur = getMDst().getDb().getDatabase().rawQuery(
+            cur = getDst().getDb().getDatabase().rawQuery(
                     "select f.guid, c.ord, c.id from cards c, notes f " +
                     "where c.nid = f.id", null);
             while (cur.moveToNext()) {
@@ -461,10 +461,10 @@ public class Anki2Importer extends Importer {
         List<Object[]> cards = new ArrayList<>();
         List<Object[]> revlog = new ArrayList<>();
         int cnt = 0;
-        int usn = getMDst().usn();
-        long aheadBy = getMSrc().getSched().getToday() - getMDst().getSched().getToday();
+        int usn = getDst().usn();
+        long aheadBy = getSrc().getSched().getToday() - getDst().getSched().getToday();
         try {
-            cur = getMSrc().getDb().getDatabase().rawQuery(
+            cur = getSrc().getDb().getDatabase().rawQuery(
                     "select f.guid, f.mid, c.* from cards c, notes f " +
                     "where c.nid = f.id", null);
 
@@ -539,12 +539,12 @@ public class Anki2Importer extends Importer {
                 // we need to import revlog, rewriting card ids and bumping usn
                 Cursor cur2 = null;
                 try {
-                    cur2 = getMSrc().getDb().getDatabase().rawQuery("select * from revlog where cid = " + scid, null);
+                    cur2 = getSrc().getDb().getDatabase().rawQuery("select * from revlog where cid = " + scid, null);
                     while (cur2.moveToNext()) {
                         Object[] rev = new Object[] { cur2.getLong(0), cur2.getLong(1), cur2.getInt(2), cur2.getInt(3),
                                 cur2.getLong(4), cur2.getLong(5), cur2.getLong(6), cur2.getLong(7), cur2.getInt(8) };
                         rev[1] = card[0];
-                        rev[2] = getMDst().usn();
+                        rev[2] = getDst().usn();
                         revlog.add(rev);
                     }
                 } finally {
@@ -565,8 +565,8 @@ public class Anki2Importer extends Importer {
             }
         }
         // apply
-        getMDst().getDb().executeMany("insert or ignore into cards values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", cards);
-        getMDst().getDb().executeMany("insert or ignore into revlog values (?,?,?,?,?,?,?,?,?)", revlog);
+        getDst().getDb().executeMany("insert or ignore into cards values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", cards);
+        getDst().getDb().executeMany("insert or ignore into revlog values (?,?,?,?,?,?,?,?,?)", revlog);
         getLog().add(getRes().getString(R.string.import_complete_count, cnt));
     }
 
@@ -581,13 +581,13 @@ public class Anki2Importer extends Importer {
     private void _importStaticMedia() {
         // Import any '_foo' prefixed media files regardless of whether
         // they're used on notes or not
-        String dir = getMSrc().getMedia().dir();
+        String dir = getSrc().getMedia().dir();
         if (!new File(dir).exists()) {
             return;
         }
         for (File f : new File(dir).listFiles()) {
             String fname = f.getName();
-            if (fname.startsWith("_") && ! getMDst().getMedia().have(fname)) {
+            if (fname.startsWith("_") && ! getDst().getMedia().have(fname)) {
                 _writeDstMedia(fname, _srcMediaData(fname));
             }
         }
@@ -601,7 +601,7 @@ public class Anki2Importer extends Importer {
 
     private BufferedInputStream _mediaData(String fname, String dir) {
         if (dir == null) {
-            dir = getMSrc().getMedia().dir();
+            dir = getSrc().getMedia().dir();
         }
         String path = new File(dir, fname).getAbsolutePath();
         try {
@@ -616,7 +616,7 @@ public class Anki2Importer extends Importer {
      * Data for FNAME in src collection.
      */
     protected BufferedInputStream _srcMediaData(String fname) {
-        return _mediaData(fname, getMSrc().getMedia().dir());
+        return _mediaData(fname, getSrc().getMedia().dir());
     }
 
 
@@ -624,16 +624,16 @@ public class Anki2Importer extends Importer {
      * Data for FNAME in dst collection.
      */
     private BufferedInputStream _dstMediaData(String fname) {
-        return _mediaData(fname, getMDst().getMedia().dir());
+        return _mediaData(fname, getDst().getMedia().dir());
     }
 
 
     private void _writeDstMedia(String fname, BufferedInputStream data) {
         try {
-            String path = new File(getMDst().getMedia().dir(), Utils.nfcNormalized(fname)).getAbsolutePath();
+            String path = new File(getDst().getMedia().dir(), Utils.nfcNormalized(fname)).getAbsolutePath();
             Utils.writeToFile(data, path);
             // Mark file addition to media db (see note in Media.java)
-            getMDst().getMedia().markFileAdd(fname);
+            getDst().getMedia().markFileAdd(fname);
         } catch (IOException e) {
             // the user likely used subdirectories
             Timber.e(e, "Error copying file %s.", fname);
@@ -662,7 +662,7 @@ public class Anki2Importer extends Importer {
                 String ext = split[1];
 
                 String lname = String.format(Locale.US, "%s_%s%s", name, mid, ext);
-                if (getMDst().getMedia().have(lname)) {
+                if (getDst().getMedia().have(lname)) {
                     m.appendReplacement(sb, Matcher.quoteReplacement(m.group(0).replace(fname, lname)));
                     continue;
                 } else if (dstData == null || compareMedia(srcData, dstData)) { // if missing or the same, pass unmodified
@@ -692,12 +692,12 @@ public class Anki2Importer extends Importer {
     private void _postImport() {
         try {
             for (long did : mDecks.values()) {
-                getMCol().getSched().maybeRandomizeDeck(did);
+                getCol().getSched().maybeRandomizeDeck(did);
             }
             // make sure new position is correct
-            getMDst().getConf().put("nextPos", getMDst().getDb().queryLongScalar(
+            getDst().getConf().put("nextPos", getDst().getDb().queryLongScalar(
                     "select max(due)+1 from cards where type = 0"));
-            getMDst().save();
+            getDst().save();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -758,10 +758,10 @@ public class Anki2Importer extends Importer {
      */
     protected void publishProgress(int notesDone, int cardsDone, int postProcess) {
         String checkmark = "\u2714";
-//        if (getMProgress() != null) {
-//            getMProgress().publishProgress(new TaskData(getRes().getString(R.string.import_progress,
-//                    notesDone, cardsDone, postProcess)));
-//        }
+        if (getProgress() != null) {
+            getProgress().publishProgress(new TaskData(getRes().getString(R.string.import_progress,
+                    notesDone, cardsDone, postProcess)));
+        }
 
         progressUpdate.invoke(new TaskData(getRes().getString(R.string.import_progress,
                 notesDone, cardsDone, postProcess)));

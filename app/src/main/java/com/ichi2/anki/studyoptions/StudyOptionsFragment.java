@@ -237,7 +237,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
     private void openReviewer() {
         Intent reviewer = new Intent(getActivity(), Reviewer.class);
         if (mFragmented) {
-            getActivity().startActivityForResult(reviewer, AnkiActivity.Companion.getREQUEST_REVIEW());
+            getActivity().startActivityForResult(reviewer, AnkiActivity.REQUEST_REVIEW);
         } else {
             // Go to DeckPickerActivity after studying when not tablet
             reviewer.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
@@ -440,7 +440,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
                 DeckTask.waitToFinish();;
                 refreshInterface(true);
             }
-        } else if (requestCode == AnkiActivity.Companion.getREQUEST_REVIEW()) {
+        } else if (requestCode == AnkiActivity.REQUEST_REVIEW) {
             if (resultCode == Reviewer.RESULT_NO_MORE_CARDS) {
                 // If no more cards getting returned while counts > 0 (due to learn ahead limit) then show a snackbar
                 int[] counts = getCol().getSched().counts();

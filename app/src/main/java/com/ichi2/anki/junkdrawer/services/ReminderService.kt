@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 
 import com.ichi2.anki.junkdrawer.CollectionHelper
-import com.ichi2.anki.IntentHandler
+import com.ichi2.anki.IntentHandlerActivity
 import com.ichi2.anki.R
 import com.ichi2.anki.junkdrawer.receiver.ReminderReceiver
 import com.ichi2.libanki.Sched
@@ -57,7 +57,7 @@ class ReminderService : IntentService("ReminderService") {
                     .setContentIntent(PendingIntent.getActivity(
                             this,
                             deckId.toInt(),
-                            Intent(this, IntentHandler::class.java).putExtra(EXTRA_DECK_ID, deckId),
+                            Intent(this, IntentHandlerActivity::class.java).putExtra(EXTRA_DECK_ID, deckId),
                             PendingIntent.FLAG_UPDATE_CURRENT
                     ))
                     .setAutoCancel(true)

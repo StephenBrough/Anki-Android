@@ -1,4 +1,4 @@
-package com.ichi2.anki.dialogs;
+package com.ichi2.anki;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -8,6 +8,12 @@ import android.os.Message;
 
 import com.ichi2.anki.AnkiActivity;
 import com.ichi2.anki.AnkiDroidApp;
+import com.ichi2.anki.dialogs.AsyncDialogFragment;
+import com.ichi2.anki.dialogs.ConfirmationDialog;
+import com.ichi2.anki.dialogs.DatabaseErrorDialog;
+import com.ichi2.anki.dialogs.DeckPickerExportCompleteDialog;
+import com.ichi2.anki.dialogs.ImportDialog;
+import com.ichi2.anki.dialogs.MediaCheckDialog;
 import com.ichi2.anki.junkdrawer.CollectionHelper;
 import com.ichi2.anki.deckpicker.DeckPickerActivity;
 import com.ichi2.anki.R;

@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.toolbar.view.*
 
 import timber.log.Timber
 
-class MyAccount : AnkiActivity() {
+class MyAccountActivity : AnkiActivity() {
 
     lateinit private var loginView: View
     lateinit private var loggedInView: View
@@ -61,7 +61,7 @@ class MyAccount : AnkiActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-            Timber.i("MyAccount - onBackPressed()")
+            Timber.i("MyAccountActivity - onBackPressed()")
             finish()
             return true
         }

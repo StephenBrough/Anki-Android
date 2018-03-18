@@ -269,7 +269,7 @@ public class Storage {
 
     private static int _createDB(DB db) {
         db.execute("PRAGMA page_size = 4096");
-        db.execute("PRAGMA legacy_file_format = 0");
+//        db.execute("PRAGMA legacy_file_format = 0");
         db.execute("VACUUM");
         _addSchema(db);
         _updateIndices(db);

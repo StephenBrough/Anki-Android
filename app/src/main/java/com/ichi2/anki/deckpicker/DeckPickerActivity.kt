@@ -47,7 +47,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ichi2.anki.*
-import com.ichi2.anki.account.MyAccount
+import com.ichi2.anki.account.MyAccountActivity
 import com.ichi2.anki.cardbrowser.CardBrowser
 import com.ichi2.anki.studyoptions.StudyOptionsFragment.StudyOptionsListener
 import com.ichi2.anki.deckpicker.model.TaskData
@@ -157,10 +157,10 @@ class DeckPickerActivity : NavigationDrawerActivity(), DeckPickerView, StudyOpti
         mDeckListAdapter.setDeckClickListener(OnClickListener {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         })
-        mDeckListAdapter.setDeckClickListener( OnClickListener { viewModel.selectDeck(it.tag as Long) })
-        mDeckListAdapter.setCountsClickListener( OnClickListener { viewModel.countsClick(it.tag as Long) })
-        mDeckListAdapter.setDeckExpanderClickListener( OnClickListener { viewModel.deckExpander(it.tag as Long) })
-        mDeckListAdapter.setDeckLongClickListener( View.OnLongClickListener { viewModel.deckLongClick(it.tag as Long) })
+        mDeckListAdapter.setDeckClickListener(OnClickListener { viewModel.selectDeck(it.tag as Long) })
+        mDeckListAdapter.setCountsClickListener(OnClickListener { viewModel.countsClick(it.tag as Long) })
+        mDeckListAdapter.setDeckExpanderClickListener(OnClickListener { viewModel.deckExpander(it.tag as Long) })
+        mDeckListAdapter.setDeckLongClickListener(View.OnLongClickListener { viewModel.deckLongClick(it.tag as Long) })
         filesRecyclerView.adapter = mDeckListAdapter
 
         refreshLayout.setDistanceToTriggerSync(SWIPE_TO_SYNC_TRIGGER_DISTANCE)
@@ -376,7 +376,7 @@ class DeckPickerActivity : NavigationDrawerActivity(), DeckPickerView, StudyOpti
                 AlertDialog.Builder(this@DeckPickerActivity)
                         .setTitle(resources.getString(R.string.new_deck))
                         .setView(mDialogEditText)
-                        .setPositiveButton(resources.getString(R.string.create)) {_, _ ->
+                        .setPositiveButton(resources.getString(R.string.create)) { _, _ ->
                             val filteredDeckName = mDialogEditText.text.toString()
                             Timber.i("DeckPickerActivity:: Creating filtered deck...")
                             col!!.decks.newDyn(filteredDeckName)
@@ -431,7 +431,6 @@ class DeckPickerActivity : NavigationDrawerActivity(), DeckPickerView, StudyOpti
     //endregion
 
 
-
     //region System Callbacks
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -451,7 +450,7 @@ class DeckPickerActivity : NavigationDrawerActivity(), DeckPickerView, StudyOpti
                 showStartupScreensAndDialogs(AnkiDroidApp.getSharedPrefs(baseContext),
                         if (requestCode == SHOW_INFO_WELCOME) 2 else 3)
             } else {
-                finish();
+                finish()
             }
             requestCode == LOG_IN_FOR_SYNC && resultCode == Activity.RESULT_OK -> mSyncOnResume = true
             (requestCode == REQUEST_REVIEW || requestCode == SHOW_STUDYOPTIONS) && resultCode == Reviewer.RESULT_NO_MORE_CARDS -> {
@@ -885,12 +884,13 @@ class DeckPickerActivity : NavigationDrawerActivity(), DeckPickerView, StudyOpti
         showProgressBar()
 
         Timber.d("doInBackgroundRebuildCram")
-        val col = CollectionHelper.getInstance().getCol(DeckPicker@this)
+        val col = CollectionHelper.getInstance().getCol(DeckPicker@ this)
         col!!.sched.rebuildDyn(col.decks.selected())
         updateDeckList()
-        if(mFragmented)
+        if (mFragmented)
             loadStudyOptionsFragment(false)
     }
+
     /**
      * Show progress bars and rebuild deck list on completion
      */
@@ -929,7 +929,6 @@ class DeckPickerActivity : NavigationDrawerActivity(), DeckPickerView, StudyOpti
         }
     }
 //endregion
-
 
 
     // ----------------------------------------------------------------------------
@@ -1380,9 +1379,9 @@ class DeckPickerActivity : NavigationDrawerActivity(), DeckPickerView, StudyOpti
                     Connection.Payload(arrayOf(hkey, preferences.getBoolean("syncFetchesMedia", true), conflict)))
         }
     }
-    
+
     override fun loginToSyncServer() {
-        val myAccount = Intent(this, MyAccount::class.java)
+        val myAccount = Intent(this, MyAccountActivity::class.java)
         myAccount.putExtra("notLoggedIn", true)
         startActivityForResult(myAccount, LOG_IN_FOR_SYNC)
     }
@@ -1681,7 +1680,7 @@ class DeckPickerActivity : NavigationDrawerActivity(), DeckPickerView, StudyOpti
         AlertDialog.Builder(this@DeckPickerActivity)
                 .setTitle(resources.getString(R.string.rename_deck))
                 .setView(mDialogEditText)
-                .setPositiveButton(resources.getString(R.string.rename)){_,_->
+                .setPositiveButton(resources.getString(R.string.rename)) { _, _ ->
                     val newName = mDialogEditText!!.text.toString().replace("\"".toRegex(), "")
                     val col = col
                     if (!TextUtils.isEmpty(newName) && newName != currentName) {
@@ -1700,7 +1699,7 @@ class DeckPickerActivity : NavigationDrawerActivity(), DeckPickerView, StudyOpti
                         loadStudyOptionsFragment(false)
                     }
                 }
-                .setNegativeButton(resources.getString(R.string.dialog_cancel)) {_, _ ->
+                .setNegativeButton(resources.getString(R.string.dialog_cancel)) { _, _ ->
                     dismissAllDialogFragments()
                 }
                 .create()

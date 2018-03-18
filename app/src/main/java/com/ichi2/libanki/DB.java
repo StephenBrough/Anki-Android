@@ -51,7 +51,7 @@ public class DB {
      * The deck, which is actually an SQLite database.
      */
     private SQLiteDatabase mDatabase;
-    private boolean mMod = false;
+    private boolean mMod;
 
 
     /**
@@ -60,26 +60,20 @@ public class DB {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public DB(String ankiFilename) {
         // Since API 11 we can provide a custom errorSnackbar handler which doesn't delete the database on corruption
-        if (CompatHelper.Companion.isHoneycomb()) {
-            mDatabase = SQLiteDatabase.openDatabase(ankiFilename, null,
-                    (SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY)
-                            | SQLiteDatabase.NO_LOCALIZED_COLLATORS, new MyDbErrorHandler());
-        } else {
-            mDatabase = SQLiteDatabase.openDatabase(ankiFilename, null,
-                    (SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY)
-                            | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
-        }
+
+        mDatabase = SQLiteDatabase.openDatabase(ankiFilename, null,
+                (SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY)
+                        | SQLiteDatabase.NO_LOCALIZED_COLLATORS, new MyDbErrorHandler());
 
         if (mDatabase != null) {
             // TODO: we can remove this eventually once everyone has stopped using old AnkiDroid clients with WAL
             CompatHelper.Companion.getCompat().disableDatabaseWriteAheadLogging(mDatabase);
             mDatabase.rawQuery("PRAGMA synchronous = 2", null);
         }
-        // getDatabase().beginTransactionNonExclusive();
+
         mMod = false;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public class MyDbErrorHandler implements DatabaseErrorHandler {
         @Override
         public void onCorruption(SQLiteDatabase db) {
@@ -96,16 +90,6 @@ public class DB {
     public void close() {
         mDatabase.close();
         Timber.d("Database %s closed = %s", mDatabase.getPath(), !mDatabase.isOpen());
-    }
-
-
-    public void commit() {
-        // SQLiteDatabase db = getDatabase();
-        // while (db.inTransaction()) {
-        // db.setTransactionSuccessful();
-        // db.endTransaction();
-        // }
-        // db.beginTransactionNonExclusive();
     }
 
 

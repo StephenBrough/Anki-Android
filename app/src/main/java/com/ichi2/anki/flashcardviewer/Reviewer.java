@@ -557,7 +557,7 @@ public class Reviewer extends AbstractFlashcardViewer {
             cardBrowser.putExtra("defaultDeckId", getCol().getDecks().selected());
         }
         cardBrowser.putExtra("currentCard", mCurrentCard.getId());
-        startActivityForResult(cardBrowser, Companion.getREQUEST_BROWSE_CARDS());
+        startActivityForResult(cardBrowser, com.ichi2.anki.NavigationDrawerActivity.REQUEST_BROWSE_CARDS);
     }
 
 
@@ -574,7 +574,7 @@ public class Reviewer extends AbstractFlashcardViewer {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Companion.getREQUEST_STATISTICS() || requestCode == Companion.getREQUEST_BROWSE_CARDS()) {
+        if (requestCode == com.ichi2.anki.NavigationDrawerActivity.REQUEST_STATISTICS || requestCode == com.ichi2.anki.NavigationDrawerActivity.REQUEST_BROWSE_CARDS) {
             // Store the selected deck
             if (data != null && data.getBooleanExtra("allDecksSelected", false)) {
                 mLastSelectedBrowserDid = -1L;

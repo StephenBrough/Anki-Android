@@ -96,7 +96,7 @@ public class Statistics extends NavigationDrawerActivity implements DeckDropDown
         mDropDownDecks = getCol().getDecks().allSorted();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
-        mActionBarSpinner = (Spinner) findViewById(R.id.toolbar_spinner);
+        mActionBarSpinner = (Spinner) findViewById(R.id.toolbarSpinner);
         mActionBarSpinner.setAdapter(new DeckDropDownAdapter(this, mDropDownDecks));
         mActionBarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

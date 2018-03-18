@@ -19,7 +19,6 @@ import android.view.MenuItem
 import android.view.View
 import com.ichi2.anki.deckpicker.DeckPickerActivity
 import com.ichi2.anki.dialogs.AsyncDialogFragment
-import com.ichi2.anki.dialogs.DialogHandler
 import com.ichi2.anki.dialogs.SimpleMessageDialog
 import com.ichi2.anki.junkdrawer.CollectionHelper
 import com.ichi2.utils.async.CollectionLoader
@@ -41,20 +40,15 @@ abstract class AnkiActivity : AppCompatActivity(),
     var customTabActivityHelper: CustomTabActivityHelper? = null
         private set
 
-//    private lateinit var lifecycleRegistry: LifecycleRegistry
-
-
     val col: Collection?
         get() = CollectionHelper.getInstance().getCol(this)
 
-//    override fun getLifecycle(): LifecycleRegistry = lifecycleRegistry
-
     override fun onCreate(savedInstanceState: Bundle?) {
-//        lifecycleRegistry = LifecycleRegistry(this)
         dialogHandler = DialogHandler(this)
 
         // The hardware buttons should control the music volume
         volumeControlStream = AudioManager.STREAM_MUSIC
+
         // Set the theme
         Themes.setTheme(this)
         super.onCreate(savedInstanceState)
@@ -128,25 +122,19 @@ abstract class AnkiActivity : AppCompatActivity(),
         }
     }
 
-
     override fun onLoaderReset(arg0: Loader<Collection>) {
         // We don't currently retain any references, so no need to free any data here
     }
 
-
     open fun showProgressBar() {
         val progressBar = findViewById<View>(R.id.progress_bar)
-        if (progressBar != null) {
-            progressBar.visibility = View.VISIBLE
-        }
+        progressBar?.visibility = View.VISIBLE
     }
-
 
     open fun hideProgressBar() {
         val progressBar = findViewById<View>(R.id.progress_bar)
-        if (progressBar != null) {
-            progressBar.visibility = View.GONE
-        }
+        progressBar?.visibility = View.GONE
+
     }
 
 
@@ -158,7 +146,7 @@ abstract class AnkiActivity : AppCompatActivity(),
     }
 
     protected fun openUrl(url: Uri) {
-        CompatHelper.compat?.openUrl(this, url)
+        CompatHelper.compat.openUrl(this, url)
     }
 
 
@@ -272,12 +260,10 @@ abstract class AnkiActivity : AppCompatActivity(),
         }
     }
 
-
     // Dismiss whatever dialog is showing
     fun dismissAllDialogFragments() {
         supportFragmentManager.popBackStack("dialog", FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
-
 
     // Restart the activity
     fun restartActivity() {
@@ -290,7 +276,7 @@ abstract class AnkiActivity : AppCompatActivity(),
     }
 
     companion object {
-        val REQUEST_REVIEW = 901
+        const val REQUEST_REVIEW = 901
     }
 }
 /**

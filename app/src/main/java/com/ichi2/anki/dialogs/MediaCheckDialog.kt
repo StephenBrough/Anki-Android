@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Message
 import android.support.v4.app.FragmentManager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.ichi2.anki.DialogHandler
 import com.ichi2.anki.R
 import com.ichi2.utils.IntArg
 import com.ichi2.utils.StringArrayListArg

@@ -21,6 +21,7 @@
 package com.ichi2.libanki;
 
 import android.content.ContentValues;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.ichi2.anki.exception.ConfirmModSchemaException;
@@ -212,6 +213,7 @@ public class Decks {
      * ***********************************************************
      */
 
+    @NonNull
     public Long id(String name) {
         return id(name, true);
     }

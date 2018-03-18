@@ -32,9 +32,9 @@ class CardBrowserMySearchesDialog : DialogFragment() {
     var mySearchesDialogListener: MySearchesDialogListener? = null
 
     interface MySearchesDialogListener {
-        fun OnSelection(searchName: String?)
-        fun OnRemoveSearch(searchName: String?)
-        fun OnSaveSearch(searchName: String, searchTerms: String?)
+        fun onSelection(searchName: String?)
+        fun onRemoveSearch(searchName: String?)
+        fun onSaveSearch(searchName: String, searchTerms: String?)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -49,7 +49,7 @@ class CardBrowserMySearchesDialog : DialogFragment() {
                 mSearchesAdapter!!.notifyDataSetChanged() //so the values are sorted.
                 builder.title(resources.getString(R.string.card_browser_list_my_searches_title))
                         .adapter(mSearchesAdapter!!) { dialog, _, which, _ ->
-                            mySearchesDialogListener!!.OnSelection(mSearchesAdapter!!.getItem(which))
+                            mySearchesDialogListener!!.onSelection(mSearchesAdapter!!.getItem(which))
                             dialog.dismiss()
                         }
             }
@@ -58,7 +58,7 @@ class CardBrowserMySearchesDialog : DialogFragment() {
                         .positiveText(getString(R.string.ok))
                         .negativeText(getString(R.string.cancel))
                         .input(R.string.card_browser_list_my_searches_new_name, R.string.empty_string) {
-                            _, text -> mySearchesDialogListener!!.OnSaveSearch(text.toString(), currentSearchTerms)
+                            _, text -> mySearchesDialogListener!!.onSaveSearch(text.toString(), currentSearchTerms)
                         }
             }
         }
@@ -83,7 +83,7 @@ class CardBrowserMySearchesDialog : DialogFragment() {
                     .negativeText(resources.getString(R.string.cancel))
                     .callback(object : MaterialDialog.ButtonCallback() {
                         override fun onPositive(dialog: MaterialDialog?) {
-                            mySearchesDialogListener!!.OnRemoveSearch(searchName)
+                            mySearchesDialogListener!!.onRemoveSearch(searchName)
                             savedFilters.remove(searchName)
                             mSearchesAdapter!!.remove(searchName)
                             mSearchesAdapter!!.notifyDataSetChanged()

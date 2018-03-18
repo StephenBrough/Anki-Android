@@ -390,7 +390,7 @@ public class NoteEditor extends AnkiActivity {
                 break;
 
             case CALLER_CARDBROWSER_EDIT:
-                mCurrentEditedCard = CardBrowser.sCardBrowserCard;
+                mCurrentEditedCard = CardBrowser.Companion.getSCardBrowserCard();
                 if (mCurrentEditedCard == null) {
                     finish();;
                     return;

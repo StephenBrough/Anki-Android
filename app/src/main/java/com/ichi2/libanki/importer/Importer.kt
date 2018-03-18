@@ -27,32 +27,25 @@ import com.ichi2.libanki.Utils
 
 import java.util.ArrayList
 
-abstract class Importer(protected var mCol: Collection, protected var mFile: String) {
+abstract class Importer(protected var col: Collection, protected var file: String) {
 
-    protected var mNeedMapper = false
-    protected var mNeedDelimiter = false
-    var log: List<String>
-        protected set
-    protected var mTotal: Int = 0
+    protected var needMapper = false
 
-    private var mTs: Long = 0
-    protected var mDst: Collection? = null
-    protected var mSrc: Collection? = null
+    protected var log: ArrayList<String> = ArrayList()
 
-    protected var mContext: Context
-    protected var mProgress: DeckTask.ProgressCallback? = null
+    protected var total: Int = 0
+
+    private var ts: Long = 0
+    protected lateinit var dst: Collection
+    protected lateinit var src: Collection
+
+    protected var context: Context = col.context
+    protected var progress: DeckTask.ProgressCallback? = null
 
     protected lateinit var progressUpdate: (TaskData) -> Unit
 
-
     protected val res: Resources
-        get() = mContext.resources
-
-    init {
-        log = ArrayList()
-        mTotal = 0
-        mContext = mCol.context
-    }
+        get() = context.resources
 
     abstract fun runImport()
 
@@ -64,14 +57,14 @@ abstract class Importer(protected var mCol: Collection, protected var mFile: Str
      * need to make sure our starting point is safe.
      */
 
-    protected fun _prepareTS() {
-        mTs = Utils.maxID(mDst!!.db)
+    protected fun prepareTS() {
+        ts = Utils.maxID(dst.db)
     }
 
 
     protected fun ts(): Long {
-        mTs++
-        return mTs
+        ts++
+        return ts
     }
 
 
@@ -81,7 +74,7 @@ abstract class Importer(protected var mCol: Collection, protected var mFile: Str
      */
 
     fun setProgressCallback(progressCallback: DeckTask.ProgressCallback) {
-        mProgress = progressCallback
+        progress = progressCallback
     }
 
     fun setProgressCallback(progressCallback: (TaskData) -> Unit ) {

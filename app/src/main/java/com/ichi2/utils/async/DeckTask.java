@@ -622,7 +622,7 @@ public class DeckTask extends BaseAsyncTask<TaskData, TaskData, TaskData> {
         // Render the first few items
         for (int i = 0; i < Math.min(numCardsToRender, searchResult.size()); i++) {
             Card c = col.getCard(Long.parseLong(searchResult.get(i).get("id"), 10));
-            CardBrowser.updateSearchItemQA(searchResult.get(i), c);
+            CardBrowser.Companion.updateSearchItemQA(searchResult.get(i), c);
         }
         // Finish off the task
         if (isCancelled()) {
@@ -648,7 +648,7 @@ public class DeckTask extends BaseAsyncTask<TaskData, TaskData, TaskData> {
                 // Extract card item
                 Card c = col.getCard(Long.parseLong(items.get(i).get("id"), 10));
                 // Update item
-                CardBrowser.updateSearchItemQA(items.get(i), c);
+                CardBrowser.Companion.updateSearchItemQA(items.get(i), c);
                 // Stop if cancelled
                 if (isCancelled()) {
                     Timber.d("doInBackgroundRenderBrowserQA was aborted");

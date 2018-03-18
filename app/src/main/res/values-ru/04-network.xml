@@ -50,7 +50,7 @@
   <string name="connection_error_message">Ошибка сети</string>
   <string name="not_logged_in_title">Залогиниться в AnkiWeb</string>
   <string name="login_create_account_message">Вы должны зарегистрироваться в одном и облачных сервисов для использования сервиса синхронизации. Вы можете создать регистрацию на следующем шаге.</string>
-  <!-- MyAccount.java -->
+  <!-- MyAccountActivity.java -->
   <string name="username">email</string>
   <string name="username_repeat">Повторите email</string>
   <string name="password">Пароль</string>

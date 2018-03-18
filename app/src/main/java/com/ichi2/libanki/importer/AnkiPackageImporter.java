@@ -48,14 +48,14 @@ public class AnkiPackageImporter extends Anki2Importer {
     @Override
     public void runImport() {
         publishProgress(0, 0, 0);
-        File tempDir = new File(new File(getMCol().getPath()).getParent(), "tmpzip");
+        File tempDir = new File(new File(getCol().getPath()).getParent(), "tmpzip");
         Collection tmpCol;
         try {
             // We extract the zip contents into a temporary directory and do a little more
             // validation than the desktop client to ensure the extracted collection is an apkg.
             try {
                 // extract the deck from the zip file
-                mZip = new ZipFile(new File(getMFile()), ZipFile.OPEN_READ);
+                mZip = new ZipFile(new File(getFile()), ZipFile.OPEN_READ);
                 Utils.unzipFiles(mZip, tempDir.getAbsolutePath(), new String[]{"collection.anki2", "media"}, null);
             } catch (IOException e) {
                 Timber.e(e, "Failed to unzip apkg.");
@@ -67,7 +67,7 @@ public class AnkiPackageImporter extends Anki2Importer {
                 getLog().add(getRes().getString(R.string.import_log_no_apkg));
                 return;
             }
-            tmpCol = Storage.Collection(getMContext(), colpath);
+            tmpCol = Storage.Collection(getContext(), colpath);
             try {
                 if (!tmpCol.validCollection()) {
                     getLog().add(getRes().getString(R.string.import_log_no_apkg));
@@ -78,7 +78,7 @@ public class AnkiPackageImporter extends Anki2Importer {
                     tmpCol.close();
                 }
             }
-            setMFile(colpath);
+            setFile(colpath);
             // we need the media dict in advance, and we'll need a map of fname ->
             // number to use during the import
             File mediaMapFile = new File(tempDir, "media");
@@ -112,10 +112,10 @@ public class AnkiPackageImporter extends Anki2Importer {
                 if (!file.startsWith("_") && !file.startsWith("latex-")) {
                     continue;
                 }
-                File path = new File(getMCol().getMedia().dir(), Utils.nfcNormalized(file));
+                File path = new File(getCol().getMedia().dir(), Utils.nfcNormalized(file));
                 if (!path.exists()) {
                     try {
-                        Utils.unzipFiles(mZip, getMCol().getMedia().dir(), new String[]{c}, numToName);
+                        Utils.unzipFiles(mZip, getCol().getMedia().dir(), new String[]{c}, numToName);
                     } catch (IOException e) {
                         Timber.e("Failed to extract static media file. Ignoring.");
                     }

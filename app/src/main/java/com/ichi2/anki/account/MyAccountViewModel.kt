@@ -27,7 +27,7 @@ class MyAccountViewModel : ViewModel() {
         override fun onPreExecute() {
 //            Timber.d("loginListener.onPreExcecute()")
 //            if (mProgressDialog == null || !mProgressDialog!!.isShowing) {
-//                mProgressDialog = StyledProgressDialog.show(this@MyAccount, "",
+//                mProgressDialog = StyledProgressDialog.show(this@MyAccountActivity, "",
 //                        resources.getString(R.string.alert_logging_message), false)
 //            }
         }
@@ -42,23 +42,23 @@ class MyAccountViewModel : ViewModel() {
 //                Timber.i("User successfully logged in!")
 //                saveUserInformation(data.data[0] as String, data.data[1] as String)
 //
-//                val i = this@MyAccount.intent
+//                val i = this@MyAccountActivity.intent
 //                if (i.hasExtra("notLoggedIn") && i.extras!!.getBoolean("notLoggedIn", false)) {
-//                    this@MyAccount.setResult(Activity.RESULT_OK, i)
+//                    this@MyAccountActivity.setResult(Activity.RESULT_OK, i)
 //                    finish()
 //                } else {
 //                    // Show logged view
 //                    loggedInView.usernameLoggedIn.text = data.data[0] as String
-//                    switchToState(MyAccount.STATE_LOGGED_IN)
+//                    switchToState(MyAccountActivity.STATE_LOGGED_IN)
 //                }
 //            } else {
 //                Timber.e("Login failed, errorSnackbar code %d", data.returnType)
 //                if (data.returnType == 403) {
 //                    errorSnackbar.value = R.string.invalid_username_password
-////                    UIUtils.showSimpleSnackbar(this@MyAccount, R.string.invalid_username_password, true)
+////                    UIUtils.showSimpleSnackbar(this@MyAccountActivity, R.string.invalid_username_password, true)
 //                } else {
 //                    errorSnackbar.value = R.string.connection_error_message
-////                    UIUtils.showSimpleSnackbar(this@MyAccount, R.string.connection_error_message, true)
+////                    UIUtils.showSimpleSnackbar(this@MyAccountActivity, R.string.connection_error_message, true)
 //                }
 //            }
         }
@@ -66,7 +66,7 @@ class MyAccountViewModel : ViewModel() {
 
         override fun onDisconnected() {
             errorSnackbar.value = R.string.youre_offline
-//            UIUtils.showSimpleSnackbar(this@MyAccount, R.string.youre_offline, true)
+//            UIUtils.showSimpleSnackbar(this@MyAccountActivity, R.string.youre_offline, true)
         }
     }
 
@@ -96,8 +96,8 @@ class MyAccountViewModel : ViewModel() {
 //        editor.commit()
 //        //  force media resync on deauth
 //        col!!.media.forceResync()
-//        stateSwitch.value = MyAccount.STATE_LOG_IN
-//        switchToState(MyAccount.STATE_LOG_IN)
+//        stateSwitch.value = MyAccountActivity.STATE_LOG_IN
+//        switchToState(MyAccountActivity.STATE_LOG_IN)
     }
 
 }

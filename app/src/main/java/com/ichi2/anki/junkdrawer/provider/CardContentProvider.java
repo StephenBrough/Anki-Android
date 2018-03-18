@@ -1322,9 +1322,6 @@ public class CardContentProvider extends ContentProvider {
 
     @Nullable
     private String getCallingPackageSafe() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return getCallingPackage();
-        }
         String[] pkgs = mContext.getPackageManager().getPackagesForUid(Binder.getCallingUid());
         if (pkgs.length == 1) {
             return pkgs[0]; // This is usual case, unless multiple packages signed with same key & using "sharedUserId"

@@ -277,7 +277,7 @@ class DeckPickerViewModel(application: Application) : AndroidViewModel(applicati
                 return false
             }
         } else {
-            // Request storage permission if we don't have it (e.g. on Android 6.0+)
+            // Request storage permission if we don't have it
             deckPickerView?.requestStoragePermission()
             return false
         }
@@ -375,7 +375,7 @@ class DeckPickerViewModel(application: Application) : AndroidViewModel(applicati
         deckPickerView?.resolveIntent(uri, attachment.name)
     }
 
-    // TODO: Test if this works... I don't know how to enable 'dyn' decks so this can be tested
+    // TODO: Test if this works... I don't know how to enable 'dyn' decks to test this
     fun deckTaskRebuildCram(fragmented: Boolean) {
         launch(UI) {
             col!!.decks.select(contextMenuDeckId)

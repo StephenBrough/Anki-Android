@@ -1059,7 +1059,7 @@ public class FlashCardsContract {
      *    </code>
      * </pre>
      *
-     *
+     *.
      * Updating the selected deck can be done as shown in this example
      * <pre>
      *     <code>

@@ -297,19 +297,15 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
         }
     }
 
-
     override fun setTitle(title: CharSequence) {
         mTitle = title
-        if (supportActionBar != null) {
-            supportActionBar!!.title = mTitle
-        }
+        supportActionBar?.title = mTitle
     }
-
 
     companion object {
         // Intent request codes
-        val REQUEST_PREFERENCES_UPDATE = 100
-        val REQUEST_BROWSE_CARDS = 101
-        val REQUEST_STATISTICS = 102
+        const val REQUEST_PREFERENCES_UPDATE = 100
+        const val REQUEST_BROWSE_CARDS = 101
+        const val REQUEST_STATISTICS = 102
     }
 }

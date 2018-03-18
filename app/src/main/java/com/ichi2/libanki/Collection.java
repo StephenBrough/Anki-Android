@@ -21,6 +21,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -77,7 +79,7 @@ public class Collection {
     private double mStartTime;
     private int mStartReps;
 
-    // BEGIN: SQL table columns
+    //region SQL table columns
     private long mCrt;
     private long mMod;
     private long mScm;
@@ -85,7 +87,7 @@ public class Collection {
     private int mUsn;
     private long mLs;
     private JSONObject mConf;
-    // END: SQL table columns
+    //endregion
 
     private LinkedList<Object[]> mUndo;
 
@@ -116,9 +118,10 @@ public class Collection {
         SUSPEND_NOTE(R.string.undo_action_suspend_note),
         DELETE_NOTE(R.string.undo_action_delete);
 
+        @StringRes
         public int undoNameId;
 
-        DismissType(int undoNameId) {
+        DismissType(@StringRes int undoNameId) {
             this.undoNameId = undoNameId;
         }
     }
@@ -165,11 +168,11 @@ public class Collection {
     }
 
 
-    public String name() {
-        String n = (new File(mPath)).getName().replace(".anki2", "");
-        // TODO:
-        return n;
-    }
+//    public String name() {
+//        String n = (new File(mPath)).getName().replace(".anki2", "");
+//        // TODO:
+//        return n;
+//    }
 
 
     /**
@@ -261,7 +264,6 @@ public class Collection {
         // and flush deck + bump mod if db has been changed
         if (mDb.getMod()) {
             flush(mod);
-            mDb.commit();
             lock();
             mDb.setMod(false);
         }
@@ -1549,6 +1551,7 @@ public class Collection {
     }
 
 
+    @NonNull
     public Decks getDecks() {
         return mDecks;
     }

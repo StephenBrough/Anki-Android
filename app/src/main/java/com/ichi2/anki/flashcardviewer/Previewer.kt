@@ -18,6 +18,8 @@
 
 package com.ichi2.anki.flashcardviewer
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.ichi2.anki.R
@@ -156,6 +158,16 @@ class Previewer : AbstractFlashcardViewer() {
         } else {
             mEase2Layout.isEnabled = true
             mNext2.text = ">"
+        }
+    }
+
+    companion object {
+        const val EXTRA_INDEX = "index"
+        const val EXTRA_CARDLIST = "cardList"
+
+        fun createIntent(context: Context, positionInCardList: Int, cardIds: LongArray): Intent = Intent(context, Previewer::class.java).apply {
+            putExtra(EXTRA_INDEX, positionInCardList)
+            putExtra(EXTRA_CARDLIST, cardIds)
         }
     }
 }
