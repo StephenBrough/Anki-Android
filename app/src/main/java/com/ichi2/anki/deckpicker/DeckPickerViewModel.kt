@@ -85,7 +85,7 @@ class DeckPickerViewModel(application: Application) : AndroidViewModel(applicati
             delay(2000)
             // Actual task
             Timber.d("doInBackgroundImportAdd")
-            val imp = AnkiPackageImporter(col, path)
+            val imp = AnkiPackageImporter(col!!, path)
             imp.setProgressCallback {
                 // On Progress Update
                 deckPickerView?.showProgress(it.string ?: "")

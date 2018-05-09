@@ -535,7 +535,7 @@ public class ModelFieldEditor extends AnkiActivity {
         @Override
         public void onPostExecute(TaskData result) {
             if (!result.getBoolean()) {
-                closeActivity(DeckPickerActivity.Companion.getRESULT_DB_ERROR());
+                closeActivity(DeckPickerActivity.RESULT_DB_ERROR);
             }
 
             dismissProgressBar();

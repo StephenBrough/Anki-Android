@@ -189,7 +189,7 @@ public class FilteredDeckOptions extends AppCompatPreferenceActivity implements 
                     mCol.getDecks().save(mDeck);
                 } catch (RuntimeException e) {
                     Timber.e(e, "RuntimeException on saving deck");
-                    setResult(DeckPickerActivity.Companion.getRESULT_DB_ERROR());
+                    setResult(DeckPickerActivity.RESULT_DB_ERROR);
                     finish();;
                 }
 

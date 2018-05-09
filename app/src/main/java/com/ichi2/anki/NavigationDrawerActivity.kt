@@ -54,7 +54,7 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
     private var mOldColPath: String? = null
     private var mOldTheme: Int = 0
     // Navigation drawer list item entries
-    private var mDrawerLayout: DrawerLayout? = null
+//    private var drawerLayout: DrawerLayout? = null
     lateinit var drawerToggle: ActionBarDrawerToggle
     private var mNightModeSwitch: SwitchCompat? = null
 
@@ -64,23 +64,23 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
     private var pendingRunnable: Runnable? = null
 
     val isDrawerOpen: Boolean
-        get() = mDrawerLayout!!.isDrawerOpen(GravityCompat.START)
+        get() = drawerLayout?.isDrawerOpen(GravityCompat.START) ?: false
 
 
+    //region Lifecycle Overrides
     /**
      * When using the ActionBarDrawerToggle, you must call it during
      * onPostCreate() and onConfigurationChanged()...
      */
-
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        if (drawerToggle != null) {
-            drawerToggle.syncState()
-        }
+        drawerToggle.syncState()
     }
 
+    //endregion
 
+    //region Other Activity Overrides
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val preferences = AnkiDroidApp.getSharedPrefs(this)
         // Update language
@@ -95,31 +95,39 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
                     finish();
                 } else if (mOldTheme != Themes.getCurrentTheme(applicationContext)) {
                     // The current theme was changed, so need to reload the stack with the new theme
-                    CompatHelper.compat?.restartActivityInvalidateBackstack(this@NavigationDrawerActivity)
+                    CompatHelper.compat.restartActivityInvalidateBackstack(this@NavigationDrawerActivity)
                 } else {
                     restartActivity()
                 }
             } else {
                 // collection path has changed so kick the user back to the DeckPickerActivity
                 CollectionHelper.getInstance().closeCollection(true)
-                CompatHelper.compat?.restartActivityInvalidateBackstack(this)
+                CompatHelper.compat.restartActivityInvalidateBackstack(this)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-
     override fun onBackPressed() {
         if (isDrawerOpen) {
             Timber.i("Back key pressed")
-            mDrawerLayout!!.closeDrawers()
+            drawerLayout!!.closeDrawers()
         } else {
             super.onBackPressed()
         }
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // Pass any configuration change to the drawer toggles
+        drawerToggle.onConfigurationChanged(newConfig)
 
+    }
+
+    //endregion
+
+    //region Navigation Item Selected Listener Override
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Don't do anything if user selects already selected position
         if (item.isChecked) {
@@ -158,40 +166,24 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
             }
         }
 
-        mDrawerLayout!!.closeDrawers()
+        drawerLayout!!.closeDrawers()
         return true
     }
+    //endregion
 
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        // Pass any configuration change to the drawer toggles
-        if (drawerToggle != null) {
-            drawerToggle.onConfigurationChanged(newConfig)
-        }
-    }
 
     /**
      * This function locks the navigation drawer closed in regards to swipes,
      * but continues to allowed it to be opened via it's indicator button. This
      * function in a noop if the drawer hasn't been initialized.
      */
-    protected fun disableDrawerSwipe() {
-        if (mDrawerLayout != null) {
-            mDrawerLayout!!.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        }
-    }
+    protected fun disableDrawerSwipe() = drawerLayout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
     /**
      * This function allows swipes to open the navigation drawer. This
      * function in a noop if the drawer hasn't been initialized.
      */
-    protected fun enableDrawerSwipe() {
-        if (mDrawerLayout != null) {
-            mDrawerLayout!!.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-        }
-    }
-
+    protected fun enableDrawerSwipe() = drawerLayout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
     /**
      * Open the card browser. Override this method to pass it custom arguments
@@ -202,25 +194,19 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
         startActivityForResult(cardBrowser, REQUEST_BROWSE_CARDS)
     }
 
-
     protected fun showBackIcon() {
-        if (drawerToggle != null) {
-            drawerToggle.isDrawerIndicatorEnabled = false
-        }
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        }
+        drawerToggle.isDrawerIndicatorEnabled = false
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mNavButtonGoesBack = true
     }
-
 
     // Navigation drawer initialisation
     protected fun initNavigationDrawer(mainView: View) {
         // Create inherited navigation drawer layout here so that it can be used by parent class
-        mDrawerLayout = mainView.findViewById<View>(R.id.drawer_layout) as DrawerLayout
+//        drawerLayout = mainView.findViewById<View>(R.id.drawerLayout) as DrawerLayout
         // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout!!.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START)
-        mDrawerLayout!!.navdrawerItemsContainer!!.setNavigationItemSelectedListener(this)
+        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START)
+        drawerLayout.navdrawerItemsContainer!!.setNavigationItemSelectedListener(this)
         val toolbar = mainView.findViewById<View>(R.id.toolbar) as Toolbar?
         if (toolbar != null) {
             setSupportActionBar(toolbar)
@@ -233,14 +219,14 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
                 if (mNavButtonGoesBack) {
                     finish();
                 } else {
-                    mDrawerLayout!!.openDrawer(Gravity.START)
+                    drawerLayout!!.openDrawer(Gravity.START)
                 }
             }
         }
 
         // Configure night-mode switch
         val preferences = AnkiDroidApp.getSharedPrefs(this@NavigationDrawerActivity)
-        val actionLayout = MenuItemCompat.getActionView(mDrawerLayout!!.navdrawerItemsContainer!!.menu.findItem(R.id.nav_night_mode))
+        val actionLayout = MenuItemCompat.getActionView(drawerLayout!!.navdrawerItemsContainer!!.menu.findItem(R.id.nav_night_mode))
         mNightModeSwitch = actionLayout.findViewById<View>(R.id.switch_compat) as SwitchCompat
         mNightModeSwitch!!.isChecked = preferences.getBoolean("invertedColors", false)
         mNightModeSwitch!!.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -255,7 +241,7 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
         }
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
-        drawerToggle = object : ActionBarDrawerToggle(this, mDrawerLayout, 0, 0) {
+        drawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, 0, 0) {
             override fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
                 supportInvalidateOptionsMenu()
@@ -272,17 +258,17 @@ abstract class NavigationDrawerActivity : AnkiActivity(), NavigationView.OnNavig
             }
         }
 
-        mDrawerLayout!!.addDrawerListener(drawerToggle)
+        drawerLayout!!.addDrawerListener(drawerToggle)
     }
 
 
     /** Sets selected navigation drawer item  */
     protected fun selectNavigationItem(itemId: Int) {
-        if (mDrawerLayout?.navdrawerItemsContainer == null) {
+        if (drawerLayout?.navdrawerItemsContainer == null) {
             Timber.e("Could not select item in navigation drawer as NavigationView null")
             return
         }
-        val menu = mDrawerLayout!!.navdrawerItemsContainer!!.menu
+        val menu = drawerLayout!!.navdrawerItemsContainer!!.menu
         if (itemId == -1) {
             for (i in 0 until menu.size()) {
                 menu.getItem(i).isChecked = false

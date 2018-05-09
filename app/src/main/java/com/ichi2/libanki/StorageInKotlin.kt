@@ -18,11 +18,11 @@ object StorageInKotlin {
         val dbExists = !dbFile.exists()
 
         // Connect
-        try {
-            // initialize
-            val ver = if (dbExists) createDb()
-            else upgradeSchema(db)
-        }
+//        try {
+//            // initialize
+//            val ver = if (dbExists) createDb()
+//            else upgradeSchema(db)
+//        }
     }
 
     fun createDb() {

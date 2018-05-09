@@ -507,7 +507,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         @Override
         public void onPostExecute(TaskData result) {
             if (!result.getBoolean()) {
-                closeReviewer(DeckPickerActivity.Companion.getRESULT_DB_ERROR(), false);
+                closeReviewer(DeckPickerActivity.RESULT_DB_ERROR, false);
             }
             mAnswerCardHandler.onPostExecute(result);
         }
@@ -572,7 +572,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         public void onPostExecute(TaskData result) {
             if (!result.getBoolean()) {
                 // RuntimeException occured on update cards
-                closeReviewer(DeckPickerActivity.Companion.getRESULT_DB_ERROR(), false);
+                closeReviewer(DeckPickerActivity.RESULT_DB_ERROR, false);
                 return;
             }
             if (mNoMoreCards) {
@@ -642,7 +642,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         public void onPostExecute(TaskData result) {
             if (!result.getBoolean()) {
                 // RuntimeException occured on answering cards
-                closeReviewer(DeckPickerActivity.Companion.getRESULT_DB_ERROR(), false);
+                closeReviewer(DeckPickerActivity.RESULT_DB_ERROR, false);
                 return;
             }
             // Check for no more cards before session complete. If they are both true, no more cards will take
@@ -1071,11 +1071,11 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == DeckPickerActivity.Companion.getRESULT_DB_ERROR()) {
-            closeReviewer(DeckPickerActivity.Companion.getRESULT_DB_ERROR(), false);
+        if (resultCode == DeckPickerActivity.RESULT_DB_ERROR) {
+            closeReviewer(DeckPickerActivity.RESULT_DB_ERROR, false);
         }
 
-        if (resultCode == DeckPickerActivity.Companion.getRESULT_MEDIA_EJECTED()) {
+        if (resultCode == DeckPickerActivity.RESULT_MEDIA_EJECTED) {
             finishNoStorageAvailable();
         }
 
@@ -1186,7 +1186,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
 
 
     private void finishNoStorageAvailable() {
-        AbstractFlashcardViewer.this.setResult(DeckPickerActivity.Companion.getRESULT_MEDIA_EJECTED());
+        AbstractFlashcardViewer.this.setResult(DeckPickerActivity.RESULT_MEDIA_EJECTED);
         finish();;
     }
 
@@ -1277,7 +1277,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
                     return 0;
             }
         } catch (RuntimeException e) {
-            closeReviewer(DeckPickerActivity.Companion.getRESULT_DB_ERROR(), true);
+            closeReviewer(DeckPickerActivity.RESULT_DB_ERROR, true);
             return 0;
         }
     }
@@ -1601,7 +1601,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         try {
             buttonCount = mSched.answerButtons(mCurrentCard);
         } catch (RuntimeException e) {
-            closeReviewer(DeckPickerActivity.Companion.getRESULT_DB_ERROR(), true);
+            closeReviewer(DeckPickerActivity.RESULT_DB_ERROR, true);
             return;
         }
 

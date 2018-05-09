@@ -27,19 +27,19 @@ android {
     }
 
     signingConfigs {
-        release {
-            storeFile file("${homePath}/src/android-keystore")
-            keyAlias "nrkeystorealias"
-            storePassword System.getenv("KSTOREPWD")
-            keyPassword System.getenv("KEYPWD")
-        }
+//        release {
+//            storeFile file("${homePath}/src/android-keystore")
+//            keyAlias "nrkeystorealias"
+//            storePassword System.getenv("KSTOREPWD")
+//            keyPassword System.getenv("KEYPWD")
+//        }
     }
 
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
 

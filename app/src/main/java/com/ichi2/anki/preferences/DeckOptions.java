@@ -377,7 +377,7 @@ public class DeckOptions extends AppCompatPreferenceActivity implements OnShared
                 } catch (RuntimeException e) {
                     Timber.e("DeckOptions - RuntimeException on saving conf: " + e);
 //                    AnkiDroidApp.sendExceptionReport(e, "DeckOptionsSaveConf");
-                    setResult(DeckPickerActivity.Companion.getRESULT_DB_ERROR());
+                    setResult(DeckPickerActivity.RESULT_DB_ERROR);
                     finish();;
                 }
 

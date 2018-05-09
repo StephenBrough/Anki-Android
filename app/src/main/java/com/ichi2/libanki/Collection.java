@@ -67,8 +67,8 @@ public class Collection {
     private Context mContext;
 
     private DB mDb;
-    private boolean mServer;
     private double mLastSave;
+    private boolean mServer;
     private Media mMedia;
     private Decks mDecks;
     private Models mModels;
@@ -744,9 +744,6 @@ public class Collection {
 	    }
 	    return cards;
 	}
-    public List<Card> previewCards(Note note) {
-        return previewCards(note, 0);
-    }
 
     /**
      * Create a new card.
@@ -865,27 +862,6 @@ public class Collection {
         return rem;
     }
 
-
-    public String emptyCardReport(List<Long> cids) {
-        StringBuilder rep = new StringBuilder();
-        Cursor cur = null;
-        try {
-            cur = mDb.getDatabase().rawQuery("select group_concat(ord+1), count(), flds from cards c, notes n "
-                                           + "where c.nid = n.id and c.id in " + Utils.ids2str(cids) + " group by nid", null);
-            while (cur.moveToNext()) {
-                String ords = cur.getString(0);
-                int cnt = cur.getInt(1);
-                String flds = cur.getString(2);
-                rep.append(String.format("Empty card numbers: %s\nFields: %s\n\n", ords, flds.replace("\u001F", " / ")));
-            }
-        } finally {
-            if (cur != null && !cur.isClosed()) {
-                cur.close();
-            }
-        }
-        return rep.toString();
-    }
-
     /**
      * Field checksums and sorting fields ***************************************
      * ********************************************************
@@ -929,11 +905,6 @@ public class Collection {
     /**
      * Q/A generation *********************************************************** ************************************
      */
-
-    public ArrayList<HashMap<String, String>> renderQA() {
-        return renderQA(null, "card");
-    }
-
 
     public ArrayList<HashMap<String, String>> renderQA(int[] ids, String type) {
         String where;
@@ -1027,10 +998,6 @@ public class Collection {
     /**
      * Return [cid, nid, mid, did, ord, tags, flds] db query
      */
-    public ArrayList<Object[]> _qaData() {
-        return _qaData("");
-    }
-
 
     public ArrayList<Object[]> _qaData(String where) {
         ArrayList<Object[]> data = new ArrayList<>();
@@ -1079,36 +1046,6 @@ public class Collection {
     }
 
 
-    public int findReplace(List<Long> nids, String src, String dst) {
-        return Finder.findReplace(this, nids, src, dst);
-    }
-
-
-    public int findReplace(List<Long> nids, String src, String dst, boolean regex) {
-        return Finder.findReplace(this, nids, src, dst, regex);
-    }
-
-
-    public int findReplace(List<Long> nids, String src, String dst, String field) {
-        return Finder.findReplace(this, nids, src, dst, field);
-    }
-
-
-    public int findReplace(List<Long> nids, String src, String dst, boolean regex, String field, boolean fold) {
-        return Finder.findReplace(this, nids, src, dst, regex, field, fold);
-    }
-
-
-    public List<Pair<String, List<Long>>> findDupes(String fieldName) {
-        return Finder.findDupes(this, fieldName, "");
-    }
-
-
-    public List<Pair<String, List<Long>>> findDupes(String fieldName, String search) {
-        return Finder.findDupes(this, fieldName, search);
-    }
-
-
     /**
      * Stats ******************************************************************** ***************************
      */
@@ -1119,26 +1056,6 @@ public class Collection {
     /**
      * Timeboxing *************************************************************** ********************************
      */
-
-    public void setTimeLimit(long seconds) {
-        try {
-            mConf.put("timeLim", seconds);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public long getTimeLimit() {
-        long timebox = 0;
-        try {
-            timebox = mConf.getLong("timeLim");
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-        return timebox;
-    }
-
 
     public void startTimebox() {
         mStartTime = Utils.now();

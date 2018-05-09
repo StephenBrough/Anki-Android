@@ -31,9 +31,9 @@ abstract class Importer(protected var col: Collection, protected var file: Strin
 
     protected var needMapper = false
 
-    protected var log: ArrayList<String> = ArrayList()
+    var log: ArrayList<String> = ArrayList()
 
-    protected var total: Int = 0
+    protected open var total: Int = 0
 
     private var ts: Long = 0
     protected lateinit var dst: Collection

@@ -274,7 +274,7 @@ public class NoteEditor extends AnkiActivity {
                 }
             } else {
                 // RuntimeException occured on adding note
-                closeNoteEditor(DeckPickerActivity.Companion.getRESULT_DB_ERROR());
+                closeNoteEditor(DeckPickerActivity.RESULT_DB_ERROR);
             }
         }
 
@@ -1029,8 +1029,8 @@ public class NoteEditor extends AnkiActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == DeckPickerActivity.Companion.getRESULT_DB_ERROR()) {
-            closeNoteEditor(DeckPickerActivity.Companion.getRESULT_DB_ERROR());
+        if (resultCode == DeckPickerActivity.RESULT_DB_ERROR) {
+            closeNoteEditor(DeckPickerActivity.RESULT_DB_ERROR);
         }
 
         switch (requestCode) {

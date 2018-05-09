@@ -408,7 +408,7 @@ public class StudyOptionsFragment extends Fragment implements Toolbar.OnMenuItem
         configureToolbar();
 
         // boot back to deck picker if there was an errorSnackbar
-        if (resultCode == DeckPickerActivity.Companion.getRESULT_DB_ERROR() || resultCode == DeckPickerActivity.Companion.getRESULT_MEDIA_EJECTED()) {
+        if (resultCode == DeckPickerActivity.RESULT_DB_ERROR || resultCode == DeckPickerActivity.RESULT_MEDIA_EJECTED) {
             closeStudyOptions(resultCode);
             return;
         }

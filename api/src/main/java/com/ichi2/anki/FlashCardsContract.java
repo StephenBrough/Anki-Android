@@ -16,7 +16,7 @@ import android.net.Uri;
  * notes and cards. To find out more about notes and cards, see
  * <a href="http://ankisrs.net/docs/manual.html#the-basics">the basics section in the Anki manual.</a>
  * </p>
- * <p/>
+ * <p>
  * <p>
  * In short, you can think of cards as instances of notes, with the limitation that the number of
  * instances and their names are pre-defined.
@@ -27,7 +27,7 @@ import android.net.Uri;
  * English speaker to learn Japanese), or just "front" and "back" (for a generic front side and back
  * side of a card, without saying anything about the purpose).
  * </p>
- * <p/>
+ * <p>
  * Note and card information is accessed in the following way:
  * </p>
  * <ul>
@@ -61,7 +61,7 @@ import android.net.Uri;
  * </ul>
  * <p/>
  * The AnkiDroid Flashcard content provider supports the following operation on it's URIs:
- * <p/>
+ * <p>
  * <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="URIs and Operations supported by CardContentProvider">
  * <caption><span>URIs and operations</span><span class="tabEnd">&nbsp;</span></caption>
  * <tr>
@@ -572,7 +572,7 @@ public class FlashCardsContract {
 
     /**
      * A card is an instance of a note.
-     * <p/>
+     * <p>
      * If the URI of a note is appended by the keyword "cards", it is possible to
      * access all the cards that are associated with this note:
      * <p>
@@ -962,7 +962,7 @@ public class FlashCardsContract {
      * A Deck contains information about a deck contained in the users deck list.
      * <p/>
      * To request a list of all decks the URI {@link #CONTENT_ALL_URI} can be used.
-     * To request the currently selected deck the URI {@link #CONTENT_SELECTED_URI} can be used.<br/>
+     * To request the currently selected deck the URI {@link #CONTENT_SELECTED_URI} can be used.<br>
      *
      * A Deck consists of the following columns:
      * <table class="jd-sumtable">

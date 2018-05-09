@@ -63,7 +63,18 @@ class SyncErrorDialog : AsyncDialogFragment() {
     interface SyncErrorDialogListener {
 
         val col: Collection?
+
+        /**
+         * Show a specific sync errorSnackbar dialog
+         * @param dialogType dialogType of dialog to show
+         */
         fun showSyncErrorDialog(dialogType: Int)
+
+        /**
+         * Show a specific sync errorSnackbar dialog
+         * @param dialogType dialogType of dialog to show
+         * @param message text to show
+         */
         fun showSyncErrorDialog(dialogType: Int, message: String)
         fun loginToSyncServer()
         fun sync()

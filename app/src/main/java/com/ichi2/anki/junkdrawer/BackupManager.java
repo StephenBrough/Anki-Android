@@ -205,7 +205,7 @@ public class BackupManager {
     }
 
 
-    public static boolean enoughDiscSpace(String path) {
+    public static boolean enoughDiskSpace(String path) {
         return getFreeDiscSpace(path) >= (MIN_FREE_SPACE * 1024 * 1024);
     }
 
